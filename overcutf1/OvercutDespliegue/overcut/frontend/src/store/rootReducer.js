@@ -1,0 +1,101 @@
+import {combineReducers} from 'redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+import app from '../modules/app';
+import users from '../modules/users';
+import posts from '../modules/posts';
+import quiz from '../modules/quiz';
+import circuits from '../modules/historic';
+import events from '../modules/events';
+import tictactoe from '../modules/tictactoe';
+import crossword from '../modules/crossword';
+import gridgame from '../modules/gridgame';
+import guessDriver from '../modules/guessDriver';
+import top10game from '../modules/top10game';
+import driversLink from '../modules/driversLink';
+import rondo from '../modules/rondo';
+import careerPath from '../modules/careerPath';
+import wordle from '../modules/wordle';
+import twoTeams from '../modules/twoTeams';
+import f1impostor from '../modules/f1impostor';
+import teamGuess from '../modules/teamGuess';
+import driversConnections from '../modules/driversConnections';
+import orderDriver from '../modules/orderDriver';
+import categoryGame from '../modules/categoryGame';
+import wordSearch from '../modules/wordSearch';
+import cooldown from '../modules/cooldown';
+
+
+
+
+import top10quali from '../modules/top10Quali';
+import driverSeason from "../modules/driverSeason";
+import tower from "../modules/tower";
+import anagrams from '../modules/anagrams';
+import bingo from '../modules/bingo';
+import timeline from '../modules/timeline';
+import whoIsWho from '../modules/whoIsWho';
+import memory from "../modules/memory";
+import teamHistory from "../modules/teamHistory/reducer";
+import higherLower from "../modules/higherLower";
+import thirtySeconds from "../modules/thirtySeconds";
+import driverStats from "../modules/driverStats/reducer";
+import abbreviations from "../modules/abbreviations/reducer";
+import teamNationality from "../modules/teamNationality";
+
+
+
+
+
+
+const usersPersistConfig = {
+  key: 'users',
+  storage,
+  blacklist: ['user'],
+};
+
+
+const rootReducer = combineReducers({
+    app: app.reducer,
+    users: persistReducer(usersPersistConfig, users.reducer),
+    posts: posts.reducer,
+    quiz: quiz.reducer,
+    circuits: circuits.reducer,
+    events:events.reducer,
+    tictactoe: tictactoe.reducer,
+    crossword: crossword.reducer,
+    gridgame: gridgame.reducer,
+    guessDriver: guessDriver.reducer,
+    top10game: top10game.reducer,
+    driversLink: driversLink.reducer,
+    rondo: rondo.reducer,
+    careerPath: careerPath.reducer,
+    wordle: wordle.reducer,
+    twoTeams: twoTeams.reducer,
+    f1impostor: f1impostor.reducer,
+    teamGuess: teamGuess.reducer,
+    driversConnections: driversConnections.reducer,
+    orderDriver: orderDriver.reducer,
+    categoryGame: categoryGame.reducer,
+    wordSearch: wordSearch.reducer,
+    cooldown: cooldown.reducer,
+    top10quali: top10quali.reducer,
+    driverSeason: driverSeason.reducer,
+    tower: tower.reducer,
+    anagrams: anagrams.reducer,
+    bingo: bingo.reducer,
+    timeline: timeline.reducer,
+    whoIsWho: whoIsWho.reducer,
+    memory: memory.reducer,
+    teamHistory: teamHistory,
+    higherLower: higherLower.reducer,
+    thirtySeconds: thirtySeconds.reducer,
+    driverStats: driverStats,
+    abbreviations: abbreviations,
+    teamNationality: teamNationality.reducer, 
+
+
+});
+
+export default rootReducer;

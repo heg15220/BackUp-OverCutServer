@@ -1,0 +1,25 @@
+
+import { getServiceToken } from '../../backend/appFetch';
+const getModuleState = state => state.users; // Asegúrate de que esta línea esté apuntando al reducer correcto
+
+export const getUser = state =>
+    getModuleState(state).user;
+
+export const isLoggedIn = state =>
+    !!getUser(state) && !!getServiceToken();
+
+export const getUserName = state =>
+    isLoggedIn(state) ? getUser(state).userName : null;
+// En ../../users/selectors.js
+export const getUserById = (state, userId) => state.users[userId];
+
+export const getUserPoints = state => getUser(state).points;
+
+export const isAdmin = state =>
+    getUser(state)?.admin ?? false;
+
+export const isJournalist = state =>
+    getUser(state)?.isJournalist ?? false;
+
+export const getUserRanking = state =>
+    getModuleState(state).ranking;

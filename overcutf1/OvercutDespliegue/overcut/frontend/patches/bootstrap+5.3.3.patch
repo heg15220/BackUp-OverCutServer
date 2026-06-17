@@ -1,0 +1,28 @@
+diff --git a/node_modules/bootstrap/dist/css/bootstrap.css b/node_modules/bootstrap/dist/css/bootstrap.css
+index b7ab57f..63344b4 100644
+--- a/node_modules/bootstrap/dist/css/bootstrap.css
++++ b/node_modules/bootstrap/dist/css/bootstrap.css
+@@ -5369,7 +5369,8 @@ textarea.form-control-lg {
+   height: 1em;
+   padding: 0.25em 0.25em;
+   color: var(--bs-btn-close-color);
+-  background: transparent var(--bs-btn-close-bg) center/1em auto no-repeat;
++  background: transparent var(--bs-btn-close-bg) center auto no-repeat;
++  background-size: 1em auto;
+   border: 0;
+   border-radius: 0.375rem;
+   opacity: var(--bs-btn-close-opacity);
+diff --git a/node_modules/bootstrap/dist/css/bootstrap.rtl.css b/node_modules/bootstrap/dist/css/bootstrap.rtl.css
+index 753823c..c290643 100644
+--- a/node_modules/bootstrap/dist/css/bootstrap.rtl.css
++++ b/node_modules/bootstrap/dist/css/bootstrap.rtl.css
+@@ -5367,7 +5367,8 @@ textarea.form-control-lg {
+   height: 1em;
+   padding: 0.25em 0.25em;
+   color: var(--bs-btn-close-color);
+-  background: transparent var(--bs-btn-close-bg) center/1em auto no-repeat;
++  background: transparent var(--bs-btn-close-bg) center auto no-repeat;
++  background-size: 1em auto;
+   border: 0;
+   border-radius: 0.375rem;
+   opacity: var(--bs-btn-close-opacity);

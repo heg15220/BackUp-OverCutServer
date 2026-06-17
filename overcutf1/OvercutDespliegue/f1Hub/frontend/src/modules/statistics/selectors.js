@@ -1,0 +1,160 @@
+const getModuleState = state => state.statistics;
+
+export const getDriverStandings = state => getModuleState(state).driverStandings;
+export const getConstructorStandings = state => getModuleState(state).constructorStandings;
+export const getDriverWins = state => getModuleState(state).driverWins;
+export const getDriverPodiums = state => getModuleState(state).driverPodiums;
+export const getDriverPoles = state => getModuleState(state).driverPoles;
+export const getDriverGrandChelems = state => getModuleState(state).driverGrandChelems;
+export const getDriverWinsByTeam = state => getModuleState(state).driverWinsByTeam;
+export const getDriverPodiumsByTeam = state => getModuleState(state).driverPodiumsByTeam;
+export const getDriverPolesByTeam = state => getModuleState(state).driverPolesByTeam;
+export const getConstructors = state => getModuleState(state).constructors;
+export const getChampionsByTitleCount = state => getModuleState(state).championsByTitleCount;
+export const getChampionsChronologically = state => getModuleState(state).championsChronologically;
+export const getChampionsByAge = state => getModuleState(state).championsByAge;
+export const getConsecutiveTitles = state => getModuleState(state).consecutiveTitles;
+export const getLongestGapBetweenTitles = state => getModuleState(state).longestGapBetweenTitles;
+export const getGpCountBeforeTitle = state => getModuleState(state).gpCountBeforeTitle;
+export const getChampionsByConstructorVariety = state => getModuleState(state).championsByConstructorVariety;
+export const getDriverWinsChronologically = state => getModuleState(state).driverWinsChronologically;
+export const getTeamWinsChronologically = state => getModuleState(state).teamWinsChronologically;
+export const getYoungestDriversAtFirstWin = state => getModuleState(state).youngestWinDrivers;
+export const getOldestDriversToWin = state => getModuleState(state).oldestWinDrivers;
+export const getWinsOnBirthday = state => getModuleState(state).winsOnBirthday;
+export const getLongestConsecutiveWinStreaks = state => getModuleState(state).longestConsecutiveWinStreaks;
+export const getLongestSeasonStartWinStreaks = state => getModuleState(state).seasonStartWinStreaks;
+export const getLastCareerWinPerDriver = state => getModuleState(state).lastCareerWins;
+export const getBiggestGapBetweenWins = state => getModuleState(state).biggestWinGaps;
+export const getGapBetweenFirstAndLastWin = state => getModuleState(state).firstLastWinGaps;
+export const getMostWinsInSingleYear = state => getModuleState(state).mostWinsSingleYear;
+export const getMostYearsWithWins = state => getModuleState(state).mostYearsWithWins;
+export const getMostConsecutiveWinningYears = state => getModuleState(state).mostConsecutiveWinningYears;
+export const getGpCountBeforeFirstWin = state => getModuleState(state).gpCountBeforeFirstWin;
+export const getDriversWithMostWinsSameConstructor = state => getModuleState(state).driversWithMostWinsSameConstructor;
+export const getDriversWithMostConstructorsWithWins = state => getModuleState(state).driversWithMostConstructorsWithWins;
+export const getWinsByGrandPrix = state => getModuleState(state).winsByGrandPrix;
+export const getConsecutiveWinsByGrandPrix = state => getModuleState(state).consecutiveWinsByGrandPrix;
+export const getDriversWithMostDifferentGPsWon = state => getModuleState(state).mostDifferentGPsWon;
+export const getDriversWithMostCircuitWins = state => getModuleState(state).mostCircuitWins;
+export const getDriversWithMostDifferentCircuitWins = state => getModuleState(state).mostDifferentCircuitWins;
+export const getWinsByStartingGridPosition = state => getModuleState(state).winsByGridPosition;
+export const getDriversWithMostGridPositionsWithWins = state => getModuleState(state).gridPositionsWithWins;
+export const getDriversWithHomeGPWins = state => getModuleState(state).homeGPWins;
+export const getWinsWithoutLeadingAnyLap = state => getModuleState(state).winsWithoutLeadingLap;
+export const getWinsWithoutPolePosition = state => getModuleState(state).winsWithoutPole;
+export const getWinsWithFastestLap = state => getModuleState(state).winsWithFastestLap;
+export const getSecondPlacePodiums = state => getModuleState(state).secondPlacePodiums;
+export const getThirdPlacePodiums = state => getModuleState(state).thirdPlacePodiums;
+export const getSecondThirdPlacePodiums = state => getModuleState(state).secondThirdPlacePodiums;
+export const getPodiumChronology = state => getModuleState(state).podiumChronology;
+export const getTeamPodiumChronology = state => getModuleState(state).teamPodiumChronology;
+export const getYoungestPodiumDrivers = state => getModuleState(state).youngestPodiumDrivers;
+export const getPodiumsOnBirthday = state => getModuleState(state).podiumsOnBirthday;
+export const getOldestPodiumDriversByNationality = state => getModuleState(state).oldestPodiumDriversByNationality;
+
+
+export const getLongestPodiumStreaks = state => getModuleState(state).longestPodiumStreaks;
+export const getSeasonStartPodiumStreaks = state => getModuleState(state).seasonStartPodiumStreaks;
+export const getLastPodiumPerDriver = state => getModuleState(state).lastPodiums;
+export const getBiggestGapBetweenPodiums = state => getModuleState(state).biggestPodiumGaps;
+export const getGapBetweenFirstAndLastPodium = state => getModuleState(state).firstLastPodiumGaps;
+export const getMostPodiumsInSingleYear = state => getModuleState(state).mostPodiumsSingleYear;
+export const getPodiumYearsCount = state => getModuleState(state).podiumYearsCount;
+export const getConsecutivePodiumYears = state => getModuleState(state).consecutivePodiumYears;
+export const getGpCountBeforeFirstPodium = state => getModuleState(state).gpCountBeforeFirstPodium;
+export const getPodiumsBeforeFirstWin = state => getModuleState(state).podiumsBeforeFirstWin;
+export const getPodiumsWithSingleConstructor = state => getModuleState(state).podiumsWithSingleConstructor;
+export const getPodiumsWithNoWins = state => getModuleState(state).podiumsWithNoWins;
+export const getPodiumsWithMostConstructors = state => getModuleState(state).podiumsWithMostConstructors;
+export const getPodiumsByGrandPrix = state => getModuleState(state).podiumsByGrandPrix;
+export const getDriversWithMostDifferentGPsWithPodium = state => getModuleState(state).mostDifferentGPsWithPodium;
+export const getDriversWithMostDifferentCircuitsWithPodium = state => getModuleState(state).mostDifferentCircuitsWithPodium;
+export const getPodiumsAtHomeGP = state => getModuleState(state).podiumsAtHomeGP;
+export const getRepeatedIdenticalPodiums = state => getModuleState(state).repeatedIdenticalPodiums;
+export const getMostFrequentPodiumTrios = state => getModuleState(state).mostFrequentPodiumTrios;
+export const getMostFrequentPodiumPairs = state => getModuleState(state).mostFrequentPodiumPairs;
+export const getMostCommonFirstSecondPairs = state => getModuleState(state).mostCommonFirstSecondPairs;
+
+
+
+
+export const getDriversWithMostPoints = state => getModuleState(state).mostPoints;
+export const getDriversToScorePointsChronologically = state => getModuleState(state).pointsChronology;
+export const getLastPointsPerDriver = state => getModuleState(state).lastPoints;
+export const getYoungestDriversToScorePoints = state => getModuleState(state).youngestPoints;
+export const getOldestDriversToScorePoints = state => getModuleState(state).oldestPoints;
+export const getYoungestDriversToScorePointsByNationality = state => getModuleState(state).youngestPointsByNationality;
+export const getOldestDriversToScorePointsByNationality = state => getModuleState(state).oldestPointsByNationality;
+export const getLongestConsecutivePointsStreaks = state => getModuleState(state).pointsStreaks;
+export const getLongestConsecutivePointsStreaksWithoutSprints = state => getModuleState(state).pointsStreaksNoSprints;
+export const getLongestGapBetweenPoints = state => getModuleState(state).gapBetweenPoints;
+export const getGapBetweenFirstAndLastPoints = state => getModuleState(state).gapFirstLastPoints;
+export const getMostPointsInSingleYear = state => getModuleState(state).mostPointsSingleYear;
+export const getMostYearsScoringPoints = state => getModuleState(state).yearsScoringPoints;
+export const getMostConsecutiveSeasonsWithPoints = state => getModuleState(state).consecutiveSeasonsPoints;
+export const getDriversWithPointsButNoWins = state => getModuleState(state).pointsNoWins;
+export const getDriversWithPointsButNoPodiums = state => getModuleState(state).pointsNoPodiums;
+export const getDriversWithMostConstructorsWithPoints = state => getModuleState(state).constructorsWithPoints;
+export const getGpCountBeforeFirstPoints = state => getModuleState(state).gpCountBeforeFirstPoints;
+export const getGpCountWhereDriverScoredPoints = state => getModuleState(state).gpCountWhereScoredPoints;
+
+
+
+
+export const getMostGrandsPrix = state => getModuleState(state).mostGrandsPrix;
+export const getGpDebutChronology = state => getModuleState(state).gpDebutChronology;
+export const getGpDebutByConstructor = state => getModuleState(state).gpDebutByConstructor;
+export const getLongestGpStreaks = state => getModuleState(state).longestGpStreaks;
+export const getBiggestGpGap = state => getModuleState(state).biggestGpGap;
+export const getFirstLastGpGap = state => getModuleState(state).firstLastGpGap;
+export const getTotalLapsCompleted = state => getModuleState(state).totalLapsCompleted;
+export const getGpsWithChampions = state => getModuleState(state).gpsWithChampions;
+export const getGpsWithWinners = state => getModuleState(state).gpsWithWinners;
+export const getMostGpsSameConstructor = state => getModuleState(state).mostGpsSameConstructor;
+export const getMostConstructorsInGps = state => getModuleState(state).mostConstructorsInGps;
+export const getMostGpsSameEngine = state => getModuleState(state).mostGpsSameEngine;
+export const getMostEnginesInGps = state => getModuleState(state).mostEnginesInGps;
+export const getMostGpsSameTeammate = state => getModuleState(state).mostGpsSameTeammate;
+export const getGpAgeByNationality = state => getModuleState(state).gpAgeByNationality;
+export const getOldestGpDrivers = state => getModuleState(state).oldestGpDrivers;
+export const getAvgAgePerGp = state => getModuleState(state).avgAgePerGp;
+export const getGpsNoWin = state => getModuleState(state).gpsNoWin;
+export const getGpsNoPole = state => getModuleState(state).gpsNoPole;
+export const getGpsNoFastestLap = state => getModuleState(state).gpsNoFastestLap;
+export const getGpsNoPoints = state => getModuleState(state).gpsNoPoints;
+export const getGpsNoPodium = state => getModuleState(state).gpsNoPodium;
+export const getGpsNoLeadLap = state => getModuleState(state).gpsNoLeadLap;
+export const getGpsNoWinPoleFastest = state => getModuleState(state).gpsNoWinPoleFastest;
+export const getMostSeasons = state => getModuleState(state).mostSeasons;
+export const getMostConsecutiveSeasons = state => getModuleState(state).mostConsecutiveSeasons;
+
+
+
+
+
+export const getVariosSeasons = state => getModuleState(state).seasons;
+export const getVariosSeasonStreak = state => getModuleState(state).seasonStreak;
+export const getVariosHatTricks = state => getModuleState(state).hatTricks;
+export const getVariosGrandSlams = state => getModuleState(state).grandSlams;
+export const getVariosFrontRowStarts = state => getModuleState(state).frontRowStarts;
+export const getVariosFrontRowDuos = state => getModuleState(state).frontRowDuos;
+export const getVariosFrontRowYoungest = state => getModuleState(state).frontRowYoungest;
+export const getVariosFrontRowStreaks = state => getModuleState(state).frontRowStreaks;
+export const getVariosGridAverage = state => getModuleState(state).gridAverage;
+export const getVariosQualifyingFastest = state => getModuleState(state).qualifyingFastest;
+export const getVariosFinishes = state => getModuleState(state).finishes;
+export const getVariosFinishStreak = state => getModuleState(state).finishStreak;
+export const getVariosClassified = state => getModuleState(state).classified;
+export const getVariosNoDnfStreak = state => getModuleState(state).noDnfStreak;
+export const getVariosDnfs = state => getModuleState(state).dnfs;
+export const getVariosDnfStreak = state => getModuleState(state).dnfStreak;
+export const getVariosFirstLapDnfs = state => getModuleState(state).firstLapDnfs;
+export const getVariosOnLeaderLap = state => getModuleState(state).onLeaderLap;
+export const getVariosFinishPositionAvg = state => getModuleState(state).finishPositionAvg;
+export const getVariosPositionGainAvg = state => getModuleState(state).positionGainAvg;
+export const getVariosDebutGrid = state => getModuleState(state).debutGrid;
+export const getVariosDebutQualifying = state => getModuleState(state).debutQualifying;
+export const getVariosLastQualifying = state => getModuleState(state).lastQualifying;
+export const getVariosNeverQualified = state => getModuleState(state).neverQualified;
+export const getVariosDisqualifications = state => getModuleState(state).disqualifications;

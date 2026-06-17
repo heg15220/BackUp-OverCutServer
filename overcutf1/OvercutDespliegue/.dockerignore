@@ -1,0 +1,60 @@
+# =========================
+# Git / IDE / OS
+# =========================
+.git
+.gitignore
+**/.idea
+**/.vscode
+**/*.iml
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# =========================
+# Logs / temporales
+# =========================
+**/*.log
+**/*.tmp
+**/*.swp
+**/.cache
+**/coverage
+**/.eslintcache
+
+# =========================
+# Node (CRÍTICO)
+# =========================
+**/node_modules
+**/npm-cache
+**/.npm
+**/.yarn
+**/.pnpm-store
+
+# Builds frontend (CRÍTICO)
+**/build
+**/dist
+
+# Vite/Next/etc (por si acaso)
+**/.vite
+**/.next
+**/.nuxt
+**/.svelte-kit
+
+# =========================
+# Java / Maven (CRÍTICO)
+# =========================
+**/target
+**/*.jar
+**/*.war
+
+# =========================
+# Docker / DB data local
+# (tu compose monta ./mysql-data en deploy/)
+# =========================
+deploy/mysql-data
+**/mysql-data
+
+# Si guardas dumps/exports grandes:
+**/*.sql.gz
+**/*.zip
+**/*.tar
+**/*.tar.gz

@@ -1,0 +1,7 @@
+/* Desktop */
+.f1hub-main { padding: 2rem; }
+
+/* Móvil */
+@media (max-width: 798px) {
+  .f1hub-main { padding: 0.75rem; }
+}

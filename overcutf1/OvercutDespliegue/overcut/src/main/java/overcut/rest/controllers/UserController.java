@@ -1,0 +1,357 @@
+package overcut.rest.controllers;
+
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import overcut.model.common.exceptions.DuplicateInstanceException;
+import overcut.model.common.exceptions.InstanceNotFoundException;
+import overcut.model.services.CookieConsentService;
+import overcut.model.services.EmailVerificationService;
+import overcut.model.services.exceptions.InvalidEmailException;
+import overcut.rest.common.*;
+import overcut.rest.dtos.*;
+import overcut.model.entities.User;
+import overcut.model.services.QuizService;
+import overcut.model.services.UserService;
+import overcut.model.services.exceptions.IncorrectLoginException;
+import overcut.model.services.exceptions.IncorrectPasswordException;
+import overcut.model.services.exceptions.PermissionException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import overcut.utils.UserRank;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+/**
+ * The Class UserController.
+ */
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    /** The Constant INCORRECT_LOGIN_EXCEPTION_CODE. */
+    private static final String INCORRECT_LOGIN_EXCEPTION_CODE = "project.exceptions.IncorrectLoginException";
+
+    /** The Constant INCORRECT_PASSWORD_EXCEPTION_CODE. */
+    private static final String INCORRECT_PASS_EXCEPTION_CODE = "project.exceptions.IncorrectPasswordException";
+
+    /** The message source. */
+    @Autowired
+    private MessageSource messageSource;
+
+    /** The jwt generator. */
+    @Autowired
+    private JwtGenerator jwtGenerator;
+
+    /** The user service. */
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private QuizService quizService;
+
+
+    @Autowired
+    private EmailVerificationService emailVerificationService;
+
+    @Autowired
+    private CookieConsentService cookieConsentService;
+
+    @Autowired
+    private AnalyticsConsentFilter analyticsConsentFilter;
+
+
+    private static final long SHORT_TTL_MIN = 12L * 60L;         // 12 horas
+    private static final long LONG_TTL_MIN  = 180L * 24L * 60L;  // 180 días
+
+
+    /**
+     * Handle incorrect login exception.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the errors dto
+     */
+    @ExceptionHandler(IncorrectLoginException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorsDto handleIncorrectLoginException(IncorrectLoginException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(INCORRECT_LOGIN_EXCEPTION_CODE, null,
+                INCORRECT_LOGIN_EXCEPTION_CODE, locale);
+
+        return new ErrorsDto(errorMessage);
+
+    }
+
+    /**
+     * Handle incorrect password exception.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the errors dto
+     */
+    @ExceptionHandler(IncorrectPasswordException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorsDto handleIncorrectPasswordException(IncorrectPasswordException exception, Locale locale) {
+
+        String errorMessage = messageSource.getMessage(INCORRECT_PASS_EXCEPTION_CODE, null,
+                INCORRECT_PASS_EXCEPTION_CODE, locale);
+
+        return new ErrorsDto(errorMessage);
+
+    }
+
+    /**
+     * Sign up.
+     *
+     * @param userDto the user dto
+     * @return the response entity
+     * @throws DuplicateInstanceException the duplicate instance exception
+     */
+    @PostMapping("/signUp")
+    public ResponseEntity<AuthenticatedUserDto> signUp (
+            @Validated({ UserDto.AllValidations.class }) @RequestBody UserDto userDto)
+            throws DuplicateInstanceException, InvalidEmailException {
+
+        User user = UserConversor.toUser(userDto);
+
+        userService.signUp(user);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build(); // o .body(null)
+
+    }
+
+    /**
+     * Login.
+     *
+     * @param params the params
+     * @return the authenticated user dto
+     * @throws IncorrectLoginException the incorrect login exception
+     */
+        @PostMapping("/login")
+    public AuthenticatedUserDto login(@Validated @RequestBody LoginParamsDto params,
+                                      HttpServletRequest req) throws IncorrectLoginException {
+
+        User user = userService.login(params.getEmail(), params.getPassword());
+
+        try {
+            String consentId = CookieUtil.readCookie(req, "oc_cid");
+            cookieConsentService.attachAnonymousConsentToUser(consentId, user.getId());
+        } catch (Exception ignore) {}
+
+        boolean remember = params.isRememberMe();
+        String token = generateServiceToken(user, remember);
+
+        return UserConversor.toAuthenticatedUserDto(token, user);
+    }
+
+    private String generateServiceToken(User user, boolean rememberMe) {
+        JwtInfo jwtInfo = new JwtInfo(user.getId(), user.getEmail(), user.isJournalist(), user.isAdmin());
+        long ttl = rememberMe ? LONG_TTL_MIN : SHORT_TTL_MIN;
+        return jwtGenerator.generate(jwtInfo, ttl);
+    }
+
+    /**
+     * Login from service token.
+     *
+     * @param userId       the user id
+     * @param serviceToken the service token
+     * @return the authenticated user dto
+     * @throws InstanceNotFoundException the instance not found exception
+     */
+    @PostMapping("/loginFromServiceToken")
+    public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId,
+                                                      @RequestAttribute String serviceToken) throws InstanceNotFoundException {
+
+        User user = userService.loginFromId(userId);
+
+        return UserConversor.toAuthenticatedUserDto(serviceToken, user);
+
+    }
+
+
+
+
+    /**
+     * Add image.
+     *
+     * @param id  the id
+     * @param file the file
+     * @return the user dto
+     * @throws InstanceNotFoundException the instance not found exception
+     * @throws IOException the IO exception
+     */
+    @PutMapping("/addImage/{id}")
+    public UserDto addImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws InstanceNotFoundException, IOException {
+        User user = userService.addImage(id, file);
+
+        return UserConversor.toUserDto(user);
+    }
+
+    /**
+     * Change password.
+     *
+     * @param userId the user id
+     * @param id     the id
+     * @param params the params
+     * @throws PermissionException        the permission exception
+     * @throws InstanceNotFoundException  the instance not found exception
+     * @throws IncorrectPasswordException the incorrect password exception
+     */
+    @PostMapping("/{id}/changePassword")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@RequestAttribute Long userId, @PathVariable Long id,
+                               @Validated @RequestBody ChangePasswordParamsDto params)
+            throws PermissionException, InstanceNotFoundException, IncorrectPasswordException {
+
+        if (!id.equals(userId)) {
+            throw new PermissionException();
+        }
+
+        userService.changePassword(id, params.getOldPassword(), params.getNewPassword());
+
+    }
+
+
+
+    /**
+     * Update profile.
+     *
+     * @param userId  the user id
+     * @param id      the id
+     * @param userDto the user dto
+     * @return the user dto
+     * @throws InstanceNotFoundException the instance not found exception
+     * @throws PermissionException       the permission exception
+     */
+    @PutMapping("/{id}")
+    public UserDto updateProfile(@RequestAttribute Long userId, @PathVariable("id") Long id,
+                                 @Validated({ UserDto.UpdateValidations.class }) @RequestBody UserDto userDto)
+            throws InstanceNotFoundException, PermissionException {
+
+        if (!id.equals(userId)) {
+            throw new PermissionException();
+        }
+
+        return UserConversor.toUserDto(
+                userService.updateProfile(id, userDto.getUserName(), userDto.getFirstName(), userDto.getLastName()));
+
+    }
+
+    @GetMapping("/{userId}/points")
+    public int getUserPoints(@PathVariable("userId") Long userId){
+        return quizService.getUserPoints(userId);
+    }
+
+    @GetMapping("/verify-email")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+        try {
+            String result = emailVerificationService.verifyEmail(token);
+            return ResponseEntity.ok(result);
+        } catch (InstanceNotFoundException | IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+
+
+    @PostMapping("/admin/createJournalist")
+    public ResponseEntity<UserDto> createJournalist(
+            @RequestAttribute Long userId,
+            @Validated({ UserDto.AllValidations.class }) @RequestBody UserDto userDto)
+            throws InstanceNotFoundException, DuplicateInstanceException, InvalidEmailException, PermissionException {
+
+        User admin = userService.loginFromId(userId);
+
+        if (!admin.isAdmin()) {
+            throw new PermissionException();
+        }
+
+        User journalist = UserConversor.toUser(userDto);
+        journalist.setJournalist(true); // asegurarse
+        journalist.setAdmin(false);     // por seguridad
+
+        userService.signUp(journalist);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserConversor.toUserDto(journalist));
+    }
+
+    @GetMapping("/ranking")
+    public Map<UserRank, List<RankedUserDto>> getUserRanking() {
+        return userService.getAllUsersGroupedByRank();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorsDto handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ErrorsDto(e.getMessage());
+    }
+
+    @PostMapping("/{id}/request-password-change")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void requestPasswordChange(@RequestAttribute Long userId,
+                                      @PathVariable Long id,
+                                      @Validated @RequestBody ChangePasswordParamsDto params)
+            throws PermissionException, InstanceNotFoundException, IncorrectPasswordException, MessagingException {
+
+        if (!userId.equals(id)) {
+            throw new PermissionException();
+        }
+
+        userService.generatePasswordChangeRequest(id, params.getOldPassword(), params.getNewPassword());
+    }
+
+    @GetMapping("/confirm-password-change")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> confirmPasswordChange(@RequestParam String token) {
+        try {
+            userService.confirmPasswordChange(token);
+            return ResponseEntity.ok("Password updated successfully.");
+        } catch (InstanceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token.");
+        }
+    }
+
+   @PostMapping("/request-password-reset")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void requestPasswordReset(@RequestBody Map<String, String> body) {
+    String email = body.getOrDefault("email", "").trim();
+    if (email.isEmpty()) {
+        return; // no reveles nada; UX igual
+    }
+    userService.requestPasswordReset(email);
+}
+
+@PostMapping("/reset-password")
+@CrossOrigin(origins = "*")
+public ResponseEntity<String> resetPassword(@RequestParam String token,
+                                           @RequestBody Map<String, String> body) {
+    try {
+        String newPassword = body.getOrDefault("newPassword", "");
+        userService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Password reset successfully.");
+    } catch (InstanceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token.");
+    }
+}
+
+
+
+}

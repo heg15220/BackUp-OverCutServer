@@ -1,0 +1,258 @@
+.predictions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.predictions-titlebox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.predictions-title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 1000;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.predictions-title span {
+  color: var(--oc-yellow);
+}
+
+.predictions-sub {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.predictions-hint {
+  color: rgba(255, 255, 255, 0.80);
+  font-weight: 800;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
+}
+
+.pill__muted {
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pill--soft {
+  background: rgba(244, 180, 0, 0.16);
+  border-color: rgba(244, 180, 0, 0.35);
+}
+
+.pill--dark {
+  background: rgba(0, 0, 0, 0.30);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.pill--ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pill--loading {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.predictions-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.oc-btn--ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(244, 180, 0, 0.55);
+}
+
+.oc-btn--ghost:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .predictions-title {
+    font-size: 28px;
+  }
+}
+
+/* ============================
+   Fix dropdown white (select)
+   ============================ */
+
+/* El control cerrado (select) */
+.predictions-header select,
+.predictions-header .oc-input[type="select"],
+.predictions-header .oc-input select,
+.predictions-header .oc-input.oc-select,
+.predictions-header select.oc-input,
+.predictions-header select.oc-select,
+.predictions-header select {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 12px !important;
+
+  filter: none !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* El menú abierto (options) */
+.predictions-header select option {
+  background-color: #0a101a !important;
+  color: #ffffff !important;
+}
+
+/* Opcional (no siempre se respeta según SO) */
+.predictions-header select option:checked {
+  background-color: #f4b400 !important;
+  color: #0b0f14 !important;
+}
+/* =========================================
+   PredictionsHeader reset button (premium)
+   Pégalo AL FINAL de PredictionsHeader.css
+   ========================================= */
+
+.pred-resetBtn {
+  border-radius: 999px !important;
+  padding: 10px 12px !important;
+  min-height: 40px;
+
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.2px;
+
+  /* base glass */
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.pred-resetBtn__icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.pred-resetBtn__label {
+  white-space: nowrap;
+}
+
+.pred-resetBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.pred-resetBtn:active:not(:disabled) {
+  transform: translateY(0px) scale(0.99);
+  filter: brightness(0.98);
+}
+
+.pred-resetBtn:focus-visible {
+  outline: 2px solid rgba(244, 180, 0, 0.75);
+  outline-offset: 2px;
+}
+
+/* Variante “danger suave” (reset) */
+.pred-resetBtn--danger {
+  border-color: rgba(255, 90, 90, 0.26) !important;
+}
+
+.pred-resetBtn--danger:hover:not(:disabled) {
+  border-color: rgba(255, 90, 90, 0.48) !important;
+  background: rgba(255, 90, 90, 0.08) !important;
+}
+
+.pred-resetBtn:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+/* =========================================
+   Mobile layout fix: ensure Reset is visible
+   Pégalo AL FINAL de PredictionsHeader.css
+   ========================================= */
+
+@media (max-width: 720px) {
+  .predictions-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .predictions-titlebox {
+    width: 100%;
+  }
+
+  /* Que el reset quede visible y no "empujado" */
+  .predictions-header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* En móvil: versión compacta (solo icono) para no ocupar tanto */
+  .pred-resetBtn {
+    padding: 10px 12px !important;
+  }
+
+  .pred-resetBtn__label {
+    display: none;
+  }
+
+  .pred-resetBtn__icon {
+    font-size: 18px;
+  }
+}
+
+/* Extra: móviles muy pequeños */
+@media (max-width: 420px) {
+  .predictions-sub .pill__muted {
+    display: none; /* opcional: evita que el startRoundName coma demasiado */
+  }
+}

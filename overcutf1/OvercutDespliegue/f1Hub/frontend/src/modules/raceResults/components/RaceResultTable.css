@@ -1,0 +1,240 @@
+.race-result-table {
+  padding: 2rem;
+  font-family: 'F1 Regular', sans-serif;
+  background-color: #0f0f0f;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+  max-width: 1100px;
+  margin: 2rem auto;
+  overflow-x: auto;
+}
+
+.race-result-title {
+  text-align: center;
+  color: #ffcc00;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+  letter-spacing: 1px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 850px;
+  background-color: #151515;
+}
+
+.result-table thead {
+  background-color: #1a1a1a;
+  color: #ffcc00;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05rem;
+}
+
+.result-table th,
+.result-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.result-table tbody tr:hover {
+  background-color: #222;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pilot-cell,
+.team-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pilot-bar,
+.team-bar {
+  width: 6px;
+  height: 24px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.pilot-name {
+  font-weight: 500;
+}
+
+.inline-flag {
+  vertical-align: middle;
+  margin: 0 0.3rem;
+  height: 28px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+
+/* ✅ Tablets / móviles grandes */
+@media (max-width: 768px) {
+  .race-result-table {
+    padding: 1.5rem 1rem;
+    margin: 1.5rem auto;
+  }
+
+  .race-result-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .result-table {
+    min-width: 700px;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .pilot-bar,
+  .team-bar {
+    height: 20px;
+  }
+
+  .inline-flag {
+    height: 24px;
+  }
+}
+
+/* ✅ Móviles pequeños */
+@media (max-width: 500px) {
+  .race-result-table {
+    padding: 1rem 0.5rem;
+    margin: 1rem auto;
+  }
+
+  .race-result-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-table {
+    min-width: 600px;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .pilot-bar,
+  .team-bar {
+    height: 18px;
+  }
+
+  .inline-flag {
+    height: 20px;
+  }
+
+  .pilot-name {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* === Mobile ≤ 798px (Race & Quali tables) === */
+@media (max-width: 798px) {
+  .race-result-table {
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 12px;
+  }
+
+  .race-result-title {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .result-table {
+    width: max-content;     /* scrolling horizontal */
+    min-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .result-table thead {
+    font-size: 0.75rem;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.6rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .pilot-cell,
+  .team-cell {
+    gap: 0.4rem;
+  }
+
+  .pilot-bar,
+  .team-bar {
+    height: 18px;
+    width: 5px;
+    border-radius: 3px;
+  }
+
+  .pilot-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .flag,
+  .inline-flag {
+    height: 18px;
+  }
+
+  /* ---- Oculta columnas menos críticas en CARRERA ----
+     Orden columnas carrera:
+     1 Pos | 2 Driver | 3 Team | 4 Grid | 5 Laps | 6 Time | 7 Points | 8 Status
+  */
+  .race-result-table:not(.qualifying) .result-table th:nth-child(4),
+  .race-result-table:not(.qualifying) .result-table td:nth-child(4),
+  .race-result-table:not(.qualifying) .result-table th:nth-child(5),
+  .race-result-table:not(.qualifying) .result-table td:nth-child(5),
+  .race-result-table:not(.qualifying) .result-table th:nth-child(8),
+  .race-result-table:not(.qualifying) .result-table td:nth-child(8) {
+    display: none;
+  }
+
+  /* ---- Oculta Q1 y Q2 en QUALI, deja Q3 visible ----
+     Orden columnas quali:
+     1 Pos | 2 Driver | 3 Team | 4 Q1 | 5 Q2 | 6 Q3
+  */
+  .race-result-table.qualifying .result-table th:nth-child(4),
+  .race-result-table.qualifying .result-table td:nth-child(4),
+  .race-result-table.qualifying .result-table th:nth-child(5),
+  .race-result-table.qualifying .result-table td:nth-child(5) {
+    display: none;
+  }
+}
+
+/* Afinado extra para pantallas muy pequeñas */
+@media (max-width: 560px) {
+  .result-table { font-size: 0.85rem; }
+  .result-table th, .result-table td { padding: 0.5rem 0.45rem; }
+  .pilot-name { font-size: 0.85rem; }
+  .flag, .inline-flag { height: 16px; }
+}

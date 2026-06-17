@@ -1,0 +1,14 @@
+diff --git a/node_modules/sanitize.css/forms.css b/node_modules/sanitize.css/forms.css
+index 84f1c44..cabe358 100644
+--- a/node_modules/sanitize.css/forms.css
++++ b/node_modules/sanitize.css/forms.css
+@@ -18,7 +18,8 @@
+ 
+ :where(select) {
+   appearance: none;
+-  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") no-repeat right center / 1em;
++  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") no-repeat right center;
++  background-size: 1em;
+   border-radius: 0;
+   padding-right: 1em;
+ }

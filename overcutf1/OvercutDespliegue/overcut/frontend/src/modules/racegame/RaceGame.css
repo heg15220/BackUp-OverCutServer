@@ -1,0 +1,2343 @@
+/* RaceGame.css — FULL UPDATED (layout-safe inside OverCut app) */
+
+/* ✅ El juego ocupa SOLO el área útil (sin header fijo).
+   Coincide con tus .Body border-top: 95/70/60px */
+.racegame {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 95px); /* desktop */
+  background: #0b0f14;
+  overflow: hidden;
+  touch-action: none;
+}
+
+@media (max-width: 768px) {
+  .racegame {
+    height: calc(100vh - 70px); /* tablet */
+  }
+}
+
+@media (max-width: 500px) {
+  .racegame {
+    height: calc(100vh - 60px); /* mobile */
+  }
+}
+
+/* Canvas ocupa el contenedor (no 100vh real) */
+.racegame__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- UI (HUD) ---------- */
+.racegame__ui {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  max-width: min(900px, 92vw);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.racegame__uiLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.racegame__titleMain {
+  font-weight: 800;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.racegame__titleSub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(231, 238, 247, 0.72);
+}
+
+.racegame__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.racegame__button {
+  background: #121a24;
+  color: rgba(231, 238, 247, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.05s ease, filter 0.1s ease;
+}
+
+.racegame__button:hover {
+  filter: brightness(1.1);
+}
+
+.racegame__button:active {
+  transform: translateY(1px);
+}
+
+.racegame__button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.racegame__status {
+  font-size: 13px;
+  color: rgba(231, 238, 247, 0.9);
+  white-space: nowrap;
+}
+
+.racegame__touchHint {
+  font-size: 12px;
+  color: rgba(231, 238, 247, 0.65);
+  white-space: nowrap;
+}
+
+/* ---------- Touch controls overlay ---------- */
+.racegame__touch {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 12;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 18px;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+.racegame__joy {
+  pointer-events: auto;
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.racegame__joyKnob {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.racegame__joyKnob.isActive {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.racegame__touchRight {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.racegame__touchBtn {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+.racegame__touchBtn:active {
+  transform: translateY(1px);
+  filter: brightness(1.15);
+}
+
+.racegame__touchBtn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+/* ---------- SETUP SCREEN (elige 3 o 5 vueltas) ---------- */
+.racegame--setup {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 18px;
+}
+
+.racegame__setupCard {
+  width: min(520px, 92vw);
+  background: rgba(0, 0, 0, 0.60);
+  border: 1px solid rgba(255,  255, 255, 0.12);
+  border-radius: 16px;
+  padding: 18px 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.racegame__setupTitle {
+  font-weight: 900;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.racegame__setupSub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(231, 238, 247, 0.72);
+  line-height: 1.35;
+}
+
+.racegame__setupRow {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.racegame__setupLabel {
+  font-size: 13px;
+  color: rgba(231, 238, 247, 0.88);
+}
+
+.racegame__setupButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.racegame__setupBtn {
+  min-width: 56px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(18, 26, 36, 0.85);
+  color: rgba(231, 238, 247, 0.95);
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 0.05s ease, filter 0.1s ease, border-color 0.1s ease;
+}
+
+.racegame__setupBtn:hover {
+  filter: brightness(1.08);
+}
+
+.racegame__setupBtn:active {
+  transform: translateY(1px);
+}
+
+.racegame__setupBtn.isActive {
+  border-color: rgba(255, 255, 255, 0.35);
+  filter: brightness(1.12);
+}
+
+.racegame__setupBtn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.racegame__setupStart {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(18, 26, 36, 0.92);
+  color: rgba(231, 238, 247, 0.95);
+  cursor: pointer;
+  font-weight: 900;
+  transition: transform 0.05s ease, filter 0.1s ease;
+}
+
+.racegame__setupStart:hover {
+  filter: brightness(1.10);
+}
+
+.racegame__setupStart:active {
+  transform: translateY(1px);
+}
+
+.racegame__setupStart:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.racegame__setupHint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(231, 238, 247, 0.62);
+  line-height: 1.35;
+}
+
+/* ---------- Responsive / Mobile polish ---------- */
+
+/* ✅ En móvil: HUD pequeño arriba derecha, controles más arriba */
+@media (max-width: 520px) {
+  /* HUD como píldora pequeña arriba-dcha */
+  .racegame__ui {
+    left: auto;
+    right: 10px;
+    top: 10px;
+    max-width: min(240px, 70vw);
+    padding: 8px 10px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.50);
+  }
+
+  /* Ocultamos título/subtítulo para dejar HUD compacto */
+  .racegame__title {
+    display: none;
+  }
+
+  /* Compactamos controles */
+  .racegame__controls {
+    gap: 8px;
+  }
+
+  .racegame__button {
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  /* Estado más pequeño y con salto */
+  .racegame__status {
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: normal;
+    max-width: 180px;
+  }
+
+  /* Quitamos hint duplicado (ya se ven los botones) */
+  .racegame__touchHint {
+    display: none;
+  }
+
+  /* ✅ Controles más arriba (no pegados al borde) */
+  .racegame__touch {
+    padding: 12px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    bottom: 14px; /* 👈 sube todo el bloque */
+  }
+
+  .racegame__joy {
+    width: 112px;
+    height: 112px;
+  }
+
+  .racegame__joyKnob {
+    width: 46px;
+    height: 46px;
+  }
+
+  .racegame__touchRight {
+    gap: 10px;
+  }
+
+  .racegame__touchBtn {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+
+  .racegame__setupCard {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+}
+
+/* Ajuste extra para pantallas MUY pequeñas */
+@media (max-width: 360px) {
+  .racegame__ui {
+    max-width: min(220px, 74vw);
+  }
+
+  .racegame__touch {
+    bottom: 18px; /* un pelín más arriba */
+  }
+
+  .racegame__joy {
+    width: 104px;
+    height: 104px;
+  }
+
+  .racegame__touchBtn {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+}
+
+/* 📱 Mobile: subir controles táctiles */
+@media (max-width: 520px) {
+  .racegame__touch {
+    bottom: 36px; /* antes ~14px → ahora claramente más arriba */
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  }
+}
+@media (max-width: 520px) {
+  .racegame__joy {
+    transform: translateY(-10px); /* joystick un poco más arriba */
+  }
+
+  .racegame__touchRight {
+    transform: translateY(-10px); /* botones ⬆ ⬇ alineados con joystick */
+  }
+}
+
+
+.racegame__setupRow {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap; /* ✅ NUEVO: evita overflow en móvil */
+}
+
+
+@media (max-width: 520px) {
+  .racegame__setupButtons {
+    width: 100%;
+    justify-content: flex-end; /* o center si lo prefieres */
+  }
+
+  .racegame__setupBtn {
+    min-width: 88px; /* ✅ para que Easy/Hard tengan buen tamaño */     
+    text-align: center;
+  }
+}
+
+/* ---------- SETUP: header/back + blocks ---------- */
+.racegame__setupTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.racegame__setupBack {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(231,238,247,0.92);
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 0.05s ease, filter 0.1s ease, background 0.1s ease;
+  white-space: nowrap;
+}
+
+.racegame__setupBack:hover { filter: brightness(1.1); }
+.racegame__setupBack:active { transform: translateY(1px); }
+
+.racegame__setupTip {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(231, 238, 247, 0.62);
+  line-height: 1.35;
+}
+
+.racegame__setupBlock {
+  margin-top: 14px;
+}
+
+.racegame__setupBlockTitle {
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(231,238,247,0.92);
+  margin-bottom: 10px;
+}
+
+/* cards grid */
+.racegame__setupChoiceGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.racegame__choiceCard {
+  text-align: left;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(18, 26, 36, 0.75);
+  color: rgba(231,238,247,0.95);
+  padding: 14px 14px;
+  cursor: pointer;
+  transition: transform 0.06s ease, filter 0.12s ease, border-color 0.12s ease;
+  min-height: 86px;
+}
+
+.racegame__choiceCard:hover { filter: brightness(1.08); }
+.racegame__choiceCard:active { transform: translateY(1px); }
+.racegame__choiceCard.isActive {
+  border-color: rgba(255,255,255,0.35);
+  filter: brightness(1.12);
+}
+
+.racegame__choiceBig {
+  font-weight: 950;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.racegame__choiceSmall {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(231,238,247,0.72);
+}
+
+.racegame__choiceMeta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(231,238,247,0.65);
+}
+
+.racegame__choiceCard--ai {
+  min-height: 96px;
+}
+
+.racegame__choiceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.racegame__choiceTag {
+  font-weight: 950;
+  font-size: 14px;
+}
+
+.racegame__choicePill {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.95);
+  font-weight: 900;
+}
+
+.racegame__choiceDesc {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(231,238,247,0.72);
+}
+
+.racegame__setupFooter {
+  margin-top: 14px;
+}
+
+/* ---------- HUD: ghost button ---------- */
+.racegame__button--ghost {
+  background: rgba(255,255,255,0.06);
+}
+
+/* ---------- Mobile adjustments for setup cards ---------- */
+@media (max-width: 520px) {
+  .racegame__setupChoiceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .racegame__setupBack {
+    padding: 9px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   ✅ RaceGame SETUP — OverCutGames palette
+   PÉGALO AL FINAL para que sobreescriba
+   ========================================= */
+
+:root{
+  --oc-bg-a: #0c0f1a;
+  --oc-bg-b: #1a2238;
+  --oc-card: rgba(17, 17, 17, 0.72);          /* similar a cardDiv */
+  --oc-card-2: rgba(10, 47, 69, 0.55);        /* azul “text” panel */
+  --oc-gold: #fbc02d;
+  --oc-white: rgba(255,255,255,0.92);
+  --oc-muted: rgba(204,204,204,0.90);
+  --oc-border-gold: rgba(251,192,45,0.22);
+  --oc-border-soft: rgba(255,255,255,0.08);
+  --oc-shadow: rgba(0,0,0,0.45);
+}
+
+/* Fondo setup: igual vibe que .minigames-page */
+.racegame--setup{
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 2.2rem 1rem 1.6rem;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--oc-bg-a), var(--oc-bg-b));
+}
+
+/* Glow sutil dorado (como title shadow) + textura suave */
+.racegame--setup::before{
+  content:"";
+  position:absolute;
+  inset:-120px;
+  pointer-events:none;
+  background:
+    radial-gradient(650px 380px at 35% 20%, rgba(251,192,45,0.10), transparent 60%),
+    radial-gradient(520px 320px at 78% 18%, rgba(255,255,255,0.05), transparent 55%),
+    radial-gradient(720px 520px at 50% 90%, rgba(10,47,69,0.35), transparent 62%);
+  filter: blur(8px);
+  opacity: 0.95;
+}
+
+.racegame--setup::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.045) 0px,
+      rgba(255,255,255,0.045) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  opacity: 0.08;
+  mask-image: radial-gradient(circle at 50% 35%, #000 0 55%, transparent 72%);
+}
+
+/* Card: similar a .games container / .cardDiv */
+.racegame__setupCard{
+  position: relative;
+  width: min(560px, 94vw);
+  border-radius: 20px;
+  padding: 18px 18px 16px;
+  background: linear-gradient(135deg, rgba(12,15,26,0.75), rgba(26,34,56,0.72));
+  border: 2px solid var(--oc-border-gold);
+  box-shadow:
+    0 0 20px rgba(0,0,0,0.40),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* borde dorado al hover del panel */
+.racegame__setupCard:hover{
+  border-color: rgba(251,192,45,0.65);
+  box-shadow:
+    0 0 22px rgba(0,0,0,0.45),
+    0 0 16px rgba(251,192,45,0.18),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+/* Header layout */
+.racegame__setupTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+}
+
+/* Título estilo minigames-title */
+.racegame__setupTitle{
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 1px;
+  font-size: 1.25rem;
+  color: var(--oc-gold);
+  text-shadow: 0 0 8px rgba(251,192,45,0.28);
+}
+
+.racegame__setupSub{
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: rgba(204,204,204,0.92);
+  font-family: "F1 Regular", sans-serif;
+  line-height: 1.35;
+  max-width: 48ch;
+}
+
+/* Botón “volver” estilo page-nav */
+.racegame__setupBack{
+  border-radius: 12px;
+  border: 2px solid rgba(251,192,45,0.35);
+  background: rgba(0,0,0,0.25);
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  padding: 10px 12px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 12px rgba(0,0,0,0.28);
+  white-space: nowrap;
+}
+
+.racegame__setupBack:hover{
+  transform: scale(1.04);
+  border-color: rgba(251,192,45,0.75);
+  box-shadow: 0 0 12px rgba(251,192,45,0.22);
+}
+
+.racegame__setupBack:active{ transform: scale(0.99); }
+
+.racegame__setupBack:focus-visible{
+  outline: 2px solid rgba(251,192,45,0.75);
+  outline-offset: 2px;
+}
+
+/* Bloques */
+.racegame__setupBlock{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.racegame__setupBlockTitle{
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 12px;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.racegame__setupBlockTitle::before{
+  content:"";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--oc-gold);
+  box-shadow: 0 0 10px rgba(251,192,45,0.30);
+}
+
+/* Grid */
+.racegame__setupChoiceGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Cards tipo “cardDiv” con hover dorado */
+.racegame__choiceCard{
+  position: relative;
+  text-align:left;
+  border-radius: 16px;
+  border: 2px solid rgba(251,192,45,0.16);
+  background: rgba(17,17,17,0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 0 12px rgba(0,0,0,0.30);
+  padding: 14px 14px;
+  color: rgba(255,255,255,0.92);
+  cursor:pointer;
+  transition: transform 0.18s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 92px;
+  overflow:hidden;
+}
+
+/* franja inferior tipo .text (azul) */
+.racegame__choiceCard::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height: 34px;
+  background: rgba(10,47,69,0.55);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  opacity: 0.9;
+  pointer-events:none;
+}
+
+/* Glow suave al hover (como cardDiv:hover) */
+.racegame__choiceCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(251,192,45,0.65);
+  box-shadow:
+    0 0 16px rgba(251,192,45,0.22),
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 0 14px rgba(0,0,0,0.35);
+}
+
+.racegame__choiceCard:active{ transform: translateY(-1px); }
+
+/* Activa: borde dorado fuerte + glow */
+.racegame__choiceCard.isActive{
+  border-color: rgba(251,192,45,0.90);
+  box-shadow:
+    0 0 18px rgba(251,192,45,0.28),
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 0 18px rgba(0,0,0,0.35);
+}
+
+/* Texto grande (vueltas) estilo gameTitle */
+.racegame__choiceBig{
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  font-size: 30px;
+  color: var(--oc-gold);
+  text-shadow: 0 0 8px rgba(251,192,45,0.22);
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* small / meta */
+.racegame__choiceSmall{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.70);
+  position: relative;
+  z-index: 1;
+}
+
+.racegame__choiceMeta{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(204,204,204,0.88);
+  position: relative;
+  z-index: 1;
+}
+
+/* AI header */
+.racegame__choiceCard--ai{ min-height: 104px; }
+
+.racegame__choiceHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.racegame__choiceTag{
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  color: var(--oc-gold);
+  text-shadow: 0 0 8px rgba(251,192,45,0.18);
+}
+
+/* pill tipo etiqueta NEW, pero dorada */
+.racegame__choicePill{
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display:grid;
+  place-items:center;
+  background: rgba(251,192,45,0.18);
+  border: 2px solid rgba(251,192,45,0.35);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  box-shadow: 0 0 10px rgba(251,192,45,0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.racegame__choiceDesc{
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(204,204,204,0.90);
+  position: relative;
+  z-index: 1;
+}
+
+/* Botón START estilo “page-number active” pero grande */
+.racegame__setupStart{
+  margin-top: 16px;
+  width: 100%;
+  height: 48px;
+  border-radius: 14px;
+  border: 2px solid rgba(251,192,45,0.35);
+  background: rgba(0,0,0,0.22);
+  cursor:pointer;
+
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+  font-size: 1.05rem;
+  color: var(--oc-gold);
+  text-shadow: 0 0 8px rgba(251,192,45,0.22);
+
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 0 18px rgba(0,0,0,0.30);
+}
+
+.racegame__setupStart:hover{
+  transform: scale(1.02);
+  border-color: rgba(251,192,45,0.75);
+  box-shadow: 0 0 14px rgba(251,192,45,0.25);
+}
+
+.racegame__setupStart:active{ transform: scale(0.995); }
+
+.racegame__setupStart:focus-visible{
+  outline: 2px solid rgba(251,192,45,0.85);
+  outline-offset: 3px;
+}
+
+/* Hint */
+.racegame__setupHint,
+.racegame__setupTip{
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgba(204,204,204,0.86);
+  line-height: 1.35;
+}
+
+/* =========================
+   Responsive setup
+   ========================= */
+@media (max-width: 520px){
+  .racegame__setupCard{
+    width: min(560px, 96vw);
+    padding: 16px 14px 14px;
+    border-radius: 18px;
+  }
+  .racegame__setupChoiceGrid{ grid-template-columns: 1fr; }
+  .racegame__setupTitle{ font-size: 1.12rem; }
+  .racegame__setupSub{ font-size: 0.92rem; }
+  .racegame__choiceBig{ font-size: 28px; }
+  .racegame__setupBack{
+    padding: 9px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   (Opcional) compat con setup viejo (row + btn)
+   ========================================= */
+.racegame__setupRow{
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 2px solid rgba(251,192,45,0.14);
+  background: rgba(0,0,0,0.18);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 0 12px rgba(0,0,0,0.25);
+}
+
+.racegame__setupBtn{
+  border-radius: 12px;
+  border: 2px solid rgba(251,192,45,0.22);
+  background: rgba(0,0,0,0.20);
+  color: rgba(255,255,255,0.90);
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.racegame__setupBtn:hover{
+  transform: scale(1.04);
+  border-color: rgba(251,192,45,0.65);
+  box-shadow: 0 0 12px rgba(251,192,45,0.18);
+}
+
+.racegame__setupBtn.isActive{
+  border-color: rgba(251,192,45,0.90);
+  background: rgba(251,192,45,0.10);
+  color: rgba(255,255,255,0.95);
+}
+
+
+/* =========================================
+   ✅ RaceGame HUD — OverCutGames style
+   PÉGALO AL FINAL (override del HUD actual)
+   ========================================= */
+
+:root{
+  --rg-gold: #fbc02d;
+  --rg-white: rgba(255,255,255,0.92);
+  --rg-muted: rgba(204,204,204,0.90);
+  --rg-soft: rgba(255,255,255,0.10);
+  --rg-soft2: rgba(255,255,255,0.06);
+  --rg-border-gold: rgba(251,192,45,0.22);
+  --rg-shadow: rgba(0,0,0,0.45);
+  --rg-bluepanel: rgba(10,47,69,0.55);
+}
+
+/* Contenedor HUD principal */
+.racegame__ui{
+  top: 14px;
+  left: 14px;
+  max-width: min(980px, 92vw);
+
+  border-radius: 18px;
+  padding: 12px 12px 10px;
+
+  background: linear-gradient(135deg, rgba(12,15,26,0.74), rgba(26,34,56,0.70));
+  border: 2px solid var(--rg-border-gold);
+
+  box-shadow:
+    0 0 18px rgba(0,0,0,0.38),
+    0 0 14px rgba(251,192,45,0.10),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* textura sutil */
+.racegame__ui::before{
+  content:"";
+  position:absolute;
+  inset:-120px;
+  pointer-events:none;
+  background:
+    radial-gradient(520px 340px at 30% 20%, rgba(251,192,45,0.10), transparent 60%),
+    radial-gradient(680px 420px at 80% 0%, rgba(255,255,255,0.05), transparent 62%);
+  filter: blur(10px);
+  opacity: 0.9;
+}
+
+/* layout interno */
+.racegame__uiLeft{
+  position: relative;
+  z-index: 1;
+  gap: 10px;
+}
+
+/* fila superior: título + track + estado */
+.racegame__hudTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.racegame__hudTitle{
+  display:flex;
+  flex-direction:column;
+  gap: 2px;
+}
+
+.racegame__titleMain{
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+  font-size: 15px;
+  color: var(--rg-gold);
+  text-shadow: 0 0 8px rgba(251,192,45,0.22);
+}
+
+.racegame__titleSub{
+  font-family: "F1 Regular", sans-serif;
+  font-size: 12px;
+  color: rgba(204,204,204,0.88);
+}
+
+/* track pill (circuito) */
+.racegame__trackPill{
+  align-self: flex-start;
+  display:inline-flex;
+  gap: 8px;
+  align-items:center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.22);
+  color: rgba(231,238,247,0.92);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.racegame__trackDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--rg-gold);
+  box-shadow: 0 0 10px rgba(251,192,45,0.28);
+}
+
+/* separador azul tipo “text panel” */
+.racegame__hudStrip{
+  margin-top: 8px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  background: var(--rg-bluepanel);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* fila inferior: chips + botones */
+.racegame__hudBottom{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items:center;
+  justify-content: space-between;
+}
+
+/* chips métricas */
+.racegame__chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+  align-items:center;
+}
+
+.racegame__chip{
+  display:inline-flex;
+  align-items:baseline;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.22);
+}
+
+.racegame__chipLabel{
+  font-size: 11px;
+  color: rgba(204,204,204,0.90);
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+
+.racegame__chipValue{
+  font-family: "F1 Bold", system-ui, sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,0.92);
+}
+
+/* status pill (avisos) */
+.racegame__statusPill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(251,192,45,0.18);
+  color: rgba(255,255,255,0.90);
+  font-size: 12px;
+  max-width: min(560px, 86vw);
+}
+
+.racegame__statusPill strong{
+  color: var(--rg-gold);
+  font-weight: 900;
+}
+
+/* botones del HUD */
+.racegame__controls{
+  gap: 10px;
+}
+
+.racegame__button{
+  border-radius: 14px;
+  border: 2px solid rgba(251,192,45,0.22);
+  background: rgba(0,0,0,0.22);
+  color: rgba(255,255,255,0.90);
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  padding: 9px 12px;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.12s ease;
+  box-shadow: 0 0 12px rgba(0,0,0,0.25);
+}
+
+.racegame__button:hover{
+  filter: brightness(1.06);
+  border-color: rgba(251,192,45,0.60);
+  box-shadow: 0 0 12px rgba(251,192,45,0.16);
+}
+
+.racegame__button:active{
+  transform: translateY(1px);
+}
+
+.racegame__button--ghost{
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+
+/* oculta texto viejo (lo reemplazamos por chips) */
+.racegame__status,
+.racegame__touchHint{
+  display:none;
+}
+
+/* ======= Mobile HUD compact ======= */
+@media (max-width: 520px){
+  .racegame__ui{
+    left:auto;
+    right: 10px;
+    top: 10px;
+    max-width: min(320px, 86vw);
+    padding: 10px 10px 9px;
+    border-radius: 18px;
+  }
+
+  .racegame__titleSub{
+    display:none;
+  }
+
+  .racegame__hudStrip{
+    margin-top: 6px;
+    padding: 8px 9px;
+  }
+
+  .racegame__chip{
+    padding: 7px 9px;
+  }
+
+  .racegame__button{
+    padding: 8px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   ✅ HUD más pequeño + más arriba/izquierda
+   PÉGALO AL FINAL
+   ========================================= */
+
+/* Desktop/Tablet: más compacto y pegado arriba-izda */
+.racegame__ui{
+  top: 8px !important;
+  left: 8px !important;
+
+  /* 👇 reduce tamaño general */
+  max-width: min(560px, 86vw) !important;
+  padding: 9px 10px 8px !important;
+  border-radius: 14px !important;
+
+  /* un pelín menos “pesado” visualmente */
+  box-shadow:
+    0 0 14px rgba(0,0,0,0.34),
+    0 0 10px rgba(251,192,45,0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.045) !important;
+}
+
+/* Tipografía más pequeña */
+.racegame__titleMain{
+  font-size: 13px !important;
+}
+.racegame__titleSub{
+  font-size: 11px !important;
+}
+
+/* Pills y strip más compactos */
+.racegame__trackPill{
+  padding: 6px 9px !important;
+  font-size: 11px !important;
+}
+.racegame__hudStrip{
+  padding: 7px 8px !important;
+  border-radius: 12px !important;
+}
+
+/* Chips más pequeños */
+.racegame__chip{
+  padding: 6px 8px !important;
+}
+.racegame__chipLabel{
+  font-size: 10px !important;
+}
+.racegame__chipValue{
+  font-size: 12px !important;
+}
+
+/* Botones del HUD más compactos */
+.racegame__controls{
+  gap: 8px !important;
+}
+.racegame__button{
+  padding: 7px 10px !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+}
+
+/* ✅ Mantén tu HUD móvil como lo tenías (arriba-dcha).
+   Si TAMBIÉN lo quieres arriba-izda en móvil, dime y lo cambiamos. */
+@media (max-width: 520px){
+  .racegame__ui{
+    left: auto !important;
+    right: 10px !important;
+    top: 10px !important;
+    max-width: min(320px, 86vw) !important;
+  }
+}
+
+
+
+/* =========================================================
+   ✅ MOBILE LAYOUT (único y coherente)
+   - HUD abajo (barra compacta)
+   - Controles táctiles abajo con “zona segura”
+   - Setup compacto con scroll interno
+   PÉGALO AL FINAL y elimina/ignora overrides móviles previos
+   ========================================================= */
+
+@media (max-width: 520px) {
+  :root{
+    /* Ajusta si cambias tamaños de joystick/botones */
+    --rg-joy: 112px;
+    --rg-btn: 60px;
+    --rg-touch-pad: 12px;            /* padding lateral del bloque touch */
+    --rg-touch-gap: 12px;            /* separación visual */
+    --rg-hud-gap: 10px;              /* distancia HUD vs controles */
+    --rg-safe-b: env(safe-area-inset-bottom);
+
+    /* Altura “real” aproximada del área touch */
+    --rg-touch-height: calc(var(--rg-joy) + 2 * 12px + var(--rg-safe-b));
+    /* Altura total reservada abajo (touch + hueco HUD) */
+    --rg-bottom-reserve: calc(var(--rg-touch-height) + 74px);
+  }
+
+  /* ---------- TOUCH CONTROLS: anclados abajo, consistentes ---------- */
+  .racegame__touch{
+    left: 0;
+    right: 0;
+    bottom: 0 !important;
+    padding: var(--rg-touch-pad) !important;
+    padding-bottom: calc(var(--rg-touch-pad) + var(--rg-safe-b)) !important;
+    z-index: 12;
+  }
+
+  .racegame__joy{
+    width: var(--rg-joy) !important;
+    height: var(--rg-joy) !important;
+    transform: none !important; /* elimina “mover con translateY” */
+  }
+  .racegame__joyKnob{
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .racegame__touchRight{
+    gap: 10px !important;
+    transform: none !important;
+  }
+  .racegame__touchBtn{
+    width: var(--rg-btn) !important;
+    height: var(--rg-btn) !important;
+    border-radius: 14px !important;
+    font-size: 22px !important;
+  }
+
+  /* ---------- HUD: barra inferior compacta ---------- */
+  .racegame__ui{
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+
+    /* HUD justo encima de controles */
+    bottom: calc(var(--rg-touch-height) + var(--rg-hud-gap)) !important;
+
+    width: min(560px, 94vw) !important;
+    max-width: min(560px, 94vw) !important;
+
+    padding: 8px 10px !important;
+    border-radius: 16px !important;
+    z-index: 11; /* por debajo del touch (12) para que no “robe” gestos */
+  }
+
+  /* En móvil, el HUD debe ser “información + acciones”, sin decoración */
+  .racegame__hudTop{
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .racegame__hudTitle{
+    gap: 0 !important;
+  }
+  .racegame__titleMain{
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+  }
+  .racegame__titleSub{
+    display: none !important;
+  }
+
+  /* Track pill: opcional, pero que no empuje el layout */
+  .racegame__trackPill{
+    padding: 5px 8px !important;
+    font-size: 10.5px !important;
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Strip: úsalo para 1 línea de estado breve */
+  .racegame__hudStrip{
+    margin-top: 6px !important;
+    padding: 6px 8px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Chips: en móvil máximo 2-3 visibles por fila */
+  .racegame__chips{
+    gap: 6px !important;
+  }
+  .racegame__chip{
+    padding: 5px 7px !important;
+  }
+  .racegame__chipLabel{
+    font-size: 9.5px !important;
+  }
+  .racegame__chipValue{
+    font-size: 11.5px !important;
+  }
+
+  /* Botones del HUD en fila (no wrap infinito) */
+  .racegame__hudBottom{
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .racegame__controls{
+    justify-content: flex-end !important;
+    gap: 7px !important;
+    flex-wrap: nowrap !important;
+  }
+  .racegame__button{
+    padding: 6px 9px !important;
+    border-radius: 12px !important;
+    font-size: 11.5px !important;
+    white-space: nowrap;
+  }
+
+  /* Evita que el HUD tape demasiada pista: opcional */
+  .racegame__ui::before{
+    opacity: 0.55 !important;
+  }
+
+  /* ---------- SETUP: layout móvil real (scroll interno + menos altura) ---------- */
+  .racegame--setup{
+    place-items: start center !important;
+    padding: 12px 10px 10px !important;
+  }
+
+  .racegame__setupCard{
+    width: min(560px, 96vw) !important;
+    padding: 12px 12px 12px !important;
+    border-radius: 16px !important;
+
+    max-height: calc(100% - 12px) !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .racegame__setupTop{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-bottom: 8px;
+    background: linear-gradient(180deg, rgba(12,15,26,0.92), rgba(12,15,26,0.0));
+    backdrop-filter: blur(6px);
+  }
+
+  .racegame__setupTitle{ font-size: 1.02rem !important; }
+  .racegame__setupSub{ font-size: 0.88rem !important; }
+
+  .racegame__setupChoiceGrid{
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .racegame__choiceCard{
+    min-height: 76px !important;
+    padding: 12px 12px !important;
+  }
+
+  .racegame__choiceBig{ font-size: 26px !important; }
+  .racegame__choiceDesc{ font-size: 11.5px !important; }
+
+  .racegame__setupStart{
+    height: 44px !important;
+    font-size: 0.98rem !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* Extra: móviles muy pequeños */
+@media (max-width: 360px){
+  .racegame__ui{
+    width: min(560px, 96vw) !important;
+  }
+  .racegame__trackPill{ max-width: 38vw; }
+}
+
+/* =========================================================
+   ✅ Mobile: subir controles táctiles de forma consistente
+   (PEGA AL FINAL para que gane siempre)
+   ========================================================= */
+@media (max-width: 520px) {
+  :root{
+    --rg-safe-b: env(safe-area-inset-bottom);
+    --rg-touch-pad: 12px;
+    --rg-touch-lift: 24px; /* 👈 SUBE el mando (ajusta 16–40px) */
+  }
+
+  .racegame__touch{
+    bottom: var(--rg-touch-lift) !important;
+    padding: var(--rg-touch-pad) !important;
+    padding-bottom: calc(var(--rg-touch-pad) + var(--rg-safe-b)) !important;
+  }
+
+  /* ❌ fuera transforms: se vuelven inconsistentes entre móviles */
+  .racegame__joy,
+  .racegame__touchRight{
+    transform: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  :root{
+    --rg-joy: 112px;
+    --rg-safe-b: env(safe-area-inset-bottom);
+    --rg-touch-pad: 12px;
+    --rg-touch-lift: 24px;
+    --rg-hud-gap: 10px;
+
+    --rg-touch-height: calc(var(--rg-joy) + 2*var(--rg-touch-pad) + var(--rg-safe-b));
+  }
+
+  .racegame__ui{
+    bottom: calc(var(--rg-touch-lift) + var(--rg-touch-height) + var(--rg-hud-gap)) !important;
+  }
+}
+
+
+/* ✅ Leaderboard DOM (mobile) */
+.racegame__leaderboard{
+  display: none; /* por defecto oculto (desktop usa canvas) */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  width: min(220px, 70vw);
+  padding: 10px 10px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.50);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
+}
+
+.racegame__leaderboardTitle{
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 8px;
+}
+
+.racegame__leaderboardRow{
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.racegame__leaderboardPos{
+  color: rgba(255,255,255,0.70);
+  font-weight: 900;
+}
+
+.racegame__leaderboardName{
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.racegame__leaderboardLap{
+  color: rgba(255,255,255,0.72);
+  font-weight: 800;
+}
+
+.racegame__leaderboardRow.isPlayer{
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 4px 6px;
+}
+
+/* Solo móvil: mostrar leaderboard DOM */
+@media (max-width: 520px){
+  .racegame__leaderboard{
+    display: block;
+  }
+}
+
+/* =========================================
+   ✅ Leaderboard: más pequeño + más abajo
+   PÉGALO AL FINAL
+   ========================================= */
+
+/* Mobile leaderboard DOM */
+@media (max-width: 520px){
+  .racegame__leaderboard{
+    top: 64px !important;          /* 👈 baja el panel (ajusta 52–90px) */
+    right: 10px !important;
+
+    width: min(185px, 62vw) !important;  /* 👈 más estrecho */
+    padding: 8px 8px !important;         /* 👈 menos padding */
+    border-radius: 12px !important;
+  }
+
+  .racegame__leaderboardTitle{
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .racegame__leaderboardRow{
+    grid-template-columns: 18px 1fr auto !important;
+    gap: 6px !important;
+    padding: 2px 0 !important;
+    font-size: 11px !important;
+  }
+
+  .racegame__leaderboardRow.isPlayer{
+    padding: 3px 5px !important;
+    border-radius: 9px !important;
+  }
+}
+
+/* Extra: móviles muy pequeños */
+@media (max-width: 360px){
+  .racegame__leaderboard{
+    top: 70px !important;
+    width: min(175px, 70vw) !important;
+  }
+}
+
+
+/* =========================================
+   ✅ Leaderboard ULTRA COMPACT (mobile)
+   PÉGALO AL FINAL
+   ========================================= */
+@media (max-width: 520px){
+  .racegame__leaderboard{
+    top: 64px !important;
+    right: 10px !important;
+
+    width: min(155px, 54vw) !important;   /* 👈 más pequeño */
+    padding: 6px 6px !important;         /* 👈 menos padding */
+    border-radius: 11px !important;
+  }
+
+  .racegame__leaderboardTitle{
+    font-size: 10px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .racegame__leaderboardRow{
+    grid-template-columns: 16px 1fr auto !important;
+    gap: 5px !important;
+    padding: 1px 0 !important;
+    font-size: 10px !important;
+  }
+
+  .racegame__leaderboardPos{
+    font-size: 10px !important;
+  }
+
+  .racegame__leaderboardLap{
+    font-size: 9.5px !important;
+  }
+
+  .racegame__leaderboardRow.isPlayer{
+    padding: 2px 4px !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* ✅ Opcional: que no ocupe mucha altura (4 filas + scroll) */
+@media (max-width: 520px){
+  .racegame__leaderboard{
+    max-height: 132px !important;  /* ~4-5 filas según font */
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Extra: móviles muy pequeños */
+@media (max-width: 360px){
+  .racegame__leaderboard{
+    width: min(145px, 58vw) !important;
+    top: 70px !important;
+  }
+}
+
+/* =========================================================
+   ✅ TABLET LAYOUT (521px–768px)
+   - HUD arriba (no barra inferior)
+   - Touch controls cómodos
+   - Setup en 2 columnas
+   - Leaderboard más compacto
+   PÉGALO AL FINAL
+   ========================================================= */
+@media (min-width: 521px) and (max-width: 768px) {
+
+  /* -------- Touch controls: tamaño intermedio -------- */
+  .racegame__touch{
+    bottom: 10px !important;
+    padding: 14px !important;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .racegame__joy{
+    width: 128px !important;
+    height: 128px !important;
+    transform: none !important;   /* evita “saltos” */
+  }
+
+  .racegame__joyKnob{
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .racegame__touchRight{
+    gap: 12px !important;
+    transform: none !important;
+  }
+
+  .racegame__touchBtn{
+    width: 66px !important;
+    height: 66px !important;
+    border-radius: 16px !important;
+    font-size: 24px !important;
+  }
+
+  /* -------- HUD: arriba-izquierda, compacto pero legible -------- */
+  .racegame__ui{
+    top: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+
+    max-width: min(620px, 88vw) !important;
+    padding: 10px 11px 9px !important;
+    border-radius: 16px !important;
+    z-index: 10 !important;
+  }
+
+  .racegame__titleMain{ font-size: 14px !important; }
+  .racegame__titleSub{ font-size: 11px !important; }
+
+  .racegame__trackPill{
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    max-width: 40vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .racegame__hudStrip{
+    padding: 8px 9px !important;
+    border-radius: 13px !important;
+  }
+
+  .racegame__chip{
+    padding: 7px 9px !important;
+  }
+  .racegame__chipLabel{ font-size: 10.5px !important; }
+  .racegame__chipValue{ font-size: 12px !important; }
+
+  .racegame__button{
+    padding: 8px 11px !important;
+    border-radius: 13px !important;
+    font-size: 12px !important;
+  }
+
+  /* -------- Setup: tablet suele ir genial en 2 columnas -------- */
+  .racegame--setup{
+    place-items: center !important;
+    padding: 18px 14px !important;
+  }
+
+  .racegame__setupCard{
+    width: min(680px, 94vw) !important;
+    padding: 16px 16px 14px !important;
+    border-radius: 18px !important;
+    max-height: calc(100% - 16px) !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .racegame__setupChoiceGrid{
+    grid-template-columns: 1fr 1fr !important; /* 👈 tablet = 2 columnas */
+    gap: 12px !important;
+  }
+
+  .racegame__choiceCard{
+    min-height: 86px !important;
+    padding: 13px 13px !important;
+  }
+
+  .racegame__choiceBig{ font-size: 28px !important; }
+
+  .racegame__setupStart{
+    height: 46px !important;
+    font-size: 1.0rem !important;
+  }
+
+  /* -------- Leaderboard DOM: si lo quieres también en tablet -------- */
+  .racegame__leaderboard{
+    display: block !important;              /* 👈 si NO lo quieres, cambia a none */
+    top: 10px !important;
+    right: 10px !important;
+    width: min(200px, 26vw) !important;
+    padding: 8px 8px !important;
+    border-radius: 12px !important;
+    max-height: 180px !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .racegame__leaderboardTitle{
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .racegame__leaderboardRow{
+    grid-template-columns: 18px 1fr auto !important;
+    gap: 6px !important;
+    padding: 2px 0 !important;
+    font-size: 11px !important;
+  }
+
+  .racegame__leaderboardRow.isPlayer{
+    padding: 3px 5px !important;
+    border-radius: 9px !important;
+  }
+}
+
+/* ✅ Tablet en horizontal: más espacio, permitimos paneles un pelín mayores */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape){
+  .racegame__ui{
+    max-width: min(720px, 70vw) !important;
+  }
+  .racegame__leaderboard{
+    width: min(230px, 22vw) !important;
+    max-height: 220px !important;
+  }
+}
+
+
+/* =========================================================
+   ✅ TABLET: bajar HUD + Leaderboard
+   PÉGALO AL FINAL DEL TODO
+   ========================================================= */
+@media (min-width: 521px) and (max-width: 768px){
+  :root{
+    --rg-tablet-top-offset: 56px; /* 👈 ajusta 40–90px según te guste */
+  }
+
+  /* HUD más abajo */
+  .racegame__ui{
+    top: calc(10px + var(--rg-tablet-top-offset)) !important;
+  }
+
+  /* Leaderboard más abajo */
+  .racegame__leaderboard{
+    top: calc(10px + var(--rg-tablet-top-offset)) !important;
+  }
+}
+
+/* ✅ Tablet landscape (iPad apaisado) suele necesitar menos offset */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape){
+  :root{
+    --rg-tablet-top-offset-land: 36px; /* 👈 ajusta 24–70px */
+  }
+
+  .racegame__ui{
+    top: calc(10px + var(--rg-tablet-top-offset-land)) !important;
+  }
+
+  .racegame__leaderboard{
+    top: calc(10px + var(--rg-tablet-top-offset-land)) !important;
+  }
+}
+
+@media (max-width: 520px){
+  .racegame__setupTop{
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .racegame__setupBack{
+    width: 100% !important;           /* se va a su propia línea */
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* =========================================
+   ✅ FIX TABLET HEADER CUT + MOBILE HUD TUNING
+   PÉGALO AL FINAL de RaceGame.css
+   ========================================= */
+
+/* --- 1) TABLET: evita que el header tape el canvas --- */
+/* Muchos tablets siguen usando header "alto" (≈95px). */
+@media (max-width: 900px) and (min-width: 521px) {
+  .racegame {
+    height: calc(100vh - 95px) !important;
+  }
+}
+
+/* Si tu tablet entra en el breakpoint <=768, fuerza igual */
+@media (max-width: 768px) and (min-width: 521px) {
+  .racegame {
+    height: calc(100vh - 95px) !important;
+  }
+}
+
+/* =========================================================
+   ✅ TABLET: subir controles táctiles (mando) un poco más arriba
+   PÉGALO AL FINAL
+   ========================================================= */
+@media (min-width: 521px) and (max-width: 768px) {
+  :root{
+    --rg-tablet-touch-lift: 28px; /* 👈 ajusta 16–48px a tu gusto */
+    --rg-safe-b: env(safe-area-inset-bottom);
+    --rg-touch-pad: 14px;
+  }
+
+  .racegame__touch{
+    bottom: var(--rg-tablet-touch-lift) !important;
+    padding: var(--rg-touch-pad) !important;
+    padding-bottom: calc(var(--rg-touch-pad) + var(--rg-safe-b)) !important;
+  }
+
+  /* Evita desajustes por transforms anteriores */
+  .racegame__joy,
+  .racegame__touchRight{
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   ✅ FIX: SETUP en TABLET no queda cortado por el header
+   PÉGALO AL FINAL DEL TODO
+   ========================================================= */
+
+/* Ajusta aquí según tu header real en tablet */
+@media (min-width: 521px) and (max-width: 768px) {
+  :root{
+    /* Si en tu tablet el header “corta”, casi siempre es 95px */
+    --rg-header-h: 95px;  /* prueba 95; si te sobra baja a 70 */
+    --rg-setup-pad: 14px;
+  }
+
+  /* La pantalla de setup debe respetar el espacio del header */
+  .racegame--setup{
+    place-items: start center !important; /* en vez de center */
+    padding-top: calc(var(--rg-header-h) + var(--rg-setup-pad)) !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  /* La card no puede “salirse”: scroll interno si hace falta */
+  .racegame__setupCard{
+    max-height: calc(100% - (var(--rg-header-h) + 2 * var(--rg-setup-pad))) !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Header interno del setup no debe quedar pegado arriba */
+  .racegame__setupTop{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-top: 8px;
+    padding-bottom: 10px;
+    background: linear-gradient(180deg, rgba(12,15,26,0.92), rgba(12,15,26,0.0));
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* iPad/tablet en landscape: normalmente header más bajo */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape){
+  :root{
+    --rg-header-h: 70px; /* suele bastar en apaisado */
+    --rg-setup-pad: 14px;
+  }
+
+  .racegame--setup{
+    place-items: start center !important;
+    padding-top: calc(var(--rg-header-h) + var(--rg-setup-pad)) !important;
+  }
+
+  .racegame__setupCard{
+    max-height: calc(100% - (var(--rg-header-h) + 2 * var(--rg-setup-pad))) !important;
+    overflow: auto !important;
+  }
+}
+
+/* =========================================
+   ✅ FIX SCROLL EN SETUP (tablet/móvil)
+   PÉGALO AL FINAL
+   ========================================= */
+
+/* En setup, el contenedor debe poder hacer scroll */
+.racegame.racegame--setup{
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  /* permite gesto vertical */
+  touch-action: pan-y !important;
+
+  /* iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   ✅ FIX CONTROLES TABLET + NO "SELECCIONAR TODO" (mobile/tablet)
+   PÉGALO AL FINAL DE RaceGame.css
+   ========================================================= */
+
+/* --- 1) Evitar selección de texto / callout al tocar botones --- */
+/* Afecta a flechas, botones HUD y cualquier elemento "clicable" del juego */
+.racegame,
+.racegame * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* iOS: evita menú al mantener pulsado */
+}
+
+/* Si hay textos que SÍ quieres seleccionables en otras pantallas,
+   limita el selector solo a los controles:
+   (.racegame__touchBtn, .racegame__button, .racegame__setupBtn, etc.) */
+
+/* Botones táctiles: comportamiento de botón real */
+.racegame__touchBtn,
+.racegame__button,
+.racegame__setupBtn,
+.racegame__setupStart,
+.racegame__choiceCard,
+.racegame__setupBack {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent; /* Android: quita highlight feo */
+  touch-action: manipulation; /* evita doble-tap zoom / gestos raros */
+}
+
+/* --- 2) TABLET: subir "altura" del mando (más grande y cómodo) --- */
+@media (min-width: 521px) and (max-width: 768px) {
+  .racegame__joy {
+    width: 156px !important;   /* antes 128px */
+    height: 156px !important;
+  }
+
+  .racegame__joyKnob {
+    width: 62px !important;    /* antes 52px */
+    height: 62px !important;
+  }
+
+  .racegame__touchBtn {
+    width: 78px !important;    /* antes 66px */
+    height: 78px !important;
+    font-size: 28px !important;
+    border-radius: 18px !important;
+  }
+
+  .racegame__touchRight {
+    gap: 14px !important;
+  }
+}
+
+/* =========================================================
+   ✅ TABLET GAMEPLAY: mando más arriba (no pegado abajo)
+   + tamaños cómodos
+   ========================================================= */
+@media (min-width: 521px) and (max-width: 768px) {
+  :root{
+    --rg-safe-b: env(safe-area-inset-bottom);
+    --rg-touch-pad: 14px;
+
+    /* 👇 sube el bloque completo del mando */
+    --rg-tablet-touch-lift: 54px; /* prueba 40–80px */
+  }
+
+  .racegame__touch{
+    bottom: var(--rg-tablet-touch-lift) !important;
+    padding: var(--rg-touch-pad) !important;
+    padding-bottom: calc(var(--rg-touch-pad) + var(--rg-safe-b)) !important;
+  }
+
+  /* Tamaños intermedios (comodidad tablet) */
+  .racegame__joy{
+    width: 160px !important;
+    height: 160px !important;
+  }
+  .racegame__joyKnob{
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .racegame__touchBtn{
+    width: 82px !important;
+    height: 82px !important;
+    font-size: 30px !important;
+    border-radius: 18px !important;
+  }
+}
+
+/* =========================================================
+   ✅ TABLET: HUD fuera del centro superior (deja ver semáforo)
+   ========================================================= */
+@media (min-width: 521px) and (max-width: 768px) {
+  .racegame__ui{
+    left: auto !important;
+    right: 12px !important;
+
+    /* 👇 baja el HUD para despejar la zona superior */
+    top: 64px !important; /* ajusta 48–90px */
+
+    max-width: min(420px, 60vw) !important;
+  }
+}
+
+/* ---------- Status pill (mensaje IA) ---------- */
+.racegame__statusPill{
+  display: block;
+  margin-top: 8px;
+
+  /* ✅ Reserva espacio SIEMPRE para que el HUD no “salte” */
+  min-height: 22px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  font-size: 12px;
+  line-height: 1.15;
+  color: rgba(231,238,247,0.92);
+
+  max-width: 520px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  opacity: 0;              /* por defecto oculto, pero ocupa espacio */
+  transform: translateY(-2px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.racegame__statusPill strong{
+  font-weight: 900;
+  margin-right: 6px;
+  color: rgba(255,255,255,0.92);
+}
+
+.racegame__statusPill.isVisible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Mobile: texto más pequeño */
+@media (max-width: 520px){
+  .racegame__statusPill{
+    font-size: 10.5px;
+    padding: 5px 8px;
+    min-height: 18px;
+    max-width: 180px; /* para que no ensanche el HUD */
+    white-space: normal; /* si prefieres 2 líneas en móvil */
+    line-height: 1.15;
+  }
+}
+
+/* =========================================================
+   ✅ MOBILE HUD: 2 columnas (métricas | botones)
+   - Izq: laps/speed/pos en una sola columna
+   - Dcha: Restart/Home/Setup en otra columna
+   PÉGALO AL FINAL
+   ========================================================= */
+@media (max-width: 520px) {
+
+  /* El HUD ya lo colocas donde quieras (arriba/abajo).
+     Aquí SOLO cambiamos el layout interno. */
+
+  .racegame__hudBottom{
+    display: grid !important;
+    grid-template-columns: 1fr 132px !important; /* izq flexible, dcha fija */
+    gap: 8px !important;
+    align-items: start !important;
+  }
+
+  /* ✅ Métricas: una sola columna (vertical), sin wrap raro */
+  .racegame__chips{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    align-items: stretch !important;
+    min-width: 0 !important;
+  }
+
+  .racegame__chip{
+    width: 100% !important;
+    padding: 5px 7px !important;
+    border-radius: 12px !important;
+    justify-content: space-between !important;
+  }
+
+  .racegame__chipLabel{
+    font-size: 9.5px !important;
+    letter-spacing: 0.35px !important;
+    white-space: nowrap !important;
+  }
+
+  .racegame__chipValue{
+    font-size: 11.5px !important;
+    white-space: nowrap !important;
+  }
+
+  /* ✅ Botones: otra columna vertical (sin cortar) */
+  .racegame__controls{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+  }
+
+  .racegame__button{
+    width: 100% !important;
+    padding: 6px 8px !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Si el panel de estado te ensancha el HUD, capalo */
+  .racegame__statusPill{
+    max-width: 100% !important;
+  }
+}
+
+/* Extra para móviles MUY pequeños: botones aún más estrechos */
+@media (max-width: 360px){
+  .racegame__hudBottom{
+    grid-template-columns: 1fr 118px !important;
+  }
+  .racegame__button{
+    font-size: 10.5px !important;
+    padding: 6px 7px !important;
+  }
+}
+/* =========================================
+   ✅ FINAL OVERRIDE (MOBILE): todo consistente
+   - Evita que se corte "Volver"
+   - Setup con scroll interno
+   - HUD y mandos sin solaparse
+   PÉGALO AL FINAL DEL TODO
+   ========================================= */
+
+@media (max-width: 520px) {
+
+  /* 1) SETUP: que nunca quede cortado + scroll interno */
+  .racegame--setup{
+    place-items: start center !important;
+    padding-top: calc(12px + env(safe-area-inset-top)) !important;
+    padding-bottom: 12px !important;
+  }
+
+  .racegame__setupCard{
+    width: min(560px, 96vw) !important;
+    max-height: calc(100% - 12px) !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* botón volver: 100% ancho y visible */
+  .racegame__setupTop{
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .racegame__setupBack{
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  /* 2) GAMEPLAY: manda a la basura transforms antiguos */
+  .racegame__joy,
+  .racegame__touchRight{
+    transform: none !important;
+  }
+
+  /* 3) Mandos: anclados abajo pero levantados (ajusta 16–40px) */
+  :root{
+    --rg-touch-lift: 24px;
+    --rg-touch-pad: 12px;
+    --rg-safe-b: env(safe-area-inset-bottom);
+    --rg-joy: 112px;
+    --rg-hud-gap: 10px;
+  }
+
+  .racegame__touch{
+    bottom: var(--rg-touch-lift) !important;
+    padding: var(--rg-touch-pad) !important;
+    padding-bottom: calc(var(--rg-touch-pad) + var(--rg-safe-b)) !important;
+  }
+
+  /* 4) HUD: siempre justo encima de los mandos */
+  .racegame__ui{
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+
+    bottom: calc(
+      var(--rg-touch-lift) +
+      (var(--rg-joy) + 2 * var(--rg-touch-pad) + var(--rg-safe-b)) +
+      var(--rg-hud-gap)
+    ) !important;
+
+    width: min(560px, 94vw) !important;
+    max-width: min(560px, 94vw) !important;
+    z-index: 11 !important;
+  }
+}
+
+
+
+

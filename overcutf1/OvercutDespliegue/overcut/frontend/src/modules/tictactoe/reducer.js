@@ -1,0 +1,64 @@
+import { combineReducers } from 'redux';
+
+import * as actionTypes from './actionTypes';
+
+const initialState = {
+    gameId: null,
+    game: null,
+    checkDriver: null,
+    criteria: null,
+    suggestions: null,
+};
+
+const gameId = (state = initialState.gameId, action) => {
+    if (action.type === actionTypes.CREATE_GAME_COMPLETED) {
+        return action.gameId;
+    } else {
+        return state;
+    }
+}
+
+const game = (state = initialState.game, action) => {
+    switch (action.type) {
+        case actionTypes.CREATE_GAME_COMPLETED:
+            return null; // limpiamos el estado de la partida anterior
+        case actionTypes.GET_GAME_COMPLETED:
+            return action.game;
+        default:
+            return state;
+    }
+};
+
+
+const checkDriver = (state = initialState.checkDriver, action) => {
+    if (action.type === actionTypes.PLAY_MOVE_COMPLETED) {
+        return action.checkDriver;
+    } else {
+        return state;
+    }
+}
+
+const criteria = (state = initialState.criteria, action) => {
+    if (action.type === actionTypes.GET_CRITERIA_COMPLETED) {
+        return action.criteria;
+    } else {
+        return state;
+    }
+}
+
+const suggestions = (state = initialState.suggestions, action) => {
+    if (action.type === actionTypes.SET_PILOT_SUGGESTIONS_COMPLETED) {
+        return action.suggestions;
+    } else {
+        return state;
+    }
+}
+
+const reducer = combineReducers({
+    gameId,
+    game,
+    checkDriver,
+    criteria,
+    suggestions,
+});
+export default reducer;

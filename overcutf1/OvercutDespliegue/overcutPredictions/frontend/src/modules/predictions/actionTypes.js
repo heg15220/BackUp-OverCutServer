@@ -1,0 +1,17 @@
+// actionTypes.js
+
+export const BOOTSTRAP_REQUESTED = "predictions/BOOTSTRAP_REQUESTED";
+export const BOOTSTRAP_CUSTOM_REQUESTED = "predictions/BOOTSTRAP_CUSTOM_REQUESTED";
+
+export const BOOTSTRAP_COMPLETED = "predictions/BOOTSTRAP_COMPLETED";
+export const BOOTSTRAP_FAILED = "predictions/BOOTSTRAP_FAILED";
+
+export const SIMULATION_REQUESTED = "predictions/SIMULATION_REQUESTED";
+export const SIMULATION_UPDATED = "predictions/SIMULATION_UPDATED";
+export const SIMULATION_FAILED = "predictions/SIMULATION_FAILED";
+
+export const SIMULATION_BATCH_REQUESTED = "predictions/SIMULATION_BATCH_REQUESTED";
+export const SIMULATION_BATCH_UPDATED = "predictions/SIMULATION_BATCH_UPDATED";
+export const SIMULATION_BATCH_FAILED = "predictions/SIMULATION_BATCH_FAILED";
+
+export const RESET_SIMULATION = "predictions/RESET_SIMULATION";

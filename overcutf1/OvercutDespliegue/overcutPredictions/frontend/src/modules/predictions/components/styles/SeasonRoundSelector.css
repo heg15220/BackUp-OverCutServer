@@ -1,0 +1,448 @@
+.sr-card {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(244, 180, 0, 0.22);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+}
+
+.sr-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sr-titlebox h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 1000;
+  color: rgba(255, 255, 255, 0.96);
+  letter-spacing: 0.2px;
+}
+
+.sr-titlebox p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 720px;
+}
+
+.sr-reset {
+  white-space: nowrap;
+}
+
+.sr-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr 180px;
+  gap: 12px;
+  align-items: end;
+}
+
+.sr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sr-field label {
+  font-size: 12px;
+  font-weight: 950;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.sr-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.95);
+  padding: 10px 12px;
+  border-radius: 12px;
+  outline: none;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.sr-select:focus {
+  border-color: rgba(244, 180, 0, 0.60);
+}
+
+.sr-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.sr-gp {
+  color: rgba(244, 180, 0, 0.95);
+  font-weight: 950;
+}
+
+.sr-muted {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.sr-error {
+  font-size: 12px;
+  color: rgba(244, 180, 0, 0.98);
+  font-weight: 950;
+}
+
+.sr-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sr-primary {
+  width: 100%;
+}
+
+.sr-quick {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sr-quick__label {
+  font-size: 12px;
+  font-weight: 950;
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.sr-quick__chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sr-chip {
+  border-radius: 999px;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .sr-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sr-actions {
+    justify-content: stretch;
+  }
+
+  .sr-primary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .sr-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sr-reset {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   FIX dropdown white (sr-select + options)
+   Pégalo AL FINAL de SeasonRoundSelector.css
+   ========================================= */
+
+/* Select cerrado: fuerza colores y evita "white wash" */
+.sr-select {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+
+  /* por si algún estilo global mete filtros */
+  filter: none !important;
+
+  /* en algunos navegadores ayuda a que el texto no "desaparezca" */
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Menú abierto: opciones (clave para evitar blanco) */
+.sr-select option {
+  background-color: #0a101a !important; /* oscuro */
+  color: #ffffff !important;            /* texto visible */
+}
+
+/* (Opcional) Estado seleccionado / hover (no siempre lo respeta el SO) */
+.sr-select option:checked {
+  background-color: #f4b400 !important;
+  color: #0b0f14 !important;
+}
+
+
+/* =========================================
+   Bootstrap button — premium
+   Pégalo AL FINAL de SeasonRoundSelector.css
+   ========================================= */
+
+.sr-actions .sr-primary {
+  /* base */
+  width: 100%;
+  min-height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(244, 180, 0, 0.55);
+
+  /* look */
+  background: linear-gradient(180deg, rgba(244, 180, 0, 0.95), rgba(244, 180, 0, 0.70));
+  color: #0b0f14;
+  font-weight: 1000;
+  letter-spacing: 0.3px;
+
+  /* layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+
+  /* polish */
+  box-shadow:
+    0 12px 26px rgba(244, 180, 0, 0.20),
+    0 10px 22px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+.sr-actions .sr-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 16px 34px rgba(244, 180, 0, 0.24),
+    0 12px 28px rgba(0, 0, 0, 0.40);
+}
+
+.sr-actions .sr-primary:active:not(:disabled) {
+  transform: translateY(0px) scale(0.99);
+  filter: brightness(0.98);
+}
+
+.sr-actions .sr-primary:focus-visible {
+  outline: 2px solid rgba(244, 180, 0, 0.75);
+  outline-offset: 2px;
+}
+
+/* Disabled = elegante, no “gris muerto” */
+.sr-actions .sr-primary:disabled {
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.70);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+/* Si quieres añadir un spinner sin tocar JSX:
+   cuando el texto sea "Cargando..." le metemos pseudo-elemento */
+.sr-actions .sr-primary:not(:disabled)::before {
+  content: "";
+  display: none;
+}
+
+.sr-actions .sr-primary:disabled::before {
+  content: "";
+  display: none; /* no spinner en disabled normal */
+}
+
+/* Spinner SOLO cuando el botón esté deshabilitado por loading:
+   (en tu caso loading => disabled, pero también hay invalid => disabled.
+    Si quieres spinner solo en loading, mejor añade data-loading en JSX.
+    Aun así te dejo la versión "simple": si el texto es Cargando..., muestra spinner con JS (opcional).)
+*/
+/* =========================================
+   Align selects + Bootstrap at same height
+   Pégalo AL FINAL de SeasonRoundSelector.css
+   ========================================= */
+
+/* 1) En desktop: alinear por arriba, no por abajo */
+.sr-grid {
+  align-items: start !important;
+}
+
+/* 2) Reserva un "hueco" fijo debajo de cada select
+      para que todos los selects queden a la misma altura */
+.sr-field {
+  /* espacio para hint/error */
+  padding-bottom: 46px; /* ajusta si tu hint ocupa más/menos */
+  position: relative;
+}
+
+/* coloca hint y error en un área fija abajo */
+.sr-hint,
+.sr-error {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* si hay error, que no se pise con el hint */
+.sr-error {
+  bottom: 0;
+}
+
+.sr-hint {
+  bottom: 0;
+}
+
+/* 3) La columna del botón: que arranque igual que un sr-field (label + gap) */
+.sr-actions {
+  /* mismo “espacio” que label(aprox) + gap(6px) */
+  padding-top: calc(12px + 6px); /* label font-size + gap */
+}
+
+/* Asegura que el botón tenga la misma altura visual que el select */
+.sr-actions .sr-primary {
+  min-height: 42px; /* select: padding 10px + line-height -> suele rondar 40-44 */
+}
+
+/* 4) En responsive (1 columna), volvemos a layout normal */
+@media (max-width: 980px) {
+  .sr-field {
+    padding-bottom: 0;
+  }
+  .sr-hint,
+  .sr-error {
+    position: static;
+  }
+  .sr-actions {
+    padding-top: 0;
+  }
+}
+
+.sr-headActions {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* =========================================
+   Head action buttons (Custom / Default)
+   Pégalo AL FINAL de SeasonRoundSelector.css
+   ========================================= */
+
+.sr-headActions {
+  display: inline-flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Base “pill button” */
+.sr-headBtn {
+  border-radius: 999px !important;
+  padding: 10px 12px !important;
+  min-height: 40px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.2px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.sr-headBtn__icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.sr-headBtn__label {
+  white-space: nowrap;
+}
+
+/* Hover / active */
+.sr-headBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  border-color: rgba(244, 180, 0, 0.35) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.sr-headBtn:active:not(:disabled) {
+  transform: translateY(0px) scale(0.99);
+  filter: brightness(0.98);
+}
+
+/* Focus accesible */
+.sr-headBtn:focus-visible {
+  outline: 2px solid rgba(244, 180, 0, 0.75);
+  outline-offset: 2px;
+}
+
+/* Disabled elegante */
+.sr-headBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+/* Variante: CUSTOM (accent dorado) */
+.sr-headBtn--custom {
+  border-color: rgba(244, 180, 0, 0.28) !important;
+}
+
+.sr-headBtn--custom:hover:not(:disabled) {
+  border-color: rgba(244, 180, 0, 0.55) !important;
+}
+
+/* Variante: DEFAULT (reset suave “rojo”) */
+.sr-headBtn--default {
+  border-color: rgba(255, 90, 90, 0.22) !important;
+}
+
+.sr-headBtn--default:hover:not(:disabled) {
+  border-color: rgba(255, 90, 90, 0.42) !important;
+  background: rgba(255, 90, 90, 0.08) !important;
+}
+
+/* Mobile: que ocupen ancho completo si quieres */
+@media (max-width: 520px) {
+  .sr-headActions {
+    width: 100%;
+  }
+  .sr-headBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}

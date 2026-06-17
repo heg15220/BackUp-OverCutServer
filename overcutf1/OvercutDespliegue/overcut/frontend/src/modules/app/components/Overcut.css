@@ -1,0 +1,183 @@
+:root {
+  --background: #111;
+  --background-section: #1b1b1b;
+  --text-color: #f0f0f0;
+  --text-muted: #ccc;
+  --highlight: gold;
+  --shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+
+.overcut {
+  max-width: 1300px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--text-color);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.overcut__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.overcut__title {
+  font-size: 3rem;
+  color: var(--highlight);
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--highlight);
+  padding-bottom: 0.5rem;
+}
+
+.overcut__intro {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.overcut__section {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: var(--background-section);
+  border-radius: 16px;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overcut__section:hover {
+  transform: scale(1.015);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.overcut__section--with-image {
+  align-items: center;
+}
+
+.overcut__image {
+  flex: 1 1 320px;
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.overcut__content {
+  flex: 1 1 320px;
+  padding: 2rem;
+}
+
+.overcut__subtitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--highlight);
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+}
+
+.overcut__content p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #ddd;
+  margin-bottom: 1rem;
+}
+
+.overcut__list {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.overcut__list li {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.overcut__subimage {
+  margin-top: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.overcut__subimage:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+  .overcut {
+    margin: 2rem 0.5rem;
+    padding: 1rem;
+  }
+
+  .overcut__header {
+    margin-bottom: 2rem;
+  }
+
+  .overcut__title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .overcut__intro {
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    line-height: 1.6;
+  }
+
+  .overcut__section {
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  .overcut__image {
+    max-width: 100%;
+    flex: 1 1 100%;
+    margin: 0 auto;
+  }
+
+  .overcut__content {
+    flex: 1 1 100%;
+    padding: 1rem;
+  }
+
+  .overcut__subtitle {
+    font-size: 1.5rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .overcut__content p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .overcut__list li {
+    font-size: 1rem;
+  }
+
+  .overcut__subimage {
+    max-width: 100%;
+    margin-top: 1rem;
+  }
+
+  .overcut__logo-title {
+    height: 120px;
+    margin: 0 4px;
+  }
+}
+
+.overcut__logo-title {
+  height: 180px;         /* o el tamaño que quieras */
+  vertical-align: middle;
+  margin: 0 8px;
+}

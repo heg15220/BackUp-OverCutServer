@@ -1,0 +1,230 @@
+/* Container */
+.wordsearch-container {
+  padding: 1.25rem;
+  text-align: center;
+  background-color: #121212;
+  color: white;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.wordsearch-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(to right, #f1c40f, #e67e22);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flicker 2s infinite;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+/* Wrapper del grid */
+.wordsearch-grid-wrapper {
+  overflow: hidden; /* Evitamos scroll horizontal en móvil */
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Grid con variables responsive */
+.wordsearch-grid {
+  --cols: 21;
+  --gap: 6px;     /* separación base (mejora diagonales) */
+  --cell: 30px;   /* tamaño base de celda en escritorio */
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  gap: var(--gap);
+  justify-content: center; /* centrado horizontal */
+  margin: 0 auto;
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+/* Celdas */
+.wordsearch-cell {
+  width: var(--cell);
+  height: var(--cell);
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: calc(var(--cell) * 0.6);
+  letter-spacing: 0.5px;
+  border: 2px solid #3a3a3a; /* borde más ancho para separar mejor */
+  border-radius: 8px;
+  touch-action: none; /* evita gestos del navegador encima de la celda */
+  user-select: none;
+  cursor: pointer;
+}
+
+.wordsearch-cell.revealed {
+  background-color: #4caf50;
+  color: white;
+}
+
+.wordsearch-cell.selected {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  color: #fff;
+  border-color: #90caf9;
+  box-shadow: 0 0 8px rgba(100, 181, 246, 0.8);
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+/* Botones */
+.wordsearch-validate-btn,
+.wordsearch-reveal-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f1c40f;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.wordsearch-reveal-btn {
+  background-color: #f44336;
+  margin-left: 0.5rem;
+}
+
+.wordsearch-reveal-btn:hover {
+  background-color: #d32f2f;
+}
+
+.wordsearch-validate-btn:hover {
+  background-color: #e0b20d;
+}
+
+/* Listados */
+.wordsearch-list-box {
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+.wordsearch-list-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(to right, #f1c40f, #e67e22);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+.wordsearch-list-item {
+  font-size: 1rem;
+  padding: 0.25rem 0;
+  list-style: none;
+  text-align: center;
+}
+
+.wordsearch-list-item.found {
+  text-decoration: line-through;
+  color: #4caf50;
+  font-style: italic;
+}
+
+.wordsearch-list-item.tofind {
+  color: #fff;
+}
+
+/* Loading */
+.wordsearch-loading {
+  padding: 3rem;
+  font-size: 1.5rem;
+  color: #f1c40f;
+  text-align: center;
+}
+
+/* Layout principal */
+.wordsearch-main-layout {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.wordsearch-main-layout > div {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .wordsearch-grid {
+    --gap: 5px;
+    --cell: 28px;
+  }
+
+  .wordsearch-title {
+    font-size: 2rem;
+  }
+
+  .wordsearch-list-box {
+    margin-top: 1.2rem;
+    padding: 0.8rem;
+  }
+
+  .wordsearch-list-title {
+    font-size: 1.1rem;
+  }
+
+  .wordsearch-list-item {
+    font-size: 0.95rem;
+  }
+
+  .wordsearch-validate-btn,
+  .wordsearch-reveal-btn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Móvil: el tablero ocupa todo el ancho disponible */
+@media (max-width: 600px) {
+  .wordsearch-grid {
+    --gap: 4px;
+    /* (ancho viewport - padding lateral aprox 2rem - suma gaps) / columnas */
+    --cell: calc((100vw - 2rem - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  }
+
+  .wordsearch-main-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .wordsearch-title {
+    font-size: 1.6rem;
+  }
+
+  .wordsearch-list-box {
+    margin-top: 0.75rem;
+    padding: 0.6rem;
+  }
+
+  .wordsearch-list-title {
+    font-size: 1rem;
+  }
+
+  .wordsearch-list-item {
+    font-size: 0.95rem;
+  }
+
+  .wordsearch-validate-btn,
+  .wordsearch-reveal-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 1rem;
+  }
+}
+

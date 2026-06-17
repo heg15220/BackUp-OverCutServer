@@ -1,0 +1,30 @@
+import argparse
+import json
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+import os
+
+DB_URL = os.getenv("DB_URI", "mysql+pymysql://root:root@db:3306/f1db")
+engine = create_engine(DB_URL)
+Session = sessionmaker(bind=engine)
+
+def autocomplete_teams(partial_name: str):
+    session = Session()
+    try:
+        result = session.execute(text("""
+            SELECT DISTINCT name
+            FROM constructors
+            WHERE LOWER(name) LIKE :partial
+            ORDER BY name
+            LIMIT 10
+        """), {"partial": f"%{partial_name.lower()}%"}).fetchall()
+        return [r[0] for r in result]
+    finally:
+        session.close()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--partial", required=True)
+    args = parser.parse_args()
+    suggestions = autocomplete_teams(args.partial)
+    print(json.dumps(suggestions))

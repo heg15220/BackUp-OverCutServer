@@ -1,0 +1,293 @@
+.minigames-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0c0f1a, #1a2238);
+  display: flex;
+  flex-direction: column; /* apila header + games */
+  align-items: center;
+  padding: 4rem 1rem 2rem;
+}
+
+
+.minigames-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  max-width: 1100px;
+  width: 100%;
+}
+
+
+.minigames-title {
+  font-size: 2.8rem;
+  font-family: 'F1 Bold', sans-serif;
+  letter-spacing: 1px;
+  color: #fbc02d;
+  text-shadow: 0 0 8px rgba(251, 192, 45, 0.3);
+}
+
+.minigames-title .highlight {
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.minigames-subtitle {
+  font-size: 1.2rem;
+  color: #cccccc;
+  font-family: 'F1 Regular', sans-serif;
+  margin-top: 0.4rem;
+}
+
+
+.games {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  padding: 2rem 1rem;
+  justify-items: center;
+  background: linear-gradient(135deg, #0c0f1a, #1a2238); /* Añadido */
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+
+.gameThumbnailLink {
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+  width: 180px;   /* antes 160px */
+  height: 260px;  /* antes 230px */
+}
+
+.gameThumbnailLink:hover {
+  transform: scale(1.05);
+}
+
+.cardDiv {
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  border-radius: 12px;
+  border: 2px solid rgba(251, 192, 45, 0.2); /* borde externo dorado suave */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05), /* borde interno tenue */
+    0 0 12px rgba(0, 0, 0, 0.3);              /* sombra exterior */
+  overflow: hidden;
+  position: relative;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.cardDiv:hover {
+  border-color: #fbc02d;
+  box-shadow: 0 0 16px rgba(251, 192, 45, 0.5);
+}
+
+
+.cardDiv .gameImage {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.text {
+  position: absolute;
+  bottom: 0;
+  background-color: #0a2f45;
+  width: 100%;
+  padding: 12px 0;
+  text-align: center;
+}
+
+.playLabel {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffffffb3;
+  margin: 0;
+}
+
+.gameTitle {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #fbc02d;
+  margin: 4px 0 0 0;
+}
+
+
+/* Etiqueta NEW */
+.tag {
+  position: absolute;
+  background-color: #00fa9a;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 0 4px rgba(0, 250, 154, 0.3);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate__animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animate__fadeIn {
+  animation-name: fadeIn;
+}
+
+@media (max-width: 768px) {
+  .minigames-page {
+    padding: 2rem 0.5rem 1rem;
+  }
+
+  .minigames-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .minigames-title {
+    font-size: 2rem;
+  }
+
+  .minigames-subtitle {
+    font-size: 1rem;
+  }
+
+  .games {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 1rem;
+  }
+
+  .gameThumbnailLink {
+    width: 140px;
+    height: 220px;
+  }
+
+  .cardDiv .gameImage {
+    height: 65%;
+  }
+
+  .playLabel {
+    font-size: 12px;
+  }
+
+  .gameTitle {
+    font-size: 14px;
+  }
+
+  .text {
+    padding: 10px 0;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+}
+
+
+/* ===========================
+   Pagination (OverCutGames style)
+   =========================== */
+
+.minigames-pagination {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0.5rem 0 2rem;
+  flex-wrap: wrap;
+}
+
+/* flechas */
+.page-nav {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2px solid rgba(251, 192, 45, 0.35);
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.page-nav:hover:not(:disabled) {
+  transform: scale(1.06);
+  border-color: rgba(251, 192, 45, 0.75);
+  box-shadow: 0 0 12px rgba(251, 192, 45, 0.25);
+}
+
+.page-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* números */
+.page-number {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(251, 192, 45, 0.22);
+  background: rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+
+  font-family: "F1 Bold", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  font-size: 1.05rem;
+  color: #fbc02d;
+  text-shadow: 0 0 8px rgba(251, 192, 45, 0.22);
+
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.page-number:hover {
+  transform: scale(1.06);
+  border-color: rgba(251, 192, 45, 0.65);
+  box-shadow: 0 0 12px rgba(251, 192, 45, 0.25);
+}
+
+/* activa */
+.page-number.active {
+  background: rgba(251, 192, 45, 0.12);
+  border-color: rgba(251, 192, 45, 0.9);
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.22);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .minigames-pagination {
+    gap: 8px;
+    margin: 0.25rem 0 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .page-number,
+  .page-nav {
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+  }
+
+  .page-number {
+    font-size: 1rem;
+  }
+}

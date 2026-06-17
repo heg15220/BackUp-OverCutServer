@@ -1,0 +1,395 @@
+.championship-tracking {
+  padding: 2rem;
+  font-family: 'F1 Regular', sans-serif;
+  background-color: #111;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.04);
+  max-width: 100%;
+  margin: 2rem auto;
+  overflow-x: auto;
+}
+
+.championship-title {
+  text-align: center;
+  color: #ffcc00;
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+  letter-spacing: 1px;
+}
+
+.stat-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.stat-controls select {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  background-color: #1a1a1a;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.stat-controls select:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #151515;
+  font-size: 0.95rem;
+  min-width: 950px;
+}
+
+.result-table thead {
+  background-color: #1a1a1a;
+  color: #ffcc00;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.04rem;
+}
+
+.result-table th,
+.result-table td {
+  padding: 0.8rem 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid #2a2a2a;
+  white-space: nowrap;
+}
+
+.result-table td {
+  font-weight: 400;
+  color: #ddd;
+}
+
+.result-table tbody tr:hover {
+  background-color: #222;
+  transition: background-color 0.2s ease;
+}
+
+.pilot-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  padding-left: 0.5rem;
+}
+
+.pilot-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.flag {
+  height: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  vertical-align: middle;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .championship-title {
+    font-size: 1.5rem;
+  }
+
+  .result-table {
+    font-size: 0.85rem;
+    min-width: unset;
+  }
+
+  .pilot-name {
+    font-size: 0.85rem;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.5rem 0.4rem;
+  }
+}
+.race-header-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.race-abbr {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: #ddd;
+}
+
+.sprint-points {
+  color: #00eaff; /* Cian brillante */
+  font-weight: 600;
+}
+
+
+.race-points {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.plus-separator {
+  color: #999;
+  font-weight: 400;
+}
+
+.status-cell {
+  font-weight: bold;
+  color: #ff6b6b;
+}
+.race-winner {
+  color: #ffcc00;
+  font-weight: 700;
+}
+
+
+.race-second {
+  color: #f0f0f5;
+  font-weight: 700;
+}
+
+.race-third {
+  color: #cd7f32;
+  font-weight: 600;
+}
+
+.race-other {
+  color: #e0e0e0;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+}
+.race-other-points {
+  color: #6fbce3; /* azul acero más brillante */
+  font-weight: 600;
+}
+
+
+.race-other-zero {
+  color: #a0a0a0;
+  font-weight: 500;
+}
+
+
+
+.scroll-wrapper {
+  position: relative;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.scroll-top,
+.scroll-bottom {
+  height: 12px;
+  overflow-x: auto;
+}
+
+.scroll-top::-webkit-scrollbar,
+.scroll-bottom::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.result-table {
+  border-collapse: collapse;
+  width: max-content; /* permite scroll horizontal natural */
+  min-width: 100%;
+}
+
+.pilot-col {
+  position: sticky;
+  left: 0;
+  background-color: #151515;
+  z-index: 1;
+  box-shadow: 4px 0 4px -2px rgba(0, 0, 0, 0.4);
+}
+
+.race-bonus {
+  color: #ff69b4; /* rosa brillante para destacar */
+  font-weight: 700;
+}
+
+
+/* === Ajustes responsive adicionales === */
+@media (max-width: 768px) {
+  .championship-tracking {
+    padding: 1.5rem 1rem;
+  }
+
+  .championship-title {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-controls select {
+    padding: 0.45rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .result-table {
+    font-size: 0.85rem;
+    min-width: unset;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .pilot-name {
+    font-size: 0.85rem;
+  }
+
+  .race-abbr {
+    font-size: 0.7rem;
+  }
+
+  .flag {
+    height: 18px;
+  }
+}
+
+@media (max-width: 500px) {
+  .championship-tracking {
+    padding: 1rem 0.5rem;
+  }
+
+  .championship-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-controls select {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .result-table {
+    font-size: 0.8rem;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .pilot-name {
+    font-size: 0.8rem;
+  }
+
+  .race-abbr {
+    font-size: 0.65rem;
+  }
+
+  .flag {
+    height: 16px;
+  }
+
+  .pilot-cell {
+    gap: 0.4rem;
+    padding-left: 0.3rem;
+  }
+
+  .scroll-top,
+  .scroll-bottom {
+    height: 10px;
+  }
+}
+
+
+/* === Mobile ≤ 798px (Championship Tracking) === */
+@media (max-width: 798px) {
+  .championship-tracking {
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 12px;
+  }
+
+  .championship-title {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-controls {
+    padding: 0 0.5rem;
+    gap: 0.6rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stat-controls select {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 10px;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .result-table {
+    width: max-content;   /* scrolling horizontal natural */
+    min-width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 0.6rem 0.4rem;
+  }
+
+  .pilot-name { font-size: 0.9rem; }
+  .race-abbr { font-size: 0.7rem; letter-spacing: 0.3px; }
+  .flag { height: 18px; }
+
+  .pilot-col {
+    position: sticky;
+    left: 0;
+    background: #151515;
+    box-shadow: 4px 0 4px -2px rgba(0,0,0,0.35);
+    z-index: 1;
+  }
+
+  .scroll-top,
+  .scroll-bottom { height: 10px; }
+
+  .sprint-points { font-size: 0.9rem; }
+  .race-points { font-size: 0.95rem; }
+}
+
+/* Afinado ≤ 500px */
+@media (max-width: 500px) {
+  .result-table { font-size: 0.8rem; }
+  .result-table th, .result-table td { padding: 0.5rem 0.3rem; }
+  .pilot-name { font-size: 0.8rem; }
+  .flag { height: 16px; }
+}

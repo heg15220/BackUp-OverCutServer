@@ -1,0 +1,152 @@
+import {
+    fetchConfig,
+    appFetch,
+} from "./appFetch";
+
+export const createPost = (post, onSuccess, onErrors) => {
+    appFetch(
+        "/posts/",
+        fetchConfig("POST", post),
+        onSuccess,
+        onErrors
+    );
+};
+
+export const deletePost = (post, onSuccess, onErrors) => {
+    appFetch(
+        `/posts/${post.id}`,
+        fetchConfig("DELETE", post),
+        onSuccess,
+        onErrors
+    );
+};
+
+export const getAllCategories = (onSuccess) => {
+    appFetch(
+        "/posts/categories",
+        fetchConfig("GET"),
+        onSuccess
+    );
+};
+
+export const getUserPosts = ({userId,page }, onSuccess) => {
+    appFetch(
+        `/posts/user?userId=${userId}&page=${page}`,
+        fetchConfig("GET"),
+        onSuccess
+    );
+};
+
+// frontend/src/backend/postService.js
+export const uploadPostImage = (postId, file, onSuccess, onErrors) => {
+  const form = new FormData();
+  form.append('file', file); // 👈 coincide con @RequestParam("file")
+
+  // Usa SIEMPRE fetchConfig para heredar Authorization/CSRF y no fijar Content-Type
+  appFetch(
+    `/posts/addImage/${postId}`,
+    fetchConfig("POST", form),
+    onSuccess,
+    onErrors
+  );
+};
+
+
+
+export const getPostByPostId = (id, onSuccess) =>
+    appFetch(`/posts/${id}`, fetchConfig("GET"), onSuccess);
+
+
+export const modifyPost = (id, post, onSuccess, onErrors) => {
+    appFetch(
+        `/posts/${id}`,
+        fetchConfig("PUT", post),
+        onSuccess,
+        onErrors
+    );
+};
+
+export const getPosts = ({ title, categoryId, page, size, criteria, order, language }, onSuccess, onErrors) => {
+    let url = `/posts/getPosts?page=${page}&size=${size}`;
+
+    if (title) url += `&title=${title}`;
+    if (categoryId) url += `&categoryId=${categoryId}`;
+    if (criteria) url += `&criteria=${criteria}`;
+    if (order !== undefined) url += `&order=${order}`;
+    if (language) url += `&language=${language}`;
+
+    appFetch(
+        url,
+        fetchConfig("GET"),
+        onSuccess,
+        onErrors
+    );
+};
+
+
+export const newPosts = (timestamp, onSuccess) => {
+    appFetch(
+        `/posts/new?date=${timestamp}`,
+        fetchConfig("GET"),
+        onSuccess
+    );
+};
+
+export const getComments = ({ postId, page }, onSuccess, onErrors) => {
+    appFetch(
+        `/posts/${postId}/comments?page=${page}`,
+        fetchConfig("GET"),
+        onSuccess,
+        onErrors
+    );
+};
+
+export const createComment = (postId, comment, onSuccess) => {
+    appFetch(
+        `/posts/${postId}/comment`,
+        fetchConfig("POST", comment),
+        onSuccess,
+    );
+};
+
+export const createAnswer = (id, comment, onSuccess) => {
+    appFetch(
+        `/posts/comment/${id}/answer`,
+        fetchConfig("POST", comment),
+        onSuccess,
+    );
+};
+
+export const deleteComment = (comment, onSuccess, onErrors) => {
+    appFetch(
+        `/posts/comment/${comment}`,
+        fetchConfig("DELETE", comment),
+        onSuccess,
+        onErrors
+    );
+};
+
+export const modifyComment = (id, comment, onSuccess) => {
+    appFetch(
+        `/posts/comment/${id}`,
+        fetchConfig("PUT", comment),
+        onSuccess,
+    );
+};
+
+export const getUserPost = (id, onSuccess) => {
+    appFetch(
+        `/posts/${id}/user`,
+        fetchConfig("GET"),
+        onSuccess,
+    );
+};
+
+export const getPostSections = (postId, onSuccess) =>
+    appFetch(`/posts/${postId}/sections`, fetchConfig("GET"), onSuccess);
+
+export const addPostSections = (postId, sections, onSuccess, onErrors) =>
+    appFetch(`/posts/${postId}/sections`, fetchConfig("POST", sections), onSuccess, onErrors);
+
+export const deletePostSections = (postId, onSuccess, onErrors) =>
+    appFetch(`/posts/${postId}/sections`, fetchConfig("DELETE"), onSuccess, onErrors);

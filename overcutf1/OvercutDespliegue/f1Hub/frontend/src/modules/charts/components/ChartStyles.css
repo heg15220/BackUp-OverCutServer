@@ -1,0 +1,185 @@
+/* === Chart Card General === */
+.chart-card {
+  background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  padding: 1.8rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.chart-title {
+  font-family: 'F1 Bold', 'Inter', sans-serif;
+  font-size: 1.4rem;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* === Chart Selector Buttons === */
+.selector-button {
+  padding: 0.6rem 1.4rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  background: #e5e7eb;
+  color: #111827;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.selector-button:hover {
+  background-color: #d1d5db;
+}
+
+.selector-button.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* === Dropdowns and Inputs === */
+.chart-dropdown,
+.chart-input {
+  border: 2px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background: #f9fafb;
+  transition: border-color 0.2s ease-in-out;
+  font-size: 0.95rem;
+}
+
+.chart-dropdown:focus,
+.chart-input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* === Action Button === */
+.fetch-button {
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.fetch-button:hover {
+  background-color: #1d4ed8;
+}
+:root {
+  --accent: #ffcc00;
+  --tooltip-bg: #1e1e1e;
+  --tooltip-border: #444;
+}
+
+/* === Tarjeta contenedora de la gráfica === */
+.chart-card {
+  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(255, 204, 0, 0.06);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(255, 204, 0, 0.15);
+}
+
+.chart-title {
+  font-family: 'F1 Bold', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: var(--accent);
+}
+
+.chart-empty {
+  color: #888;
+  background-color: #1a1a1a;
+}
+
+/* === Gráfica interna === */
+.chart-graphic {
+  font-family: 'F1 Regular', sans-serif;
+}
+
+/* === Ejes y ticks === */
+.chart-axis line,
+.chart-axis path {
+  stroke: #777 !important;
+}
+
+.chart-tick {
+  font-size: 12px;
+  fill: #ccc !important;
+}
+
+/* === Cuadrícula === */
+.chart-grid line {
+  stroke: #444;
+  stroke-opacity: 0.6;
+}
+
+.chart-description {
+  font-size: 0.9rem;
+  color: #ccc; /* Mucho más visible en fondo oscuro */
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* === Móviles: dar más altura a la gráfica y NO tocar otros divs === */
+@media (max-width: 798px) {
+  /* Altura más cómoda en móviles */
+  .echarts-for-react {
+    height: 420px; /* antes 300px !important */
+  }
+
+  /* Mantén el resto si quieres (paddings, títulos, etc.) */
+  .chart-selector-container { padding: 0.9rem; }
+  .selector-button {
+    width: 100%;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.95rem;
+  }
+  .chart-dropdown,
+  .chart-input {
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.95rem;
+    padding: 0.45rem 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+  .fetch-button {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem;
+  }
+  .race-selector {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
+  }
+  .chart-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  .chart-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  .chart-description {
+    font-size: 0.85rem;
+    margin-top: -0.3rem;
+    margin-bottom: 0.8rem;
+  }
+}
+

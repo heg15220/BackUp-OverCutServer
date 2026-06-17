@@ -1,0 +1,35 @@
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+
+spring:
+  devtools:
+    restart:
+      trigger-file: reload
+    liveReload:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  main:
+    allow-bean-definition-overriding: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# No fijamos profile aquí; lo activas por variable de entorno en Docker
+# spring:
+#   profiles:
+#     active: prod
+
+server:
+  servlet:
+    context-path: '@project.contextPath@'
+
+project:
+  jwt:
+    signKey: ${PROJECT_JWT_SIGNKEY:${OVERCUT_JWT_SIGNKEY}}
+    expirationMinutes: ${PROJECT_JWT_EXP_MINUTES:${OVERCUT_JWT_EXP_MINUTES:1440}}
