@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import Header from './Header';
 import Footer from './Footer';
 import Body from './Body';
+import GoatCounterTracker from './GoatCounterTracker';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <meta charSet="UTF-8" />
         <title>OverCutHub - Big Data F1</title>
       </Helmet>
+      <GoatCounterTracker />
       <div className="app">
         <Header />
         <Body />

@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 
 import Body from "./Body";
 import Footer from "./Footer";
+import GoatCounterTracker from "./GoatCounterTracker";
 import Header from "./Header";
 import MobileHeader from "./MobileHeader";
 
@@ -45,6 +46,8 @@ const App = () => (
     <Helmet>
       <meta charSet="UTF-8" />
     </Helmet>
+
+    <GoatCounterTracker />
 
     <ConsentProvider>
       <AppShell />

@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 import Header from "./Header";
 import Footer from "./Footer";
 import Body from "./Body";
+import GoatCounterTracker from "./GoatCounterTracker";
 
 const App = () => {
   // ✅ App independiente: decide su basename propio
@@ -16,6 +17,8 @@ const App = () => {
         <meta charSet="UTF-8" />
         <title>OverCut Predictions</title>
       </Helmet>
+
+      <GoatCounterTracker />
 
       <div className="ocp-app">
         <Header />
