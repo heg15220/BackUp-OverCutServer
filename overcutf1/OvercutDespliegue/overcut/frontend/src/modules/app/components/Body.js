@@ -18,6 +18,8 @@ import Overcut from './Overcut';
 import OvercutRacing from "../../overcutRacing/components/OvercutRacing";
 
 import CareerMode from "../../careerMode/components/CareerMode";
+import CareerModeHome from "../../careerMode/components/CareerModeHome";
+import OvercutTrayectoria from "../../overcutTrayectoria/components/OvercutTrayectoria";
 
 import Home from "./Home";
 import {Quiz} from "../../quiz";
@@ -190,10 +192,21 @@ const Body = () => {
                     {loggedIn && <Route path="/minigames/categoryGame" element={withAdVignettes(<CategoryGame />, "games")} />}
                     <Route path="/minigames/wordSearch" element={withAdVignettes(<WordSearchGame />, "games")} />
 
+                    {/* Career Mode is two games now, so /careerMode is the
+                        choice between them and each one hangs off it. Both are
+                        open: no account, and not listed in OverCutGames. */}
                     <Route
-    			path="/careerMode"
-    			element={withAdVignettes(<CareerMode />, "games", "bottom")}
-  			/>
+                        path="/careerMode"
+                        element={withAdVignettes(<CareerModeHome />, "games", "bottom")}
+                    />
+                    <Route
+                        path="/careerMode/deep"
+                        element={withAdVignettes(<CareerMode />, "games", "bottom")}
+                    />
+                    <Route
+                        path="/careerMode/trayectoria"
+                        element={withAdVignettes(<OvercutTrayectoria backTo="/careerMode" />, "games", "bottom")}
+                    />
 
                     <Route path="/verify-email" element={<EmailVerificationPage />} />
                     <Route path="/email-confirmation" element={<EmailConfirmationPending />} />

@@ -14,10 +14,12 @@ import CookiePanel from "../../../cookies/CookiePanel";
 
 import CookieIntroModal from "../../../cookies/CookieIntroModal";
 
-const FULLSCREEN_GAME_PATHS = new Set([
-  "/overcutDraft",
-  "/careerMode"
-]);
+// Matched by prefix, not by equality: Career Mode grew sub-routes and an exact
+// Set put the site header and footer back around /careerMode/deep.
+const FULLSCREEN_GAME_ROOTS = ["/overcutDraft", "/careerMode"];
+
+const isFullscreenGamePath = (pathname) =>
+  FULLSCREEN_GAME_ROOTS.some((root) => pathname === root || pathname.startsWith(`${root}/`));
 
 const AppShell = () => {
   const [width, setWidth] = React.useState(window.innerWidth);
@@ -30,7 +32,7 @@ const AppShell = () => {
 
   const isMobile = width <= 768;
   const location = useLocation();
-  const isFullscreenGame = FULLSCREEN_GAME_PATHS.has(location.pathname);
+  const isFullscreenGame = isFullscreenGamePath(location.pathname);
 
   return (
     <div className={`App${isFullscreenGame ? " App--fullscreen" : ""}`}>

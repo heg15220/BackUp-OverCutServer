@@ -65,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(mvc.pattern("/api/careerMode/saves/**")).permitAll()
                        
                         .requestMatchers(mvc.pattern("/api/overcutRacing/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/overcutTrayectoria/**")).permitAll()
                         // 🔐 Endpoints protegidos
                         .requestMatchers(mvc.pattern("/api/posts/")).hasRole("JOURNALIST")
                         .requestMatchers(mvc.pattern("/api/posts/{id}")).hasRole("JOURNALIST")
