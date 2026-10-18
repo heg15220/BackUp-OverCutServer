@@ -1,12 +1,12 @@
 /**
  * The door to Career Mode.
  *
- * There are now two ways to race a whole Formula 1 career, and they differ in
- * one thing: how much of it you play by hand. The deep mode gives you every
- * Grand Prix; the quick one gives you every season. So the choice is presented
- * as exactly that difference - one card shows a single race's worth of laps,
- * the other a stack of seasons - rather than as two names you would have to
- * take on trust.
+ * There are two ways to race a whole Formula 1 career, and they differ in one
+ * thing: how much of it you play by hand. The deep mode gives you every Grand
+ * Prix; the quick one gives you every season. The third card is the other side
+ * of the garage - running the team instead of driving for it. So each choice is
+ * presented as what you actually hold: a single race's worth of laps, a stack of
+ * seasons, or a grid of cars with yours among them.
  *
  * The shell wears the OverCut seam because it belongs to neither mode: each
  * card previews its own palette instead, so you can see where you are going.
@@ -30,7 +30,7 @@ const STRINGS = {
     back: "Volver a OverCut",
     kicker: "OverCut",
     title: "Modo Carrera",
-    lead: "Dos formas de correr una carrera entera en la Fórmula 1. La diferencia es cuánto juegas tú.",
+    lead: "Dos formas de correr una carrera entera en la Fórmula 1 y una de dirigirla desde el muro de boxes.",
     deep: {
       name: "Carrera profunda",
       tag: "Juegas cada Gran Premio",
@@ -53,13 +53,24 @@ const STRINGS = {
       ],
       cta: "Empezar simulación rápida",
     },
-    free: "Las dos se juegan sin cuenta.",
+    manager: {
+      name: "Modo mánager",
+      tag: "Diriges el equipo",
+      copy: "Eres el jefe de equipo: desarrollas el coche, fichas pilotos, decides la estrategia en directo y respondes ante la directiva. O creas tu propio equipo desde cero y lo sumas a la parrilla.",
+      points: [
+        "Cualquier temporada desde 1950, con su parrilla real",
+        "Crea tu equipo: nombre, colores, motor y pilotos",
+        "Carrera en directo: paradas, lluvia y órdenes de equipo",
+      ],
+      cta: "Empezar modo mánager",
+    },
+    free: "Los tres se juegan sin cuenta.",
   },
   en: {
     back: "Back to OverCut",
     kicker: "OverCut",
     title: "Career Mode",
-    lead: "Two ways to race a whole Formula 1 career. What changes is how much of it you play.",
+    lead: "Two ways to race a whole Formula 1 career, and one to run it from the pit wall.",
     deep: {
       name: "Deep career",
       tag: "You play every Grand Prix",
@@ -82,7 +93,18 @@ const STRINGS = {
       ],
       cta: "Start quick simulation",
     },
-    free: "Both play without an account.",
+    manager: {
+      name: "Manager mode",
+      tag: "You run the team",
+      copy: "You are the team principal: you develop the car, sign drivers, call the strategy live and answer to the board. Or build your own team from scratch and add it to the grid.",
+      points: [
+        "Any season since 1950, with its real grid",
+        "Create your team: name, colours, engine and drivers",
+        "Live race: pit stops, rain and team orders",
+      ],
+      cta: "Start manager mode",
+    },
+    free: "All three play without an account.",
   },
 };
 
@@ -98,6 +120,10 @@ const SEASONS = [
   ".pP.WpP.PW.pPW",
   "pPW.WPW.WpPWPW",
 ];
+
+/* A grid of cars on pace, yours the gold one: the grain of the manager. */
+const GRID = [94, 90, 86, 83, 80, 78, 76, 73, 70, 66];
+const MINE = 5;
 
 const Card = ({ to, mode, tone, children }) => (
   <article className={`cmh-card cmh-card--${tone}`}>
@@ -159,6 +185,15 @@ export const CareerModeHome = () => (
                   <i key={`${row}-${index}`} className={`is-${cell === "." ? "none" : cell}`} />
                 ))}
               </span>
+            ))}
+          </span>
+        </Card>
+
+        <Card to="/careerMode/manager" mode={t.manager} tone="manager">
+          {/* The grid, car by car, with yours somewhere in it. */}
+          <span className="cmh-grid">
+            {GRID.map((pace, index) => (
+              <i key={pace} className={index === MINE ? "is-mine" : undefined} style={{ height: `${pace - 50}%` }} />
             ))}
           </span>
         </Card>

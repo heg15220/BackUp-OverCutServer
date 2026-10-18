@@ -20,6 +20,7 @@ import OvercutRacing from "../../overcutRacing/components/OvercutRacing";
 import CareerMode from "../../careerMode/components/CareerMode";
 import CareerModeHome from "../../careerMode/components/CareerModeHome";
 import OvercutTrayectoria from "../../overcutTrayectoria/components/OvercutTrayectoria";
+import OvercutManager from "../../overcutManager/components/OvercutManager";
 
 import Home from "./Home";
 import {Quiz} from "../../quiz";
@@ -192,9 +193,10 @@ const Body = () => {
                     {loggedIn && <Route path="/minigames/categoryGame" element={withAdVignettes(<CategoryGame />, "games")} />}
                     <Route path="/minigames/wordSearch" element={withAdVignettes(<WordSearchGame />, "games")} />
 
-                    {/* Career Mode is two games now, so /careerMode is the
-                        choice between them and each one hangs off it. Both are
-                        open: no account, and not listed in OverCutGames. */}
+                    {/* Career Mode is three games now - two driver careers and
+                        the team manager - so /careerMode is the choice between
+                        them and each one hangs off it. All are open: no account,
+                        and not listed in OverCutGames. */}
                     <Route
                         path="/careerMode"
                         element={withAdVignettes(<CareerModeHome />, "games", "bottom")}
@@ -206,6 +208,10 @@ const Body = () => {
                     <Route
                         path="/careerMode/trayectoria"
                         element={withAdVignettes(<OvercutTrayectoria backTo="/careerMode" />, "games", "bottom")}
+                    />
+                    <Route
+                        path="/careerMode/manager"
+                        element={withAdVignettes(<OvercutManager backTo="/careerMode" />, "games", "bottom")}
                     />
 
                     <Route path="/verify-email" element={<EmailVerificationPage />} />
