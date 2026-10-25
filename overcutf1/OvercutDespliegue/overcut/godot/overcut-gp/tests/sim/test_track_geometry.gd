@@ -57,13 +57,22 @@ func test_track_has_gravel_hairpin_and_high_kerb_chicane() -> void:
 	assert_true(Array(data.kerb_high_left).has(1))
 
 
+## Relative to a brute-force scan on the same machine, so a busy CPU cannot fail it.
 func test_query_performance() -> void:
-	var t0 := Time.get_ticks_msec()
-	for i in 10000:
-		geo.surface_at(data.points[i % data.points.size()] + Vector2(3, 2))
-	var ms := Time.get_ticks_msec() - t0
-	print("  surface_at x10k: %d ms" % ms)
-	assert_true(ms < 400, "10k consultas < 400 ms (%d ms)" % ms)
+	var n := data.points.size()
+	var t0 := Time.get_ticks_usec()
+	for i in 2000:
+		geo.surface_at(data.points[i % n] + Vector2(3, 2))
+	var grid_us := float(Time.get_ticks_usec() - t0) / 2000.0
+	t0 = Time.get_ticks_usec()
+	for i in 50:
+		var pos := data.points[(i * 37) % n] + Vector2(3, 2)
+		var best := INF
+		for k in n:
+			best = minf(best, geo._closest_on_segment(k, pos).x)
+	var brute_us := float(Time.get_ticks_usec() - t0) / 50.0
+	print("  surface_at: %.1f us vs brute force %.1f us" % [grid_us, brute_us])
+	assert_true(grid_us * 10.0 < brute_us, "grid %.1f us, brute %.1f us" % [grid_us, brute_us])
 
 
 func test_hinted_projection_matches_full_search() -> void:
