@@ -50,3 +50,26 @@ func test_touch_outside_zones_is_ignored() -> void:
 	c.handle_touch(0, Vector2(500, 20), true)
 	assert_near(c.throttle + c.brake + absf(c.steer), 0.0, 1e-6)
 	c.free()
+
+
+func _touch_event(pos: Vector2, pressed: bool) -> InputEventScreenTouch:
+	var e := InputEventScreenTouch.new()
+	e.index = 0
+	e.position = pos
+	e.pressed = pressed
+	return e
+
+
+func test_hidden_controls_ignore_touches_and_release_on_hide() -> void:
+	var c := _controls()
+	tree.root.add_child(c)
+	c.size = Vector2(1000, 500)
+	c.visible = false
+	c._input(_touch_event(_center(c, TouchControls.Zone.THROTTLE), true))
+	assert_near(c.throttle, 0.0, 1e-6, "hidden: mouse clicks must not drive the car")
+	c.visible = true
+	c._input(_touch_event(_center(c, TouchControls.Zone.THROTTLE), true))
+	assert_true(c.throttle > 0.0)
+	c.visible = false
+	assert_near(c.throttle, 0.0, 1e-6, "hiding releases held fingers")
+	c.queue_free()

@@ -103,15 +103,37 @@ func project_hinted(pos: Vector2, hint: int) -> TrackProjection:
 	var reach := maxf(data.wall_left[best], data.wall_right[best]) + 5.0
 	if at_edge or best_d2 > reach * reach:
 		return project(pos)
-	return _make_projection(best, best_t, pos)
+	var p := _make_projection(best, best_t, pos)
+	# Off the racing surface another part of the circuit may be nearer than the
+	# hinted one (two legs sharing an infield), so ask the full search.
+	var left := p.lateral >= 0.0
+	var edge := _side(data.width_left if left else data.width_right, p) + _side(data.kerb_left if left else data.kerb_right, p)
+	if absf(p.lateral) > edge:
+		return project(pos)
+	return p
 
 
-## Lateral offset of another point measured against an existing projection's segment.
-## Good to a few centimetres for points within a car length of the projected one.
+## Lateral offset of a nearby point (within a car length of p), walking to the
+## neighbouring segment when the point lies past either end of p's segment, so it
+## follows the curve instead of extrapolating p's tangent.
 func lateral_at(p: TrackProjection, pos: Vector2) -> float:
-	var a := data.points[p.index]
-	var b := data.points[(p.index + 1) % _n]
-	return (pos - a.lerp(b, p.t)).dot(p.tangent.orthogonal())
+	var i := p.index
+	var a := data.points[i]
+	var ab := data.points[(i + 1) % _n] - a
+	var t := 0.0
+	for walk in 3:
+		a = data.points[i]
+		ab = data.points[(i + 1) % _n] - a
+		var len2 := ab.length_squared()
+		t = 0.0 if len2 == 0.0 else (pos - a).dot(ab) / len2
+		if t > 1.0:
+			i = (i + 1) % _n
+		elif t < 0.0:
+			i = (i - 1 + _n) % _n
+		else:
+			break
+	t = clampf(t, 0.0, 1.0)
+	return (pos - (a + ab * t)).dot(ab.normalized().orthogonal())
 
 
 func surface_at(pos: Vector2, racing_line_lateral := INF) -> int:

@@ -41,3 +41,11 @@ func test_analog_steer_not_attenuated_without_assist() -> void:
 	var r := InputMapper.Raw.new()
 	r.steer = 1.0
 	assert_near(InputMapper.new().process_raw(r, SimRunner.rolling(spec, 80.0), SimRunner.TICK).steer, 1.0, 1e-6)
+
+
+func test_gamepad_bindings_accept_any_pad() -> void:
+	InputMapper.ensure_actions()
+	for action in InputMapper.ACTIONS:
+		for ev in InputMap.action_get_events(action):
+			if ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
+				assert_eq(ev.device, -1, "%s bound to pad %d only" % [action, ev.device])

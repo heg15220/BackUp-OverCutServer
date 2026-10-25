@@ -11,6 +11,9 @@ const DOWNSHIFT_TARGET_RPM := 16000.0
 const ENGINE_BRAKE_NM := 30.0
 ## Minimum speed used to turn KERS power into force (avoids infinite force at rest).
 const KERS_MIN_SPEED := 5.0
+## Gear -1 is reverse. Its force is returned positive; the sim applies it backwards.
+const REVERSE := -1
+const REVERSE_RATIO := 30.0
 
 var spec: CarSpec
 var gear := 1
@@ -48,32 +51,38 @@ func speed_at(at_rpm: float, at_gear: int) -> float:
 	return at_rpm * TAU / 60.0 / spec.gear_ratios[at_gear - 1] * spec.tyre_radius
 
 
+func ratio() -> float:
+	return REVERSE_RATIO if gear == REVERSE else spec.gear_ratios[gear - 1]
+
+
 func update_rpm(wheel_speed_ms: float) -> void:
-	if gear <= 0:
+	if gear == 0:
 		rpm = spec.idle_rpm
 		return
-	rpm = maxf(spec.idle_rpm, absf(wheel_speed_ms) / spec.tyre_radius * spec.gear_ratios[gear - 1] * 60.0 / TAU)
+	rpm = maxf(spec.idle_rpm, absf(wheel_speed_ms) / spec.tyre_radius * ratio() * 60.0 / TAU)
 
 
 ## Engine force at the ground at full throttle in the current gear, without side effects.
 func full_drive_force() -> float:
-	if gear <= 0:
+	if gear == 0:
 		return 0.0
-	var eval_rpm := maxf(rpm, LAUNCH_RPM) if gear == 1 else rpm
-	return engine_torque(eval_rpm, 1.0) * spec.gear_ratios[gear - 1] * spec.drivetrain_eff / spec.tyre_radius
+	var eval_rpm := maxf(rpm, LAUNCH_RPM) if gear == 1 or gear == REVERSE else rpm
+	return engine_torque(eval_rpm, 1.0) * ratio() * spec.drivetrain_eff / spec.tyre_radius
 
 
 ## Total longitudinal force at the ground from the engine (and KERS when requested).
 func drive_force(throttle: float, kers_request: bool, dt: float) -> float:
-	if gear <= 0:
+	if gear == 0:
 		return 0.0
 	var force := 0.0
 	if _shift_timer > 0.0:
 		_shift_timer -= dt
 	else:
-		var eval_rpm := maxf(rpm, LAUNCH_RPM) if gear == 1 and throttle > 0.05 else rpm
-		force = engine_torque(eval_rpm, throttle) * spec.gear_ratios[gear - 1] * spec.drivetrain_eff / spec.tyre_radius
-	if kers_request and throttle > 0.5 and kers_energy_j > 0.0:
+		var launching := (gear == 1 or gear == REVERSE) and throttle > 0.05
+		var eval_rpm := maxf(rpm, LAUNCH_RPM) if launching else rpm
+		force = engine_torque(eval_rpm, throttle) * ratio() * spec.drivetrain_eff / spec.tyre_radius
+	# KERS is a button: it deploys whenever pressed on the throttle, not in reverse.
+	if kers_request and gear >= 1 and throttle > 0.05 and kers_energy_j > 0.0:
 		var power := minf(spec.kers_power_kw * 1000.0, kers_energy_j / dt)
 		kers_energy_j -= power * dt
 		var speed := maxf(speed_at(rpm, gear), KERS_MIN_SPEED)
@@ -82,7 +91,7 @@ func drive_force(throttle: float, kers_request: bool, dt: float) -> float:
 
 
 func auto_shift() -> void:
-	if gear <= 0:
+	if gear < 1:
 		return
 	if rpm > UPSHIFT_RPM and gear < spec.gear_ratios.size():
 		shift(1)
@@ -90,7 +99,21 @@ func auto_shift() -> void:
 		shift(-1)
 
 
+func select_reverse() -> void:
+	gear = REVERSE
+	_shift_timer = spec.shift_time
+
+
+func select_first() -> void:
+	gear = 1
+	_shift_timer = spec.shift_time
+
+
 func shift(direction: int) -> void:
+	if gear == REVERSE:
+		if direction > 0:
+			select_first()
+		return
 	var target := clampi(gear + direction, 1, spec.gear_ratios.size())
 	if target == gear:
 		return

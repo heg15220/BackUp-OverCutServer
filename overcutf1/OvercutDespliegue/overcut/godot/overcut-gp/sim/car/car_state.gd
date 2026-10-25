@@ -26,7 +26,10 @@ var last_impact_speed := 0.0
 var wall_contact := false
 var distance_m := 0.0
 ## Last track segment index (hint for the next projection); -1 = unknown.
+## Reset it to -1 whenever the car is teleported (grid, pits, recovery).
 var track_index := -1
+## Seconds the driver has held the brake at a standstill (auto gearbox selects reverse).
+var reverse_hold := 0.0
 
 
 static func create(spec: CarSpec, compound_id: StringName, tyre_temp_c: float) -> CarState:

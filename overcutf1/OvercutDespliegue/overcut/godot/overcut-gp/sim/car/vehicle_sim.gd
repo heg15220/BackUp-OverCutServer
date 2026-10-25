@@ -26,6 +26,11 @@ const COLLISION_CIRCLES := [2.2, 0.8, -0.8, -2.2]
 const COLLISION_RADIUS := 0.55
 const WALL_RESTITUTION := 0.2
 const WALL_FRICTION := 0.4
+## Share of the drive a limited-slip diff can move to the wheel with grip.
+const DIFF_LOCK := 0.3
+## Brake held this long at a standstill selects reverse (auto gearbox).
+const REVERSE_HOLD := 0.4
+const STANDSTILL := 0.5  ## m/s
 
 static var _offsets_cache := {}
 
@@ -62,8 +67,11 @@ static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackE
 		state.wheels[i].tyre.update(dt, slip_energy[i] / dt, env.air_c, env.track_c, water)
 
 	# Walls are a boundary, not a thin object, so checking once per tick cannot tunnel.
+	# Re-project first: the car has moved up to a metre since the tick began.
 	if proj != null:
-		_collide_walls(state, spec, env.geometry, proj)
+		var after := env.geometry.project_hinted(state.position, state.track_index)
+		state.track_index = after.index
+		_collide_walls(state, spec, env.geometry, after)
 
 
 static func _wheel_offsets(spec: CarSpec) -> Array[Vector2]:
@@ -90,16 +98,16 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 	var target := clampf(input.steer, -1.0, 1.0) * spec.max_steer
 	state.steer_angle = move_toward(state.steer_angle, target, STEER_RATE * h)
 
-	# DRS and gearbox
-	state.drs_open = input.drs and input.brake < 0.05
+	# Gearbox, including reverse. In reverse the pedals swap: the brake pedal drives
+	# the car backwards and the throttle pedal brakes it.
+	_select_gear(state, input, v_local.x, h)
+	var reversing := pt.gear == Powertrain.REVERSE
+	var throttle := input.brake if reversing else input.throttle
+	var brake := input.throttle if reversing else input.brake
+	state.drs_open = input.drs and brake < 0.05 and not reversing
 	pt.update_rpm(v_local.x)
 	if state.auto_gearbox:
 		pt.auto_shift()
-	else:
-		if input.shift_up:
-			pt.shift(1)
-		if input.shift_down:
-			pt.shift(-1)
 
 	# Aero
 	var q := 0.5 * Units.AIR_DENSITY * speed * speed
@@ -118,9 +126,38 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 	var lat_rear := mass * state.accel_local.y * spec.cg_height / spec.track_rear * 0.5
 
 	# Longitudinal demands
-	var drive := pt.drive_force(input.throttle, input.kers, h)
-	var brake_total := clampf(input.brake, 0.0, 1.0) * spec.max_brake_force_n
+	# Stopped with the brake on, the clutch is held open (as on the grid): the engine
+	# revs but does not drive. Releasing the brake is the launch.
+	var clutch_open := absf(v_local.x) < STANDSTILL and brake > 0.5
+	var drive := 0.0 if clutch_open else pt.drive_force(throttle, input.kers, h) * (-1.0 if reversing else 1.0)
+	var brake_total := clampf(brake, 0.0, 1.0) * spec.max_brake_force_n
 	var stop_k := mass * 0.25 / h  # force that would stop a quarter-car in one substep
+
+	# Loads and available grip first: the differential needs both rears' grip.
+	var loads := PackedFloat64Array([0.0, 0.0, 0.0, 0.0])
+	var avails := PackedFloat64Array([0.0, 0.0, 0.0, 0.0])
+	for i in 4:
+		var base_load: float
+		if i < 2:
+			base_load = front_half + (lat_front if i == CarState.FL else -lat_front)
+		else:
+			base_load = rear_half + (lat_rear if i == CarState.RL else -lat_rear)
+		loads[i] = maxf(0.0, base_load * (1.0 + BUMP_LOAD * bump[i] * sin(state.distance_m * 1.7 + i)))
+		avails[i] = TyreModel.effective_mu(mu[i], loads[i]) * loads[i]
+
+	# Limited-slip diff: equal split, but up to DIFF_LOCK of the drive moves from a
+	# wheel that cannot use its half to the other one.
+	var drive_rl := drive * 0.5
+	var drive_rr := drive * 0.5
+	var half := absf(drive) * 0.5
+	if half > avails[CarState.RL] and half <= avails[CarState.RR]:
+		var moved := signf(drive) * minf(half - avails[CarState.RL], DIFF_LOCK * absf(drive))
+		drive_rl -= moved
+		drive_rr += moved
+	elif half > avails[CarState.RR] and half <= avails[CarState.RL]:
+		var moved := signf(drive) * minf(half - avails[CarState.RR], DIFF_LOCK * absf(drive))
+		drive_rr -= moved
+		drive_rl += moved
 
 	var force := Vector2.ZERO
 	var torque := 0.0
@@ -128,22 +165,18 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 		var w := state.wheels[i]
 		var front := i < 2
 		var r: Vector2 = corners[i]
-		var base_load: float
-		if front:
-			base_load = front_half + (lat_front if i == CarState.FL else -lat_front)
-		else:
-			base_load = rear_half + (lat_rear if i == CarState.RL else -lat_rear)
-		var load := maxf(0.0, base_load * (1.0 + BUMP_LOAD * bump[i] * sin(state.distance_m * 1.7 + i)))
+		var load := loads[i]
 		w.load_n = load
 		var delta := state.steer_angle if front else 0.0
 		# Contact patch velocity in the car frame, then in the wheel frame.
 		var vw := Vector2(v_local.x - state.yaw_rate * r.y, v_local.y + state.yaw_rate * r.x).rotated(-delta)
 
-		var avail := TyreModel.effective_mu(mu[i], load) * load
+		var avail := avails[i]
 		var brake_i := brake_total * (spec.brake_bias_front if front else 1.0 - spec.brake_bias_front) * 0.5
-		var fx := -clampf(vw.x * stop_k, -brake_i, brake_i)
-		if not front:
-			fx += drive * 0.5
+		var drive_i := 0.0 if front else (drive_rl if i == CarState.RL else drive_rr)
+		# The brake resists the net demand: at a standstill it holds the drive back
+		# (revving on the grid) instead of only opposing motion.
+		var fx := drive_i - clampf(vw.x * stop_k + drive_i, -brake_i, brake_i)
 
 		var slip_angle := atan2(vw.y, maxf(absf(vw.x), MIN_SLIP_SPEED))
 		var fy: float
@@ -190,10 +223,37 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 	state.distance_m += state.velocity.length() * h
 
 	# Hold still: below STOP_SPEED with no throttle the car is parked.
-	if state.velocity.length() < STOP_SPEED and input.throttle < 0.05:
+	if state.velocity.length() < STOP_SPEED and throttle < 0.05:
 		state.velocity = Vector2.ZERO
 		state.yaw_rate = 0.0
 		state.accel_local = Vector2.ZERO
+
+
+## Reverse in and out. Auto: holding the brake at a standstill selects reverse,
+## throttle selects first again. Manual: shift down from first at a standstill.
+static func _select_gear(state: CarState, input: DriverInput, vx: float, h: float) -> void:
+	var pt := state.powertrain
+	var stopped := absf(vx) < STANDSTILL
+	if pt.gear == Powertrain.REVERSE:
+		state.reverse_hold = 0.0
+		if (state.auto_gearbox and input.throttle > 0.3 and vx > -STANDSTILL) or (not state.auto_gearbox and input.shift_up):
+			pt.select_first()
+		return
+	if state.auto_gearbox:
+		if pt.gear == 1 and stopped and input.brake > 0.3 and input.throttle < 0.05:
+			state.reverse_hold += h
+			if state.reverse_hold >= REVERSE_HOLD:
+				state.reverse_hold = 0.0
+				pt.select_reverse()
+		else:
+			state.reverse_hold = 0.0
+		return
+	if input.shift_down and pt.gear == 1 and stopped:
+		pt.select_reverse()
+	elif input.shift_up:
+		pt.shift(1)
+	elif input.shift_down:
+		pt.shift(-1)
 
 
 ## Four circles along the car's axis against the track walls: positional correction

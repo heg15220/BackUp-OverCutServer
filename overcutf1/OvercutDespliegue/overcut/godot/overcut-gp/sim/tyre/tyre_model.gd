@@ -28,10 +28,15 @@ static func effective_mu(mu: float, load_n: float) -> float:
 
 
 static func lateral_force(slip_angle: float, load_n: float, mu: float) -> float:
-	return pacejka(slip_angle, LAT_B, LAT_C, effective_mu(mu, load_n) * load_n, LAT_E)
+	return lateral_with_peak(slip_angle, effective_mu(mu, load_n) * load_n)
 
 
 ## Lateral force when the caller already knows the peak force (grip with load
 ## sensitivity applied); the curve only supplies the shape.
+## Past the peak the curve never drops below SLIDE_FACTOR: a tyre sliding sideways
+## still has sliding friction, the same as a locked or spinning one.
 static func lateral_with_peak(slip_angle: float, peak_force: float) -> float:
-	return pacejka(slip_angle, LAT_B, LAT_C, peak_force, LAT_E)
+	var y := pacejka(slip_angle, LAT_B, LAT_C, 1.0, LAT_E)
+	if absf(slip_angle) > PEAK_SLIP_ANGLE:
+		y = signf(slip_angle) * maxf(absf(y), SLIDE_FACTOR)
+	return y * peak_force

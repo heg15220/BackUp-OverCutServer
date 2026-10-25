@@ -31,7 +31,8 @@ extends Resource
 @export var drs_cl_a_delta := -0.50
 
 @export var brake_bias_front := 0.56
-@export var max_brake_force_n := 40000.0
+## Sized so full pedal saturates the fronts only below ~200 km/h (peak ~5 g at 300).
+@export var max_brake_force_n := 27000.0
 @export var fuel_capacity_kg := 160.0
 
 

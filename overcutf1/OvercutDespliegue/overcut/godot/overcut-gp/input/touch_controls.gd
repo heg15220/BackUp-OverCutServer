@@ -37,10 +37,27 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	# Hidden controls must not drive the car: mouse-to-touch emulation turns every
+	# desktop click into a touch.
+	if not is_visible_in_tree():
+		return
 	if event is InputEventScreenTouch:
 		handle_touch(event.index, event.position - global_position, event.pressed)
 	elif event is InputEventScreenDrag:
 		handle_drag(event.index, event.position - global_position)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_VISIBILITY_CHANGED and not is_visible_in_tree():
+		release_all()
+	elif what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		release_all()
+
+
+## Lifts every finger (hidden, app lost focus): no pedal stays held.
+func release_all() -> void:
+	_fingers.clear()
+	_recompute()
 
 
 func zone_rect(zone: int) -> Rect2:

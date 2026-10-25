@@ -11,10 +11,17 @@ static func apply(input: DriverInput, state: CarState, spec: CarSpec, cfg: Assis
 	state.auto_gearbox = cfg.auto_gearbox
 	var out := input.copy()
 	if cfg.traction_control and out.throttle > 0.0:
+		var pt := state.powertrain
 		var capacity := _fx_capacity(state.wheels[CarState.RL]) + _fx_capacity(state.wheels[CarState.RR])
-		var full := state.powertrain.full_drive_force()
+		var kers_force := 0.0
+		if out.kers and pt.gear >= 1 and pt.kers_energy_j > 0.0:
+			kers_force = spec.kers_power_kw * 1000.0 / maxf(pt.speed_at(pt.rpm, pt.gear), Powertrain.KERS_MIN_SPEED)
+			if kers_force > capacity:
+				out.kers = false  # KERS alone would spin the wheels
+				kers_force = 0.0
+		var full := pt.full_drive_force()
 		if full > 0.0:
-			out.throttle = minf(out.throttle, capacity / full)
+			out.throttle = minf(out.throttle, maxf(0.0, capacity - kers_force) / full)
 	if cfg.abs and out.brake > 0.0:
 		var cap := 1.0
 		for i in 4:

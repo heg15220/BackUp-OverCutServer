@@ -55,10 +55,12 @@ static func ensure_actions() -> void:
 			var ev: InputEvent
 			if action in [&"throttle", &"brake"] and code in [JOY_AXIS_TRIGGER_RIGHT, JOY_AXIS_TRIGGER_LEFT]:
 				ev = InputEventJoypadMotion.new()
+				ev.device = -1  # any pad
 				ev.axis = code
 				ev.axis_value = 1.0
 			elif code in [JOY_BUTTON_A, JOY_BUTTON_Y, JOY_BUTTON_RIGHT_SHOULDER, JOY_BUTTON_LEFT_SHOULDER] and action in [&"kers", &"drs", &"shift_up", &"shift_down"]:
 				ev = InputEventJoypadButton.new()
+				ev.device = -1
 				ev.button_index = code
 			else:
 				ev = InputEventKey.new()
@@ -66,6 +68,7 @@ static func ensure_actions() -> void:
 			InputMap.action_add_event(action, ev)
 	for side in [[&"steer_left", -1.0], [&"steer_right", 1.0]]:
 		var stick := InputEventJoypadMotion.new()
+		stick.device = -1
 		stick.axis = JOY_AXIS_LEFT_X
 		stick.axis_value = side[1]
 		InputMap.action_add_event(side[0], stick)
