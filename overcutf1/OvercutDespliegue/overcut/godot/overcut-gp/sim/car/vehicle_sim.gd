@@ -18,6 +18,11 @@ const STOP_SPEED := 0.3
 ## Slip speed of a spinning wheel: max(SPIN_SLIP_MIN, |vx| * SPIN_SLIP_FRACTION).
 const SPIN_SLIP_MIN := 3.0
 const SPIN_SLIP_FRACTION := 0.2
+## Collision circles (x offsets along the car axis) and their radius.
+const COLLISION_CIRCLES := [2.2, 0.8, -0.8, -2.2]
+const COLLISION_RADIUS := 0.55
+const WALL_RESTITUTION := 0.2
+const WALL_FRICTION := 0.4
 
 
 static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackEnvironment, dt: float) -> void:
@@ -29,6 +34,40 @@ static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackE
 	var h := dt / SUBSTEPS
 	for k in SUBSTEPS:
 		_substep(state, spec, input, env, water, corners, h)
+	# Walls are a boundary, not a thin object, so checking once per tick cannot tunnel.
+	if env.geometry != null:
+		_collide_walls(state, spec, env.geometry)
+
+
+## Four circles along the car's axis against the track walls: positional correction
+## plus an impulse with restitution and wall friction at the contact point.
+static func _collide_walls(state: CarState, spec: CarSpec, geo: TrackGeometry) -> void:
+	state.wall_contact = false
+	var mass := spec.mass_kg + state.fuel_kg
+	for x in COLLISION_CIRCLES:
+		var r := Vector2(x, 0.0).rotated(state.heading)
+		var push := geo.wall_contact(state.position + r, COLLISION_RADIUS)
+		if push == Vector2.ZERO:
+			continue
+		state.wall_contact = true
+		state.position += push
+		var n := push.normalized()  # points back into the track
+		var v_point := state.velocity + r.rotated(PI / 2) * state.yaw_rate
+		var vn := v_point.dot(n)
+		if vn >= 0.0:
+			continue
+		state.last_impact_speed = maxf(state.last_impact_speed, -vn)
+		var rn := r.x * n.y - r.y * n.x
+		var j := -(1.0 + WALL_RESTITUTION) * vn / (1.0 / mass + rn * rn / spec.yaw_inertia)
+		var tangent_v := v_point - n * vn
+		var impulse := n * j
+		if tangent_v.length() > 0.01:
+			var t := tangent_v.normalized()
+			var rt := r.x * t.y - r.y * t.x
+			var jt := minf(WALL_FRICTION * j, tangent_v.length() / (1.0 / mass + rt * rt / spec.yaw_inertia))
+			impulse -= t * jt
+		state.velocity += impulse / mass
+		state.yaw_rate += (r.x * impulse.y - r.y * impulse.x) / spec.yaw_inertia
 
 
 static func _wheel_offsets(spec: CarSpec) -> Array[Vector2]:
@@ -105,9 +144,7 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, env: Tr
 
 		var bias := spec.brake_bias_front if i < 2 else 1.0 - spec.brake_bias_front
 		var brake_i := brake_total * bias * 0.5
-		var roll_i := Surface.rolling_resistance(w.surface) * load
-		var resist := brake_i + roll_i
-		var fx := -clampf(vw.x * stop_k, -resist, resist)
+		var fx := -clampf(vw.x * stop_k, -brake_i, brake_i)
 		if i >= 2:
 			fx += drive * 0.5
 
@@ -135,7 +172,10 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, env: Tr
 		var slide_speed := absf(vw.y) + (absf(vw.x) * 0.15 if sliding else absf(vw.x) * absf(w.slip_ratio))
 		w.tyre.update(h, (absf(fx) + absf(fy)) * slide_speed, env.air_c, env.track_c, water)
 
-		var f_car := Vector2(fx, fy).rotated(delta)
+		# Rolling resistance is the surface deforming (gravel, grass), not tyre friction,
+		# so it is not limited by the available grip.
+		var roll_i := Surface.rolling_resistance(w.surface) * load
+		var f_car := Vector2(fx - clampf(vw.x * stop_k, -roll_i, roll_i), fy).rotated(delta)
 		force += f_car
 		torque += r.x * f_car.y - r.y * f_car.x
 
