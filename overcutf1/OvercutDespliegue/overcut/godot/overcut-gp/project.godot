@@ -6,7 +6,7 @@ config_version=5
 config/name="OverCut GP"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
-run/main_scene="res://scenes/dev/test_drive.tscn"
+run/main_scene="res://game/main.tscn"
 
 [physics]
 
@@ -22,6 +22,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=6
 

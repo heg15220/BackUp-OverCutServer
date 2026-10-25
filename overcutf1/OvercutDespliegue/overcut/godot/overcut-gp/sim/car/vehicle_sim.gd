@@ -21,6 +21,9 @@ const STOP_SPEED := 0.3
 ## Slip speed of a spinning wheel: max(SPIN_SLIP_MIN, |vx| * SPIN_SLIP_FRACTION).
 const SPIN_SLIP_MIN := 3.0
 const SPIN_SLIP_FRACTION := 0.2
+## A fully sliding patch (lock-up, spin) puts most of its heat into the road and a thin
+## surface layer: the tyre's bulk sees at most this slip speed (about peak slip at 300 km/h).
+const SLIDE_HEAT_SPEED := 8.0
 ## Collision circles (x offsets along the car axis) and their radius.
 const COLLISION_CIRCLES := [2.2, 0.8, -0.8, -2.2]
 const COLLISION_RADIUS := 0.55
@@ -255,9 +258,15 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 		w.fx = fx
 		w.fy = fy
 
-		# Sliding energy for heat and wear (applied once per tick).
-		var slide_speed := absf(vw.y) + (absf(vw.x) * 0.15 if sliding else absf(vw.x) * absf(w.slip_ratio))
-		slip_energy[i] += (absf(fx) + absf(fy)) * slide_speed * h
+		# Friction power for heat and wear (applied once per tick): each force times the slip
+		# speed along it. Below the limit most of the contact patch still grips (brush
+		# model), so only the sliding share of it, roughly the grip usage, dissipates.
+		if sliding:
+			var slip_vel := vw if fx * vw.x < 0.0 else Vector2(maxf(SPIN_SLIP_MIN, absf(vw.x) * SPIN_SLIP_FRACTION), vw.y)
+			slip_energy[i] += Vector2(fx, fy).length() * minf(slip_vel.length(), SLIDE_HEAT_SPEED) * h
+		else:
+			var usage_c := 0.0 if avail <= 0.0 else minf(1.0, Vector2(fx, fy).length() / avail)
+			slip_energy[i] += (absf(fx) * absf(vw.x) * absf(w.slip_ratio) + absf(fy) * absf(vw.y)) * usage_c * h
 
 		# Rolling resistance is the surface deforming (gravel, grass), not tyre friction,
 		# so it is not limited by the available grip.

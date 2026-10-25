@@ -3,9 +3,9 @@ extends RefCounted
 ## Thermal and wear state of one tyre, and the grip multiplier that follows from it.
 
 ## °C gained per second per watt of sliding power.
-const HEAT_K := 0.00075
+const HEAT_K := 0.00042
 ## Fraction of the gap to ambient lost per second (wet track multiplies it).
-const COOL_K := 0.05
+const COOL_K := 0.02
 ## Wear per joule of sliding energy for a wear_rate 1.0 compound (~25-30 laps of medium).
 const WEAR_K := 7.0e-8
 const TEMP_PENALTY_PER_DEG := 0.006

@@ -2,7 +2,7 @@ extends SceneTree
 ## Legend AI lap time vs a grip/downforce compensation factor on the AI car.
 func _initialize() -> void:
 	var track := TrackLoader.load_track("res://data/tracks/melbourne_2012.json")
-	for f in [1.0, 1.2, 1.35, 1.5]:
+	for f in [1.12, 1.16, 1.20]:
 		var spec := CarSpec.baseline_2012()
 		spec.base_mu *= f
 		spec.cl_a *= f
@@ -11,7 +11,9 @@ func _initialize() -> void:
 		var s := CarState.create(spec, &"soft", 95.0)
 		s.position = track.grid[0].position
 		s.heading = track.grid[0].heading
-		var ai := AiDriver.new(track, profile, AiSkill.level(AiSkill.LEGEND))
+		var skill := AiSkill.level(AiSkill.LEGEND)
+		skill.pace = 0.96
+		var ai := AiDriver.new(track, profile, skill)
 		var t := 0.0
 		var last := -1.0
 		var prev := s.track_index

@@ -6,6 +6,9 @@ extends RefCounted
 
 const SAVE_PATH := "user://championship_2012.json"
 const VERSION := 1
+## Simulated rounds: chance per car of a race-ending incident, and the race-long pace spread.
+const INCIDENT_RATE := 0.04
+const RACE_SPREAD_PCT := 0.35
 
 var model: SeasonModel
 var year := 2012
@@ -14,6 +17,8 @@ var player_code := ""
 var level := AiSkill.PROFESSIONAL
 var length := RaceRules.Length.LAPS_5
 var assists := {"traction_control": true, "abs": true, "auto_gearbox": true, "stability_control": false}
+## Overhead camera distance (OverheadCamera.height_scale).
+var camera_zoom := 1.0
 var round := 1
 var driver_points := {}
 var team_points := {}
@@ -37,6 +42,32 @@ func next_gp() -> Dictionary:
 
 func season_over() -> bool:
 	return round > model.data["calendar"].size()
+
+
+## True when the next round's circuit is built and can be driven.
+func round_playable() -> bool:
+	return not season_over() and bool(next_gp().get("available", false))
+
+
+## A round whose circuit is not built yet: each car's race pace is its team's real
+## qualifying gap at that Grand Prix plus the driver's gap to the team-mate and a race-long
+## spread; each team's 2012 mechanical failure rate (plus incidents) decides the retirements.
+func simulate_order(gp_id: String, seed_value: int) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var rows := []
+	var retired := []
+	for d in model.starters():
+		var dnf := float(model.team(d["team"]).get("mechanical_dnf_rate", 0.05)) + INCIDENT_RATE
+		if rng.randf() < dnf:
+			retired.append(d["code"])
+			continue
+		var gap := model.team_gap_pct(d["team"], gp_id) + float(d.get("quali_vs_teammate_pct", 0.0)) + rng.randfn(0.0, RACE_SPREAD_PCT)
+		rows.append([d["code"], gap])
+	rows.sort_custom(func(a, b): return a[1] < b[1])
+	var order := rows.map(func(r): return r[0])
+	var fastest: String = order[rng.randi() % mini(5, order.size())] if not order.is_empty() else ""
+	return {"order": order, "fastest": fastest, "retired": retired}
 
 
 ## Records a finishing order (classified codes, winner first) and moves to the next round.
@@ -73,7 +104,7 @@ func team_standings() -> Array:
 
 func to_dict() -> Dictionary:
 	return {"version": VERSION, "year": year, "team": team_id, "driver": player_code, "level": level, "length": length,
-		"assists": assists, "round": round, "driver_points": driver_points, "team_points": team_points, "results": results}
+		"assists": assists, "camera_zoom": camera_zoom, "round": round, "driver_points": driver_points, "team_points": team_points, "results": results}
 
 
 func save(path := SAVE_PATH) -> void:
@@ -90,6 +121,7 @@ static func load_from(path: String, season: SeasonModel) -> Championship:
 		return null
 	var c := Championship.create(season, d["team"], d["driver"], int(d["level"]), int(d["length"]))
 	c.assists = d.get("assists", c.assists)
+	c.camera_zoom = float(d.get("camera_zoom", 1.0))
 	c.round = int(d["round"])
 	for k in d["driver_points"]:
 		c.driver_points[k] = int(d["driver_points"][k])

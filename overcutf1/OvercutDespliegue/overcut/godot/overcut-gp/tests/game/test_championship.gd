@@ -37,3 +37,18 @@ func test_save_and_load_roundtrip() -> void:
 	assert_eq(d.round, 2)
 	assert_eq(d.driver_points["HAM"], 25)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+
+
+func test_rounds_without_a_built_circuit_are_simulated_from_real_pace() -> void:
+	var c := _new()
+	c.round = 2  # Malaysia: circuit not built yet
+	assert_true(not c.round_playable())
+	var hrt_ahead_of_mclaren := 0
+	for seed_value in 20:
+		var r := c.simulate_order("malaysia", seed_value)
+		var order: Array = r["order"]
+		assert_true(order.size() >= 14 and order.size() <= 24, "classified count %d" % order.size())
+		if order.find("KAR") >= 0 and order.find("BUT") >= 0 and order.find("KAR") < order.find("BUT"):
+			hrt_ahead_of_mclaren += 1
+	assert_eq(hrt_ahead_of_mclaren, 0, "HRT never beats a McLaren on pace")
+	assert_true(c.simulate_order("malaysia", 3)["order"] == c.simulate_order("malaysia", 3)["order"], "deterministic")

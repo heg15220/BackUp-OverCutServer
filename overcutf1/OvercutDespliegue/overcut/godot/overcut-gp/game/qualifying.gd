@@ -39,12 +39,15 @@ static func simulate(track: LoadedTrack, model: SeasonModel, gp_id: String, leve
 	var rows := []
 	for d in model.starters():
 		var base := estimated_lap(track, model, gp_id, d["team"], d["code"], level) * QUALI_TRIM
-		var row := {"code": d["code"], "team": d["team"], "base": base, "q1": INF, "q2": INF, "q3": INF}
+		# Every car's lap noise is drawn up front, so the AI times do not depend on the
+		# player's laps (the live timing screen re-runs this as the player improves).
+		var noise := [rng.randfn(0.0, LAP_NOISE), rng.randfn(0.0, LAP_NOISE), rng.randfn(0.0, LAP_NOISE)]
+		var row := {"code": d["code"], "team": d["team"], "base": base, "noise": noise, "q1": INF, "q2": INF, "q3": INF}
 		rows.append(row)
 	var session_time := func(row: Dictionary, session: int) -> float:
 		if row["code"] == player_code and player_times.has(session):
 			return player_times[session]
-		return row["base"] * EVOLUTION[session] * (1.0 + rng.randfn(0.0, LAP_NOISE))
+		return row["base"] * EVOLUTION[session] * (1.0 + row["noise"][session])
 	for row in rows:
 		row["q1"] = session_time.call(row, 0)
 	rows.sort_custom(func(a, b): return a["q1"] < b["q1"])
