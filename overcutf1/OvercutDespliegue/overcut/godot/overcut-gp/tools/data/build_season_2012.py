@@ -136,6 +136,21 @@ def main():
         d["quali_vs_teammate_pct"] = g[len(g) // 2] if g else 0.0
         d["quali_sessions"] = len(g)
 
+    # Mechanical retirements per car-race (accidents and collisions are the race's business).
+    not_mechanical = {"Collision", "Collision damage", "Accident", "Spun off", "Illness", "Puncture", "Puncture damage"}
+    starts = defaultdict(int)
+    failures = defaultdict(int)
+    for r in results:
+        if r["positionText"] in ("DNQ", "DNPQ", "EX", "DNS"):
+            continue
+        starts[r["constructorId"]] += 1
+        if r["reasonRetired"] and r["reasonRetired"] not in not_mechanical:
+            failures[r["constructorId"]] += 1
+    for t in teams:
+        n = starts.get(t["id"], 0)
+        # a little prior so a lucky season does not read as bullet-proof
+        t["mechanical_dnf_rate"] = round((failures.get(t["id"], 0) + 0.5) / (n + 5), 4)
+
     real = {}
     code_of = {d["id"]: d["abbreviation"] for d in drivers.values()}
     for race in races:

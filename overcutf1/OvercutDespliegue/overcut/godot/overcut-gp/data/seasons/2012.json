@@ -214,7 +214,8 @@
     "nose_tip": 0.3,
     "sidepod": 1.45,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.0778
   },
   {
    "id": "mclaren",
@@ -232,7 +233,8 @@
     "nose_tip": 0.24,
     "sidepod": 1.55,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.1
   },
   {
    "id": "ferrari",
@@ -250,7 +252,8 @@
     "nose_tip": 0.28,
     "sidepod": 1.5,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.0111
   },
   {
    "id": "mercedes",
@@ -268,7 +271,8 @@
     "nose_tip": 0.27,
     "sidepod": 1.6,
     "fin": true
-   }
+   },
+   "mechanical_dnf_rate": 0.1444
   },
   {
    "id": "lotus-f1",
@@ -286,7 +290,8 @@
     "nose_tip": 0.27,
     "sidepod": 1.45,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.0556
   },
   {
    "id": "force-india",
@@ -304,7 +309,8 @@
     "nose_tip": 0.27,
     "sidepod": 1.5,
     "fin": true
-   }
+   },
+   "mechanical_dnf_rate": 0.0333
   },
   {
    "id": "sauber",
@@ -322,7 +328,8 @@
     "nose_tip": 0.27,
     "sidepod": 1.45,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.0778
   },
   {
    "id": "toro-rosso",
@@ -340,7 +347,8 @@
     "nose_tip": 0.28,
     "sidepod": 1.4,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.0778
   },
   {
    "id": "williams",
@@ -358,7 +366,8 @@
     "nose_tip": 0.27,
     "sidepod": 1.4,
     "fin": false
-   }
+   },
+   "mechanical_dnf_rate": 0.1
   },
   {
    "id": "caterham",
@@ -376,7 +385,8 @@
     "nose_tip": 0.28,
     "sidepod": 1.5,
     "fin": true
-   }
+   },
+   "mechanical_dnf_rate": 0.0795
   },
   {
    "id": "hrt",
@@ -394,7 +404,8 @@
     "nose_tip": 0.3,
     "sidepod": 1.5,
     "fin": true
-   }
+   },
+   "mechanical_dnf_rate": 0.1977
   },
   {
    "id": "marussia",
@@ -412,7 +423,8 @@
     "nose_tip": 0.28,
     "sidepod": 1.5,
     "fin": true
-   }
+   },
+   "mechanical_dnf_rate": 0.1705
   }
  ],
  "drivers": [
