@@ -136,6 +136,23 @@ func lateral_at(p: TrackProjection, pos: Vector2) -> float:
 	return (pos - (a + ab * t)).dot(ab.normalized().orthogonal())
 
 
+## Height of the track surface at a projection (0 on tracks without heights).
+func height_at(p: TrackProjection) -> float:
+	if data.heights.is_empty():
+		return 0.0
+	return _side(data.heights, p)
+
+
+## Rise over run of the centreline at a projection, in the direction of travel.
+func grade_at(p: TrackProjection) -> float:
+	if data.heights.is_empty():
+		return 0.0
+	var run := _cumulative[p.index + 1] - _cumulative[p.index]
+	if run <= 0.0:
+		return 0.0
+	return (data.heights[(p.index + 1) % _n] - data.heights[p.index]) / run
+
+
 func surface_at(pos: Vector2, racing_line_lateral := INF) -> int:
 	var p := project(pos)
 	return surface_for(p, p.lateral, racing_line_lateral)

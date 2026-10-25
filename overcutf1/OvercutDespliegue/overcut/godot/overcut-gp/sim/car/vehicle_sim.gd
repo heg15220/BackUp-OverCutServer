@@ -58,10 +58,17 @@ static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackE
 		bump[i] = Surface.bump(w.surface)
 		roll[i] = Surface.rolling_resistance(w.surface)
 
+	# Gravity along the car on a slope (small angles: sin ~ tan). Positive grade = uphill.
+	var slope_force := 0.0
+	if proj != null:
+		state.height = env.geometry.height_at(proj)
+		var grade_along := env.geometry.grade_at(proj) * state.forward().dot(proj.tangent)
+		slope_force = -(spec.mass_kg + state.fuel_kg) * Units.G * grade_along
+
 	var slip_energy := PackedFloat64Array([0.0, 0.0, 0.0, 0.0])
 	var h := dt / SUBSTEPS
 	for k in SUBSTEPS:
-		_substep(state, spec, input, corners, mu, bump, roll, slip_energy, h)
+		_substep(state, spec, input, corners, mu, bump, roll, slip_energy, slope_force, h)
 
 	for i in 4:
 		state.wheels[i].tyre.update(dt, slip_energy[i] / dt, env.air_c, env.track_c, water)
@@ -88,7 +95,7 @@ static func _wheel_offsets(spec: CarSpec) -> Array[Vector2]:
 	return offsets
 
 
-static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners: Array[Vector2], mu: PackedFloat64Array, bump: PackedFloat64Array, roll: PackedFloat64Array, slip_energy: PackedFloat64Array, h: float) -> void:
+static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners: Array[Vector2], mu: PackedFloat64Array, bump: PackedFloat64Array, roll: PackedFloat64Array, slip_energy: PackedFloat64Array, slope_force: float, h: float) -> void:
 	var pt := state.powertrain
 	var mass := spec.mass_kg + state.fuel_kg
 	var v_local := state.local_velocity()
@@ -210,9 +217,10 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 		force += f_car
 		torque += r.x * f_car.y - r.y * f_car.x
 
-	# Aero drag opposes the velocity.
+	# Aero drag opposes the velocity; gravity pulls along the slope.
 	if speed > 0.01:
 		force -= v_local / speed * q * cd_a
+	force.x += slope_force
 
 	# Integrate (semi-implicit Euler) in the world frame.
 	state.accel_local = force / mass

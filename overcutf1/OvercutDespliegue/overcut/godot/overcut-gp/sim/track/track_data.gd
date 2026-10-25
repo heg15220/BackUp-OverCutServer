@@ -21,6 +21,8 @@ extends Resource
 ## Centre to wall.
 @export var wall_left := PackedFloat32Array()
 @export var wall_right := PackedFloat32Array()
+## Terrain height of the centreline (m, up). Empty = a flat track.
+@export var heights := PackedFloat32Array()
 
 
 func length() -> float:
