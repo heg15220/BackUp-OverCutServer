@@ -82,3 +82,17 @@
 
 ### Task 12: Export web e integración
 - [ ] `tools/export_web.sh` al OverCut local; tamaños; captura en navegador real si la extensión de Chrome está disponible; si no, el usuario lo prueba.
+
+---
+
+## Registro de decisiones (ejecución)
+
+- Task 1: Ruling: escapatorias, pianos y muros derivados de la curvatura real (ningún dato abierto los recoge); pit lane por dentro (lado del lago), coherente con los edificios del paddock en OSM — coste: aproximado, revisable circuito a circuito.
+- Task 1: Ruling: línea central TUM suavizada ~7 m (σ = 1,5 puntos) antes de alinear — la T15 tenía un codo de un punto (R 15 m) que hacía trompear a la IA — coste: ±0,3 m de forma.
+- Task 3: Ruling: modelos 3D procedurales por código desde el reglamento FIA 2012 y parámetros por equipo (batalla, escalón, pontones, aleta) — sin modelos de terceros.
+- Task 7: Ruling (física, tras depurar la IA con telemetría): base_mu 1,70→1,95 y cl_a 4,2→5,0 (≈2,5× peso a 250 km/h, como un F1 de 2012); reparto de frenada 0,56→0,66 (a 4-5 g el eje delantero lleva ~62 % de la carga); agarre trasero ×1,15 (neumático 325 mm vs 245 mm); 62 % de la transferencia lateral al eje delantero (reglaje subvirador típico) — sin esto el coche era sobrevirador al límite y en frenada — coste: recalibrar circuitos futuros con los mismos bancos.
+- Task 7: Ruling: ABS y TC actúan por eje (simétricos) y respetan la fuerza lateral (círculo de fricción); ABS trasero al 60 % y TC al 90 % del agarre sobrante; ESC opcional por frenada de una rueda (solo IA por defecto; ayuda opcional para el jugador). El TC por rueda generaba un par de guiñada propio.
+- Task 7: Ruling: perfil de velocidad de la IA medido con la propia física (aceleración, frenada y skidpad estacionario), no analítico — garantiza objetivos alcanzables para cualquier coche.
+- Task 7: Ruling: IA Leyenda al 93 % del perfil con anticipación 0,3 s (búsqueda en rejilla: única combinación sin incidentes en 3 vueltas) — por encima del 95 % se sale en T13/T15.
+- Task 6: Ruling (cambia un anti-objetivo del spec, que era decisión mía): **compensación de agarre para la IA (×1,38 en base_mu y cl_a)**. La física del jugador da un ideal de ~86,5 s (con DRS/KERS) frente a la pole real de 84,9 s, pero la IA solo extrae el ~85 % del ideal sin salirse; con la compensación, el Leyenda en el McLaren hace 86,3 s sin DRS. Las diferencias entre equipos reproducen la clasificación real (HRT +11,8 % vs +10,1 % real). Coste: los coches de la IA pasan las curvas más rápido que su física "pura"; se puede reducir a medida que mejore el piloto IA.
+- Task 6: ritmo de piloto = mediana de su diferencia en clasificación con su compañero en 2012 (Hamilton −0,40 % vs Button, Alonso −0,36 % vs Massa…).

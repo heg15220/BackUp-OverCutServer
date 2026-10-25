@@ -7,3 +7,5 @@ extends Resource
 @export var auto_gearbox := true
 ## Speed-sensitive steering for analog sticks too (digital and touch always get it).
 @export var steer_assist := false
+## Stability control: brakes one wheel to stop a spin or a slide (no extra grip).
+@export var stability_control := false

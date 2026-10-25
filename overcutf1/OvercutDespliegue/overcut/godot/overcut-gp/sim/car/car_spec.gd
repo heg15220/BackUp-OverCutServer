@@ -9,10 +9,16 @@ extends Resource
 @export var track_front := 1.80
 @export var track_rear := 1.70
 @export var cg_height := 0.30
+## Share of the lateral load transfer taken by the front axle (roll stiffness balance).
+## F1 set-ups run stiffer at the front so the car understeers at the limit.
+@export var roll_stiffness_front := 0.62
 @export var yaw_inertia := 1100.0
 @export var tyre_radius := 0.33
 @export var max_steer := 0.30  ## rad at the wheel
-@export var base_mu := 1.70
+@export var base_mu := 1.95
+## The 325 mm rear tyres grip more than the 245 mm fronts; without this the heavier, more
+## load-sensitive rear axle would make the car oversteer at the limit.
+@export var rear_grip_factor := 1.15
 
 @export var max_power_kw := 560.0
 @export var power_rpm := 17500.0
@@ -25,12 +31,14 @@ extends Resource
 @export var kers_energy_kj := 400.0
 
 @export var cd_a := 1.05
-@export var cl_a := 4.2
+@export var cl_a := 5.0
 @export var aero_balance_front := 0.44
 @export var drs_cd_a_delta := -0.11
 @export var drs_cl_a_delta := -0.50
 
-@export var brake_bias_front := 0.56
+## Under 4-5 g braking ~62 % of the load is on the front axle (h = 0.30 m, L = 3.4 m);
+## 66 % front keeps the rears below their limit so the car stays stable on the brakes.
+@export var brake_bias_front := 0.66
 ## Sized so full pedal saturates the fronts only below ~200 km/h (peak ~5 g at 300).
 @export var max_brake_force_n := 27000.0
 @export var fuel_capacity_kg := 160.0

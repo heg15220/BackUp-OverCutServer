@@ -1,7 +1,6 @@
 class_name Assists
-## Driver aids. They act on the input, never on the physics: traction control caps
-## the throttle and ABS caps the brake so the tyres stay just under the grip limit
-## measured in the previous substep (what is left after the cornering force).
+## Driver aids. They switch on the per-wheel ABS and traction control in the physics
+## (no extra grip, only a limit on how much of the tyre the brake and drive may use).
 
 ## Fraction of the remaining grip the aids aim for.
 const TARGET_USAGE := 0.92
@@ -9,26 +8,16 @@ const TARGET_USAGE := 0.92
 
 static func apply(input: DriverInput, state: CarState, spec: CarSpec, cfg: AssistConfig) -> DriverInput:
 	state.auto_gearbox = cfg.auto_gearbox
+	# ABS and traction control act per wheel inside the physics, like the real systems.
+	state.abs_enabled = cfg.abs
+	state.tc_enabled = cfg.traction_control
+	state.esc_enabled = cfg.stability_control
 	var out := input.copy()
-	if cfg.traction_control and out.throttle > 0.0:
-		var pt := state.powertrain
-		var capacity := _fx_capacity(state.wheels[CarState.RL]) + _fx_capacity(state.wheels[CarState.RR])
-		var kers_force := 0.0
-		if out.kers and pt.gear >= 1 and pt.kers_energy_j > 0.0:
-			kers_force = spec.kers_power_kw * 1000.0 / maxf(pt.speed_at(pt.rpm, pt.gear), Powertrain.KERS_MIN_SPEED)
-			if kers_force > capacity:
-				out.kers = false  # KERS alone would spin the wheels
-				kers_force = 0.0
-		var full := pt.full_drive_force()
-		if full > 0.0:
-			out.throttle = minf(out.throttle, maxf(0.0, capacity - kers_force) / full)
-	if cfg.abs and out.brake > 0.0:
-		var cap := 1.0
-		for i in 4:
-			var bias := spec.brake_bias_front if i < 2 else 1.0 - spec.brake_bias_front
-			var per_wheel_full := spec.max_brake_force_n * bias * 0.5
-			cap = minf(cap, _fx_capacity(state.wheels[i]) / per_wheel_full)
-		out.brake = minf(out.brake, cap)
+	if cfg.traction_control and out.kers and state.powertrain.gear >= 1:
+		# KERS alone would spin the rears: hold it back.
+		var kers_force := spec.kers_power_kw * 1000.0 / maxf(state.speed(), Powertrain.KERS_MIN_SPEED)
+		if kers_force > _fx_capacity(state.wheels[CarState.RL]) + _fx_capacity(state.wheels[CarState.RR]):
+			out.kers = false
 	return out
 
 

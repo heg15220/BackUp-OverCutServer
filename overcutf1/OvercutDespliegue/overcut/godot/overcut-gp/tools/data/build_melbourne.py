@@ -132,7 +132,11 @@ def racing_line(p, normals, wl, wr):
         return float((d ** 2).sum()), (g_q * normals).sum(axis=1)
 
     bounds = [(-(wr[i] - CAR_MARGIN), wl[i] - CAR_MARGIN) for i in range(n)]
-    res = minimize(f, np.zeros(n), jac=True, method="L-BFGS-B", bounds=bounds, options={"maxiter": 5000})
+    # Scaled objective (positions are ~1e3 m, curvature terms tiny) and a long run: the
+    # optimiser must push the line out to the walls on corner entry and exit.
+    res = minimize(lambda x: tuple(v * 1e3 for v in f(x)), np.zeros(n), jac=True, method="L-BFGS-B",
+                   bounds=bounds, options={"maxiter": 200000, "maxfun": 400000, "ftol": 1e-15, "gtol": 1e-12})
+    print(f"racing line: {res.nit} iterations, success={res.success} ({res.message})")
     return res.x
 
 
@@ -191,6 +195,10 @@ def main():
             osm_pts += [nodes[n] for n in nd if n in nodes]
     tum = np.loadtxt(os.path.join(RAW, "tum_melbourne.csv"), delimiter=",", comments="#")
     tum_xy = tum[:, :2] * np.array([1.0, -1.0])  # TUM is north-up; flip to y-down like OSM
+    # The survey has a few single-point kinks (T15 reads as a 15 m radius); a light
+    # smoothing (~7 m) turns them into the arcs the asphalt actually follows.
+    tum_xy = np.stack([gaussian_filter1d(tum_xy[:, 0], 1.5, mode="wrap"),
+                       gaussian_filter1d(tum_xy[:, 1], 1.5, mode="wrap")], axis=1)
     p, residual = align_centreline(tum_xy, np.array(osm_pts))
     w_right, w_left = tum[:, 2].copy(), tum[:, 3].copy()
     n = len(p)

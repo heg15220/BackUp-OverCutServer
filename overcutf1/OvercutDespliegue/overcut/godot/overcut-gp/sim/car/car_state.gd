@@ -18,6 +18,11 @@ var steer_angle := 0.0  ## rad at the wheel, positive = right
 var fuel_kg := 0.0
 var drs_open := false
 var auto_gearbox := true
+## Driver aids, acting per wheel like the real systems (set by Assists).
+var abs_enabled := false
+var tc_enabled := false
+## Yaw stability control by braking single wheels (AI drivers; optional aid for the player).
+var esc_enabled := false
 var powertrain: Powertrain
 var wheels: Array[WheelState] = []
 ## Acceleration in the car frame during the last substep (feeds load transfer, telemetry, haptics).

@@ -28,6 +28,14 @@ const WALL_RESTITUTION := 0.2
 const WALL_FRICTION := 0.4
 ## Share of the drive a limited-slip diff can move to the wheel with grip.
 const DIFF_LOCK := 0.3
+## Share of a wheel's grip the aids let the brake / drive use. The rear keeps more in
+## reserve: a rear axle at its braking limit has nothing left to hold the car on turn-in.
+const ABS_FRONT_USAGE := 0.97
+const ABS_REAR_USAGE := 0.60
+const TC_USAGE := 0.90
+## Stability control: yaw-rate error (rad/s) it tolerates, and its gain.
+const ESC_DEADBAND := 0.08
+const ESC_GAIN := 0.9
 ## Brake held this long at a standstill selects reverse (auto gearbox).
 const REVERSE_HOLD := 0.4
 const STANDSTILL := 0.5  ## m/s
@@ -54,7 +62,7 @@ static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackE
 			w.surface = env.geometry.surface_for(proj, env.geometry.lateral_at(proj, world))
 		else:
 			w.surface = Surface.Type.ASPHALT
-		mu[i] = spec.base_mu * w.tyre.grip_factor(water) * Surface.grip(w.surface, water)
+		mu[i] = spec.base_mu * w.tyre.grip_factor(water) * Surface.grip(w.surface, water) * (spec.rear_grip_factor if i >= 2 else 1.0)
 		bump[i] = Surface.bump(w.surface)
 		roll[i] = Surface.rolling_resistance(w.surface)
 
@@ -129,8 +137,8 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 	var front_half := (weight * spec.cg_to_rear() / l + downforce * spec.aero_balance_front - long_transfer) * 0.5
 	var rear_half := (weight * spec.cg_to_front / l + downforce * (1.0 - spec.aero_balance_front) + long_transfer) * 0.5
 	# Positive accel_local.y is towards the right, so load moves to the left wheels.
-	var lat_front := mass * state.accel_local.y * spec.cg_height / spec.track_front * 0.5
-	var lat_rear := mass * state.accel_local.y * spec.cg_height / spec.track_rear * 0.5
+	var lat_front := mass * state.accel_local.y * spec.cg_height / spec.track_front * spec.roll_stiffness_front
+	var lat_rear := mass * state.accel_local.y * spec.cg_height / spec.track_rear * (1.0 - spec.roll_stiffness_front)
 
 	# Longitudinal demands
 	# Stopped with the brake on, the clutch is held open (as on the grid): the engine
@@ -151,6 +159,21 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 			base_load = rear_half + (lat_rear if i == CarState.RL else -lat_rear)
 		loads[i] = maxf(0.0, base_load * (1.0 + BUMP_LOAD * bump[i] * sin(state.distance_m * 1.7 + i)))
 		avails[i] = TyreModel.effective_mu(mu[i], loads[i]) * loads[i]
+	# What the cornering force (last substep) leaves of each friction circle, per axle: the
+	# aids act equally on both wheels of an axle, as engine-torque TC and ABS do, so they
+	# never create a yaw moment of their own.
+	var spare_front := INF
+	var spare_rear := INF
+	var spare_drive := INF
+	for i in 4:
+		var fy2 := state.wheels[i].fy * state.wheels[i].fy
+		if i < 2:
+			spare_front = minf(spare_front, sqrt(maxf(0.0, pow(avails[i] * ABS_FRONT_USAGE, 2) - fy2)))
+		else:
+			spare_rear = minf(spare_rear, sqrt(maxf(0.0, pow(avails[i] * ABS_REAR_USAGE, 2) - fy2)))
+			spare_drive = minf(spare_drive, sqrt(maxf(0.0, pow(avails[i] * TC_USAGE, 2) - fy2)))
+	if state.tc_enabled and drive != 0.0:
+		drive = signf(drive) * minf(absf(drive), 2.0 * spare_drive)
 
 	# Limited-slip diff: equal split, but up to DIFF_LOCK of the drive moves from a
 	# wheel that cannot use its half to the other one.
@@ -166,6 +189,26 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 		drive_rr -= moved
 		drive_rl += moved
 
+	# Stability control: compare the yaw rate with what the steering and grip allow and brake
+	# one wheel to make up the difference (outer front stops oversteer, inner rear understeer).
+	var esc_brake := PackedFloat64Array([0.0, 0.0, 0.0, 0.0])
+	if state.esc_enabled and speed > 8.0:
+		var kinematic := v_local.x * tan(state.steer_angle) / spec.wheelbase
+		var grip_limit := (spec.base_mu * 1.1 * (Units.G + downforce / mass)) / maxf(speed, 1.0)
+		var wanted := clampf(kinematic, -grip_limit, grip_limit)
+		var err := state.yaw_rate - wanted
+		if absf(err) > ESC_DEADBAND:
+			var moment := -ESC_GAIN * (absf(err) - ESC_DEADBAND) * signf(err) * spec.yaw_inertia / h * 0.02
+			# A brake force F at the wheel on side z (+ right) gives a yaw moment -z * (-F) = z * F.
+			var oversteer := signf(state.yaw_rate) == signf(wanted) and absf(state.yaw_rate) > absf(wanted)
+			var idx: int
+			if oversteer:
+				idx = CarState.FL if state.yaw_rate > 0.0 else CarState.FR  # outer front
+			else:
+				idx = CarState.RR if wanted > 0.0 else CarState.RL  # inner rear
+			var arm := (spec.track_front if idx < 2 else spec.track_rear) * 0.5
+			esc_brake[idx] = minf(absf(moment) / arm, avails[idx] * 0.7)
+
 	var force := Vector2.ZERO
 	var torque := 0.0
 	for i in 4:
@@ -179,11 +222,17 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, corners
 		var vw := Vector2(v_local.x - state.yaw_rate * r.y, v_local.y + state.yaw_rate * r.x).rotated(-delta)
 
 		var avail := avails[i]
-		var brake_i := brake_total * (spec.brake_bias_front if front else 1.0 - spec.brake_bias_front) * 0.5
+		var brake_i := brake_total * (spec.brake_bias_front if front else 1.0 - spec.brake_bias_front) * 0.5 + esc_brake[i]
 		var drive_i := 0.0 if front else (drive_rl if i == CarState.RL else drive_rr)
+		if state.abs_enabled:
+			brake_i = minf(brake_i, spare_front if front else spare_rear)
 		# The brake resists the net demand: at a standstill it holds the drive back
 		# (revving on the grid) instead of only opposing motion.
 		var fx := drive_i - clampf(vw.x * stop_k + drive_i, -brake_i, brake_i)
+		if state.abs_enabled and fx * vw.x < 0.0:
+			# ABS limits the whole retarding force, engine braking included.
+			var cap := spare_front if front else spare_rear
+			fx = signf(fx) * minf(absf(fx), cap)
 
 		var slip_angle := atan2(vw.y, maxf(absf(vw.x), MIN_SLIP_SPEED))
 		var fy: float

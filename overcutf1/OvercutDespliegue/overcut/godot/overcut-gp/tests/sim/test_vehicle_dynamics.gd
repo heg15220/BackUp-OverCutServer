@@ -104,7 +104,7 @@ func test_steady_state_lateral_g() -> void:
 	var fast := _peak_lateral_g(72.0)
 	print("  peak lateral: %.2f g @115 km/h, %.2f g @260 km/h" % [slow, fast])
 	assert_between(slow, 1.8, 2.9, "slow corner (~R50)")
-	assert_between(fast, 3.8, 5.6, "fast corner (~R300)")
+	assert_between(fast, 3.8, 6.0, "fast corner (~R300)")
 
 
 func test_locked_fronts_lose_steering() -> void:
