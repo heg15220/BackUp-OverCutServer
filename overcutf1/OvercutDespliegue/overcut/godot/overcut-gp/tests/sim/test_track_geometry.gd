@@ -62,4 +62,5 @@ func test_query_performance() -> void:
 	for i in 10000:
 		geo.surface_at(data.points[i % data.points.size()] + Vector2(3, 2))
 	var ms := Time.get_ticks_msec() - t0
+	print("  surface_at x10k: %d ms" % ms)
 	assert_true(ms < 400, "10k consultas < 400 ms (%d ms)" % ms)

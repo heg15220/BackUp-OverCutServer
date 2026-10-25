@@ -3,11 +3,11 @@ extends RefCounted
 ## Spatial queries over a TrackData: projection onto the centreline, surface lookup
 ## and wall contact. Segments are bucketed in a uniform grid for fast lookup.
 
-const CELL := 25.0
+const CELL := 5.0
 const WHITE_LINE_WIDTH := 0.12
 ## Half-width of the rubbered racing-line band.
 const RACING_LINE_HALF_WIDTH := 1.0
-const MAX_RING := 4
+const MAX_RING := 20
 
 var data: TrackData
 var _n := 0
