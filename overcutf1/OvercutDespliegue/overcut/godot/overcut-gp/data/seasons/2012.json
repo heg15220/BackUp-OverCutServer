@@ -1,0 +1,2076 @@
+{
+ "year": 2012,
+ "points": [
+  25,
+  18,
+  15,
+  12,
+  10,
+  8,
+  6,
+  4,
+  2,
+  1
+ ],
+ "fastest_lap_point": false,
+ "qualifying_format": "Q1Q2Q3",
+ "tyre_supplier": "Pirelli",
+ "calendar": [
+  {
+   "round": 1,
+   "id": "australia",
+   "date": "2012-03-18",
+   "circuit": "melbourne",
+   "laps": 58,
+   "length_km": 5.303,
+   "available": true
+  },
+  {
+   "round": 2,
+   "id": "malaysia",
+   "date": "2012-03-25",
+   "circuit": "sepang",
+   "laps": 56,
+   "length_km": 5.543,
+   "available": false
+  },
+  {
+   "round": 3,
+   "id": "china",
+   "date": "2012-04-15",
+   "circuit": "shanghai",
+   "laps": 56,
+   "length_km": 5.451,
+   "available": false
+  },
+  {
+   "round": 4,
+   "id": "bahrain",
+   "date": "2012-04-22",
+   "circuit": "bahrain",
+   "laps": 57,
+   "length_km": 5.412,
+   "available": false
+  },
+  {
+   "round": 5,
+   "id": "spain",
+   "date": "2012-05-13",
+   "circuit": "catalunya",
+   "laps": 66,
+   "length_km": 4.655,
+   "available": false
+  },
+  {
+   "round": 6,
+   "id": "monaco",
+   "date": "2012-05-27",
+   "circuit": "monaco",
+   "laps": 78,
+   "length_km": 3.34,
+   "available": false
+  },
+  {
+   "round": 7,
+   "id": "canada",
+   "date": "2012-06-10",
+   "circuit": "montreal",
+   "laps": 70,
+   "length_km": 4.361,
+   "available": false
+  },
+  {
+   "round": 8,
+   "id": "europe",
+   "date": "2012-06-24",
+   "circuit": "valencia",
+   "laps": 57,
+   "length_km": 5.419,
+   "available": false
+  },
+  {
+   "round": 9,
+   "id": "great-britain",
+   "date": "2012-07-08",
+   "circuit": "silverstone",
+   "laps": 52,
+   "length_km": 5.891,
+   "available": false
+  },
+  {
+   "round": 10,
+   "id": "germany",
+   "date": "2012-07-22",
+   "circuit": "hockenheimring",
+   "laps": 67,
+   "length_km": 4.574,
+   "available": false
+  },
+  {
+   "round": 11,
+   "id": "hungary",
+   "date": "2012-07-29",
+   "circuit": "hungaroring",
+   "laps": 69,
+   "length_km": 4.381,
+   "available": false
+  },
+  {
+   "round": 12,
+   "id": "belgium",
+   "date": "2012-09-02",
+   "circuit": "spa-francorchamps",
+   "laps": 44,
+   "length_km": 7.004,
+   "available": false
+  },
+  {
+   "round": 13,
+   "id": "italy",
+   "date": "2012-09-09",
+   "circuit": "monza",
+   "laps": 53,
+   "length_km": 5.793,
+   "available": false
+  },
+  {
+   "round": 14,
+   "id": "singapore",
+   "date": "2012-09-23",
+   "circuit": "marina-bay",
+   "laps": 59,
+   "length_km": 5.073,
+   "available": false
+  },
+  {
+   "round": 15,
+   "id": "japan",
+   "date": "2012-10-07",
+   "circuit": "suzuka",
+   "laps": 53,
+   "length_km": 5.807,
+   "available": false
+  },
+  {
+   "round": 16,
+   "id": "korea",
+   "date": "2012-10-14",
+   "circuit": "yeongam",
+   "laps": 55,
+   "length_km": 5.615,
+   "available": false
+  },
+  {
+   "round": 17,
+   "id": "india",
+   "date": "2012-10-28",
+   "circuit": "buddh",
+   "laps": 60,
+   "length_km": 5.125,
+   "available": false
+  },
+  {
+   "round": 18,
+   "id": "abu-dhabi",
+   "date": "2012-11-04",
+   "circuit": "yas-marina",
+   "laps": 55,
+   "length_km": 5.554,
+   "available": false
+  },
+  {
+   "round": 19,
+   "id": "united-states",
+   "date": "2012-11-18",
+   "circuit": "austin",
+   "laps": 56,
+   "length_km": 5.513,
+   "available": false
+  },
+  {
+   "round": 20,
+   "id": "brazil",
+   "date": "2012-11-25",
+   "circuit": "interlagos",
+   "laps": 71,
+   "length_km": 4.309,
+   "available": false
+  }
+ ],
+ "teams": [
+  {
+   "id": "red-bull",
+   "name": "Red Bull Racing",
+   "chassis": "RB8",
+   "engine": "Renault",
+   "colors": {
+    "primary": "#1B2A5C",
+    "secondary": "#C8102E",
+    "accent": "#F4C300"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.08,
+    "nose_tip": 0.3,
+    "sidepod": 1.45,
+    "fin": false
+   }
+  },
+  {
+   "id": "mclaren",
+   "name": "McLaren",
+   "chassis": "MP4-27",
+   "engine": "Mercedes",
+   "colors": {
+    "primary": "#B9BEC4",
+    "secondary": "#E10600",
+    "accent": "#2B2B2B"
+   },
+   "car": {
+    "wheelbase": 3.4,
+    "nose_step": 0.0,
+    "nose_tip": 0.24,
+    "sidepod": 1.55,
+    "fin": false
+   }
+  },
+  {
+   "id": "ferrari",
+   "name": "Ferrari",
+   "chassis": "F2012",
+   "engine": "Ferrari",
+   "colors": {
+    "primary": "#D40000",
+    "secondary": "#FFFFFF",
+    "accent": "#111111"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.12,
+    "nose_tip": 0.28,
+    "sidepod": 1.5,
+    "fin": false
+   }
+  },
+  {
+   "id": "mercedes",
+   "name": "Mercedes",
+   "chassis": "F1 W03",
+   "engine": "Mercedes",
+   "colors": {
+    "primary": "#B4BBC2",
+    "secondary": "#00A19C",
+    "accent": "#1A1A1A"
+   },
+   "car": {
+    "wheelbase": 3.45,
+    "nose_step": 0.07,
+    "nose_tip": 0.27,
+    "sidepod": 1.6,
+    "fin": true
+   }
+  },
+  {
+   "id": "lotus-f1",
+   "name": "Lotus",
+   "chassis": "E20",
+   "engine": "Renault",
+   "colors": {
+    "primary": "#141414",
+    "secondary": "#C9A54A",
+    "accent": "#C9A54A"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.1,
+    "nose_tip": 0.27,
+    "sidepod": 1.45,
+    "fin": false
+   }
+  },
+  {
+   "id": "force-india",
+   "name": "Force India",
+   "chassis": "VJM05",
+   "engine": "Mercedes",
+   "colors": {
+    "primary": "#F2F2F2",
+    "secondary": "#F7941D",
+    "accent": "#2E8B3E"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.12,
+    "nose_tip": 0.27,
+    "sidepod": 1.5,
+    "fin": true
+   }
+  },
+  {
+   "id": "sauber",
+   "name": "Sauber",
+   "chassis": "C31",
+   "engine": "Ferrari",
+   "colors": {
+    "primary": "#F2F2F2",
+    "secondary": "#1A1A1A",
+    "accent": "#7A8A99"
+   },
+   "car": {
+    "wheelbase": 3.35,
+    "nose_step": 0.11,
+    "nose_tip": 0.27,
+    "sidepod": 1.45,
+    "fin": false
+   }
+  },
+  {
+   "id": "toro-rosso",
+   "name": "Toro Rosso",
+   "chassis": "STR7",
+   "engine": "Ferrari",
+   "colors": {
+    "primary": "#1C2A6B",
+    "secondary": "#C0C4CC",
+    "accent": "#C8102E"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.1,
+    "nose_tip": 0.28,
+    "sidepod": 1.4,
+    "fin": false
+   }
+  },
+  {
+   "id": "williams",
+   "name": "Williams",
+   "chassis": "FW34",
+   "engine": "Renault",
+   "colors": {
+    "primary": "#0B2346",
+    "secondary": "#F2F2F2",
+    "accent": "#6EA8DC"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.1,
+    "nose_tip": 0.27,
+    "sidepod": 1.4,
+    "fin": false
+   }
+  },
+  {
+   "id": "caterham",
+   "name": "Caterham",
+   "chassis": "CT01",
+   "engine": "Renault",
+   "colors": {
+    "primary": "#0B5B3A",
+    "secondary": "#F5D100",
+    "accent": "#111111"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.15,
+    "nose_tip": 0.28,
+    "sidepod": 1.5,
+    "fin": true
+   }
+  },
+  {
+   "id": "hrt",
+   "name": "HRT",
+   "chassis": "F112",
+   "engine": "Cosworth",
+   "colors": {
+    "primary": "#F2F2F2",
+    "secondary": "#B8001F",
+    "accent": "#7C7C7C"
+   },
+   "car": {
+    "wheelbase": 3.25,
+    "nose_step": 0.06,
+    "nose_tip": 0.3,
+    "sidepod": 1.5,
+    "fin": true
+   }
+  },
+  {
+   "id": "marussia",
+   "name": "Marussia",
+   "chassis": "MR01",
+   "engine": "Cosworth",
+   "colors": {
+    "primary": "#141414",
+    "secondary": "#B0102A",
+    "accent": "#FFFFFF"
+   },
+   "car": {
+    "wheelbase": 3.3,
+    "nose_step": 0.1,
+    "nose_tip": 0.28,
+    "sidepod": 1.5,
+    "fin": true
+   }
+  }
+ ],
+ "drivers": [
+  {
+   "id": "heikki-kovalainen",
+   "code": "KOV",
+   "name": "Heikki Kovalainen",
+   "first_name": "Heikki",
+   "last_name": "Kovalainen",
+   "number": 20,
+   "team": "caterham",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#1E3A8A"
+   },
+   "quali_vs_teammate_pct": -0.2168691792413635,
+   "quali_sessions": 20
+  },
+  {
+   "id": "vitaly-petrov",
+   "code": "PET",
+   "name": "Vitaly Petrov",
+   "first_name": "Vitaly",
+   "last_name": "Petrov",
+   "number": 21,
+   "team": "caterham",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#D40000"
+   },
+   "quali_vs_teammate_pct": 0.26282399854993255,
+   "quali_sessions": 20
+  },
+  {
+   "id": "narain-karthikeyan",
+   "code": "KAR",
+   "name": "Narain Karthikeyan",
+   "first_name": "Narain",
+   "last_name": "Karthikeyan",
+   "number": 23,
+   "team": "hrt",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F2F2F2",
+    "stripe": "#FF8C00"
+   },
+   "quali_vs_teammate_pct": 0.44032160845091095,
+   "quali_sessions": 19
+  },
+  {
+   "id": "pedro-de-la-rosa",
+   "code": "DLR",
+   "name": "Pedro de la Rosa",
+   "first_name": "Pedro",
+   "last_name": "De la Rosa",
+   "number": 22,
+   "team": "hrt",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5D100",
+    "stripe": "#D40000"
+   },
+   "quali_vs_teammate_pct": -0.4383912769290288,
+   "quali_sessions": 19
+  },
+  {
+   "id": "kimi-raikkonen",
+   "code": "RAI",
+   "name": "Kimi Räikkönen",
+   "first_name": "Kimi",
+   "last_name": "Räikkönen",
+   "number": 9,
+   "team": "lotus-f1",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#C8102E"
+   },
+   "quali_vs_teammate_pct": 0.0695948035879912,
+   "quali_sessions": 20
+  },
+  {
+   "id": "romain-grosjean",
+   "code": "GRO",
+   "name": "Romain Grosjean",
+   "first_name": "Romain",
+   "last_name": "Grosjean",
+   "number": 10,
+   "team": "lotus-f1",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#111111"
+   },
+   "quali_vs_teammate_pct": -0.06954640290549596,
+   "quali_sessions": 19
+  },
+  {
+   "id": "jerome-dambrosio",
+   "code": "DAM",
+   "name": "Jérôme d'Ambrosio",
+   "first_name": "Jérôme",
+   "last_name": "D'Ambrosio",
+   "number": 10,
+   "team": "lotus-f1",
+   "rounds": [
+    13
+   ],
+   "starter": false,
+   "helmet": {
+    "main": "#E9E9E9",
+    "stripe": "#1E3A8A"
+   },
+   "quali_vs_teammate_pct": 0.7859148946213201,
+   "quali_sessions": 1
+  },
+  {
+   "id": "charles-pic",
+   "code": "PIC",
+   "name": "Charles Pic",
+   "first_name": "Charles",
+   "last_name": "Pic",
+   "number": 25,
+   "team": "marussia",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#1E3A8A",
+    "stripe": "#FFFFFF"
+   },
+   "quali_vs_teammate_pct": 0.35197988686361814,
+   "quali_sessions": 19
+  },
+  {
+   "id": "timo-glock",
+   "code": "GLO",
+   "name": "Timo Glock",
+   "first_name": "Timo",
+   "last_name": "Glock",
+   "number": 24,
+   "team": "marussia",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#111111"
+   },
+   "quali_vs_teammate_pct": -0.3507453338344013,
+   "quali_sessions": 19
+  },
+  {
+   "id": "michael-schumacher",
+   "code": "MSC",
+   "name": "Michael Schumacher",
+   "first_name": "Michael",
+   "last_name": "Schumacher",
+   "number": 7,
+   "team": "mercedes",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#D40000",
+    "stripe": "#FFFFFF"
+   },
+   "quali_vs_teammate_pct": 0.02654376100963418,
+   "quali_sessions": 20
+  },
+  {
+   "id": "nico-rosberg",
+   "code": "ROS",
+   "name": "Nico Rosberg",
+   "first_name": "Nico",
+   "last_name": "Rosberg",
+   "number": 8,
+   "team": "mercedes",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5F5F5",
+    "stripe": "#00A19C"
+   },
+   "quali_vs_teammate_pct": 0.11129350880609845,
+   "quali_sessions": 20
+  },
+  {
+   "id": "mark-webber",
+   "code": "WEB",
+   "name": "Mark Webber",
+   "first_name": "Mark",
+   "last_name": "Webber",
+   "number": 2,
+   "team": "red-bull",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F2F2F2",
+    "stripe": "#1B2A5C"
+   },
+   "quali_vs_teammate_pct": 0.11220500941073741,
+   "quali_sessions": 20
+  },
+  {
+   "id": "sebastian-vettel",
+   "code": "VET",
+   "name": "Sebastian Vettel",
+   "first_name": "Sebastian",
+   "last_name": "Vettel",
+   "number": 1,
+   "team": "red-bull",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#1E3A8A"
+   },
+   "quali_vs_teammate_pct": -0.05156632718834597,
+   "quali_sessions": 20
+  },
+  {
+   "id": "nico-hulkenberg",
+   "code": "HUL",
+   "name": "Nico Hülkenberg",
+   "first_name": "Nico",
+   "last_name": "Hülkenberg",
+   "number": 12,
+   "team": "force-india",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5D100",
+    "stripe": "#111111"
+   },
+   "quali_vs_teammate_pct": -0.19556794152518764,
+   "quali_sessions": 19
+  },
+  {
+   "id": "paul-di-resta",
+   "code": "DIR",
+   "name": "Paul di Resta",
+   "first_name": "Paul",
+   "last_name": "Di Resta",
+   "number": 11,
+   "team": "force-india",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#1E3A8A",
+    "stripe": "#FFFFFF"
+   },
+   "quali_vs_teammate_pct": 0.19595115917356853,
+   "quali_sessions": 19
+  },
+  {
+   "id": "kamui-kobayashi",
+   "code": "KOB",
+   "name": "Kamui Kobayashi",
+   "first_name": "Kamui",
+   "last_name": "Kobayashi",
+   "number": 14,
+   "team": "sauber",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#D40000"
+   },
+   "quali_vs_teammate_pct": 0.13609587649807686,
+   "quali_sessions": 19
+  },
+  {
+   "id": "sergio-perez",
+   "code": "PER",
+   "name": "Sergio Pérez",
+   "first_name": "Sergio",
+   "last_name": "Pérez",
+   "number": 15,
+   "team": "sauber",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#2E8B3E"
+   },
+   "quali_vs_teammate_pct": -0.13591090735745048,
+   "quali_sessions": 19
+  },
+  {
+   "id": "felipe-massa",
+   "code": "MAS",
+   "name": "Felipe Massa",
+   "first_name": "Felipe",
+   "last_name": "Massa",
+   "number": 6,
+   "team": "ferrari",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#2E8B3E"
+   },
+   "quali_vs_teammate_pct": 0.36147423982584304,
+   "quali_sessions": 20
+  },
+  {
+   "id": "fernando-alonso",
+   "code": "ALO",
+   "name": "Fernando Alonso",
+   "first_name": "Fernando",
+   "last_name": "Alonso",
+   "number": 5,
+   "team": "ferrari",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#1E3A8A",
+    "stripe": "#F5D100"
+   },
+   "quali_vs_teammate_pct": -0.3575660986473772,
+   "quali_sessions": 20
+  },
+  {
+   "id": "daniel-ricciardo",
+   "code": "RIC",
+   "name": "Daniel Ricciardo",
+   "first_name": "Daniel",
+   "last_name": "Ricciardo",
+   "number": 16,
+   "team": "toro-rosso",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#D40000"
+   },
+   "quali_vs_teammate_pct": -0.2784347774018703,
+   "quali_sessions": 20
+  },
+  {
+   "id": "jean-eric-vergne",
+   "code": "VER",
+   "name": "Jean-Éric Vergne",
+   "first_name": "Jean-Éric",
+   "last_name": "Vergne",
+   "number": 17,
+   "team": "toro-rosso",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#1E3A8A",
+    "stripe": "#FFFFFF"
+   },
+   "quali_vs_teammate_pct": 0.2940561451199697,
+   "quali_sessions": 20
+  },
+  {
+   "id": "jenson-button",
+   "code": "BUT",
+   "name": "Jenson Button",
+   "first_name": "Jenson",
+   "last_name": "Button",
+   "number": 3,
+   "team": "mclaren",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#FFFFFF",
+    "stripe": "#E5007E"
+   },
+   "quali_vs_teammate_pct": 0.44999999999999485,
+   "quali_sessions": 20
+  },
+  {
+   "id": "lewis-hamilton",
+   "code": "HAM",
+   "name": "Lewis Hamilton",
+   "first_name": "Lewis",
+   "last_name": "Hamilton",
+   "number": 4,
+   "team": "mclaren",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5D100",
+    "stripe": "#1B6E2F"
+   },
+   "quali_vs_teammate_pct": -0.39574498233823086,
+   "quali_sessions": 20
+  },
+  {
+   "id": "bruno-senna",
+   "code": "SEN",
+   "name": "Bruno Senna",
+   "first_name": "Bruno",
+   "last_name": "Senna",
+   "number": 19,
+   "team": "williams",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5D100",
+    "stripe": "#2E8B3E"
+   },
+   "quali_vs_teammate_pct": 0.5301255133053351,
+   "quali_sessions": 20
+  },
+  {
+   "id": "pastor-maldonado",
+   "code": "MAL",
+   "name": "Pastor Maldonado",
+   "first_name": "Pastor",
+   "last_name": "Maldonado",
+   "number": 18,
+   "team": "williams",
+   "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "starter": true,
+   "helmet": {
+    "main": "#F5D100",
+    "stripe": "#D40000"
+   },
+   "quali_vs_teammate_pct": -0.4906306547004635,
+   "quali_sessions": 20
+  }
+ ],
+ "pace": {
+  "australia": {
+   "mclaren": 0.0,
+   "lotus-f1": 0.44746944254727694,
+   "mercedes": 0.4875061821436155,
+   "red-bull": 0.8584347989920138,
+   "williams": 1.16106544829373,
+   "force-india": 1.6391512211205495,
+   "toro-rosso": 1.645038976943547,
+   "ferrari": 1.8511104307482151,
+   "sauber": 1.4837144673936153,
+   "caterham": 4.4240597253950575,
+   "marussia": 7.066484538753204,
+   "hrt": 10.095146134099519
+  },
+  "malaysia": {
+   "mclaren": 0.0,
+   "mercedes": 0.17875887298766102,
+   "red-bull": 0.25150957711055355,
+   "lotus-f1": 0.25150957711055355,
+   "ferrari": 1.2055830968935366,
+   "sauber": 1.3074340826655817,
+   "williams": 1.4238352092622142,
+   "force-india": 1.723152391939231,
+   "toro-rosso": 1.7293881665783273,
+   "caterham": 3.2083060518192763,
+   "marussia": 4.868061401594281,
+   "hrt": 6.958085201467479
+  },
+  "china": {
+   "mercedes": 0.0,
+   "mclaren": 0.5309027449248882,
+   "sauber": 0.6970069700696913,
+   "lotus-f1": 0.816854322389382,
+   "red-bull": 0.6086983946762548,
+   "ferrari": 0.9051628977828186,
+   "williams": 1.221601959609342,
+   "force-india": 1.2573459067924064,
+   "toro-rosso": 1.9049421263443334,
+   "caterham": 3.513419749582103,
+   "marussia": 4.374428359668214,
+   "hrt": 5.561337664658694
+  },
+  "bahrain": {
+   "red-bull": 0.0,
+   "mclaren": 0.10603535954643029,
+   "mercedes": 0.4317153924390249,
+   "toro-rosso": 0.5301767977321514,
+   "lotus-f1": 0.6340481703490441,
+   "sauber": 1.051697647746197,
+   "ferrari": 1.0614355889290383,
+   "force-india": 1.17720888965831,
+   "williams": 1.7257795762913641,
+   "caterham": 2.6292441193655147,
+   "marussia": 5.692367618099592,
+   "hrt": 5.908766311051483
+  },
+  "spain": {
+   "williams": 0.48710636787545614,
+   "ferrari": 0.728211781120347,
+   "lotus-f1": 0.8775257933836711,
+   "sauber": 1.0109292961435479,
+   "mercedes": 1.4380652820443762,
+   "red-bull": 1.4405130527372245,
+   "mclaren": 0.0,
+   "force-india": 1.7354694212246224,
+   "toro-rosso": 1.9068133697235146,
+   "caterham": 4.36927068672206,
+   "marussia": 5.966441063801153,
+   "hrt": 7.15728150586854
+  },
+  "monaco": {
+   "mercedes": 0.0,
+   "red-bull": 0.10767015248784872,
+   "mclaren": 0.3795372875196934,
+   "lotus-f1": 0.4549063942611786,
+   "ferrari": 0.8209849127198909,
+   "williams": 0.9757607569211624,
+   "force-india": 1.5033445041116478,
+   "sauber": 1.6244734256604998,
+   "toro-rosso": 2.1224478809168223,
+   "caterham": 3.0107266389415965,
+   "marussia": 4.907067199633919,
+   "hrt": 5.107602858642557
+  },
+  "canada": {
+   "red-bull": 0.0,
+   "mclaren": 0.41065813726552935,
+   "ferrari": 0.49739780982327453,
+   "mercedes": 0.849777729589074,
+   "lotus-f1": 1.1425241244714224,
+   "force-india": 1.158787813076012,
+   "sauber": 1.2251978748780257,
+   "toro-rosso": 1.753767754526736,
+   "williams": 1.6195923235389875,
+   "caterham": 3.3598070042285544,
+   "hrt": 5.025479778813824,
+   "marussia": 5.579800498753107
+  },
+  "europe": {
+   "red-bull": 0.0,
+   "mclaren": 0.33032237016494825,
+   "williams": 0.3965907468955754,
+   "lotus-f1": 0.410863935729866,
+   "mercedes": 0.42615663805232185,
+   "sauber": 0.6290398221968418,
+   "force-india": 0.4414493403747777,
+   "ferrari": 0.6331178761495027,
+   "caterham": 2.0400464898150616,
+   "toro-rosso": 1.8738657912444223,
+   "hrt": 4.16471259914768,
+   "marussia": 4.678547397182076
+  },
+  "great-britain": {
+   "ferrari": 0.22205703854947245,
+   "red-bull": 0.0,
+   "mercedes": 0.27474853922222486,
+   "lotus-f1": 0.718862616321192,
+   "williams": 0.15995634132801584,
+   "mclaren": 1.0858212817207447,
+   "force-india": 0.051750581017895314,
+   "sauber": 0.20229772579718475,
+   "toro-rosso": 0.9286876993573445,
+   "caterham": 2.5856472115846074,
+   "marussia": 5.023570037354519,
+   "hrt": 6.081163729429151
+  },
+  "germany": {
+   "ferrari": 0.5020279286063412,
+   "red-bull": 0.9247882895379922,
+   "mercedes": 0.38973220773386164,
+   "force-india": 0.7636109019327986,
+   "williams": 0.6447095504207745,
+   "mclaren": 0.697554595537242,
+   "lotus-f1": 0.0,
+   "toro-rosso": 1.0872868032711036,
+   "sauber": 0.04359716222108734,
+   "caterham": 2.5458100484853308,
+   "marussia": 4.65961185314363,
+   "hrt": 5.573831133658325
+  },
+  "hungary": {
+   "mclaren": 0.0,
+   "lotus-f1": 0.5101725692685966,
+   "red-bull": 0.5608192407940304,
+   "ferrari": 0.7177003940558091,
+   "williams": 0.6806418539152315,
+   "force-india": 0.864699269946767,
+   "mercedes": 1.163638160414071,
+   "sauber": 1.163638160414071,
+   "toro-rosso": 1.7627512260200318,
+   "caterham": 3.240151692957638,
+   "marussia": 5.300606524773643,
+   "hrt": 6.130717823922516
+  },
+  "belgium": {
+   "mclaren": 0.0,
+   "sauber": 0.27702118561347966,
+   "williams": 0.29747241408160097,
+   "lotus-f1": 0.5875080178111558,
+   "ferrari": 0.6879049575637008,
+   "red-bull": 0.761343459790087,
+   "force-india": 1.0746190958697888,
+   "mercedes": 1.401838751359552,
+   "toro-rosso": 1.655619904622907,
+   "caterham": 3.8727189908248416,
+   "marussia": 4.427690963345832,
+   "hrt": 5.072834261385295
+  },
+  "italy": {
+   "mclaren": 0.0,
+   "ferrari": 0.19640518985835076,
+   "force-india": 0.3499583382930549,
+   "mercedes": 0.6011189144149442,
+   "red-bull": 0.8058564456612238,
+   "lotus-f1": 0.8713248422806741,
+   "sauber": 0.8010951077252804,
+   "williams": 0.9641709320318936,
+   "toro-rosso": 1.5498154981549828,
+   "caterham": 2.8234733960242897,
+   "marussia": 3.6055231520057074,
+   "hrt": 4.084037614569702
+  },
+  "singapore": {
+   "mclaren": 0.0,
+   "williams": 0.41556194881631203,
+   "red-bull": 0.40333953855700155,
+   "ferrari": 0.8029183354957503,
+   "force-india": 0.826422970609797,
+   "lotus-f1": 1.0971963671235985,
+   "mercedes": 1.373610876064757,
+   "sauber": 2.0148173219759036,
+   "toro-rosso": 2.2677271958030154,
+   "caterham": 4.21579135405501,
+   "marussia": 4.708448506045393,
+   "hrt": 5.650514281416297
+  },
+  "japan": {
+   "red-bull": 0.0,
+   "mclaren": 0.49648278822973513,
+   "sauber": 0.9478307775294681,
+   "lotus-f1": 1.0865377205825588,
+   "ferrari": 1.0942436618633034,
+   "force-india": 1.5775162650403463,
+   "mercedes": 1.794383469655103,
+   "williams": 1.8417199660938577,
+   "toro-rosso": 2.3282951155340736,
+   "caterham": 4.2030405442596175,
+   "marussia": 4.815112451700254,
+   "hrt": 5.0044584374552725
+  },
+  "korea": {
+   "red-bull": 0.0,
+   "mclaren": 0.23343822628083544,
+   "ferrari": 0.30028177125109856,
+   "lotus-f1": 0.3938627342094936,
+   "force-india": 1.0530429238394978,
+   "mercedes": 1.150737335719132,
+   "sauber": 1.2525451965200274,
+   "williams": 1.525061187552712,
+   "toro-rosso": 1.5446000699286255,
+   "caterham": 3.0490940128750976,
+   "marussia": 4.190576088521425,
+   "hrt": 5.798934616729401
+  },
+  "india": {
+   "red-bull": 0.0,
+   "mclaren": 0.21575226012218174,
+   "ferrari": 0.5745576492384163,
+   "lotus-f1": 0.9591595042388379,
+   "sauber": 0.9298453384613659,
+   "williams": 0.8207966417691726,
+   "mercedes": 0.8125886753514777,
+   "force-india": 1.123318832592668,
+   "toro-rosso": 1.7518145468616186,
+   "caterham": 4.072323909806164,
+   "marussia": 5.077213512657863,
+   "hrt": 6.2251562445035935
+  },
+  "abu-dhabi": {
+   "mclaren": 0.0,
+   "red-bull": 0.34582132564842105,
+   "williams": 0.5922687071449939,
+   "lotus-f1": 0.6260558481566036,
+   "ferrari": 0.8784656663022972,
+   "mercedes": 0.966908476597439,
+   "force-india": 1.3803040842691017,
+   "sauber": 1.4448971479678052,
+   "toro-rosso": 2.1216337076418457,
+   "caterham": 4.298916824008736,
+   "marussia": 4.4310841697307035,
+   "hrt": 5.103845771638671
+  },
+  "united-states": {
+   "red-bull": 0.0,
+   "mclaren": 0.11394879621982046,
+   "lotus-f1": 0.9722236741691592,
+   "mercedes": 1.1886218468068144,
+   "ferrari": 0.932498405762261,
+   "force-india": 1.4729711364563025,
+   "williams": 1.4154740374462849,
+   "toro-rosso": 2.322882800004189,
+   "sauber": 2.6647291886636726,
+   "marussia": 4.598722519000176,
+   "caterham": 5.385910074537148,
+   "hrt": 6.642483038355795
+  },
+  "brazil": {
+   "mclaren": 0.0,
+   "red-bull": 0.16975351237957792,
+   "ferrari": 0.7300781142179025,
+   "williams": 0.988158657429139,
+   "force-india": 1.0323221728449683,
+   "lotus-f1": 1.1592922796654692,
+   "mercedes": 1.4228932623036705,
+   "sauber": 2.451075105578404,
+   "toro-rosso": 2.9203124568715655,
+   "caterham": 6.369206988876308,
+   "marussia": 6.969554776560205,
+   "hrt": 9.823621960308039
+  }
+ },
+ "real_results": {
+  "australia": {
+   "qualifying": [
+    {
+     "code": "HAM",
+     "team": "mclaren",
+     "position": "1",
+     "q1": "1:26.800",
+     "q2": "1:25.626",
+     "q3": "1:24.922",
+     "best_s": 84.922
+    },
+    {
+     "code": "BUT",
+     "team": "mclaren",
+     "position": "2",
+     "q1": "1:26.832",
+     "q2": "1:25.663",
+     "q3": "1:25.074",
+     "best_s": 85.074
+    },
+    {
+     "code": "GRO",
+     "team": "lotus-f1",
+     "position": "3",
+     "q1": "1:26.498",
+     "q2": "1:25.845",
+     "q3": "1:25.302",
+     "best_s": 85.302
+    },
+    {
+     "code": "MSC",
+     "team": "mercedes",
+     "position": "4",
+     "q1": "1:26.586",
+     "q2": "1:25.571",
+     "q3": "1:25.336",
+     "best_s": 85.336
+    },
+    {
+     "code": "WEB",
+     "team": "red-bull",
+     "position": "5",
+     "q1": "1:27.117",
+     "q2": "1:26.297",
+     "q3": "1:25.651",
+     "best_s": 85.651
+    },
+    {
+     "code": "VET",
+     "team": "red-bull",
+     "position": "6",
+     "q1": "1:26.773",
+     "q2": "1:25.982",
+     "q3": "1:25.668",
+     "best_s": 85.668
+    },
+    {
+     "code": "ROS",
+     "team": "mercedes",
+     "position": "7",
+     "q1": "1:26.763",
+     "q2": "1:25.469",
+     "q3": "1:25.686",
+     "best_s": 85.469
+    },
+    {
+     "code": "MAL",
+     "team": "williams",
+     "position": "8",
+     "q1": "1:26.803",
+     "q2": "1:26.206",
+     "q3": "1:25.908",
+     "best_s": 85.908
+    },
+    {
+     "code": "HUL",
+     "team": "force-india",
+     "position": "9",
+     "q1": "1:27.464",
+     "q2": "1:26.314",
+     "q3": "1:26.451",
+     "best_s": 86.314
+    },
+    {
+     "code": "RIC",
+     "team": "toro-rosso",
+     "position": "10",
+     "q1": "1:27.024",
+     "q2": "1:26.319",
+     "q3": "",
+     "best_s": 86.319
+    },
+    {
+     "code": "VER",
+     "team": "toro-rosso",
+     "position": "11",
+     "q1": "1:26.493",
+     "q2": "1:26.429",
+     "q3": "",
+     "best_s": 86.429
+    },
+    {
+     "code": "ALO",
+     "team": "ferrari",
+     "position": "12",
+     "q1": "1:26.688",
+     "q2": "1:26.494",
+     "q3": "",
+     "best_s": 86.494
+    },
+    {
+     "code": "KOB",
+     "team": "sauber",
+     "position": "13",
+     "q1": "1:26.182",
+     "q2": "1:26.590",
+     "q3": "",
+     "best_s": 86.182
+    },
+    {
+     "code": "SEN",
+     "team": "williams",
+     "position": "14",
+     "q1": "1:27.004",
+     "q2": "1:26.663",
+     "q3": "",
+     "best_s": 86.663
+    },
+    {
+     "code": "DIR",
+     "team": "force-india",
+     "position": "15",
+     "q1": "1:27.469",
+     "q2": "1:27.086",
+     "q3": "",
+     "best_s": 87.086
+    },
+    {
+     "code": "MAS",
+     "team": "ferrari",
+     "position": "16",
+     "q1": "1:27.633",
+     "q2": "1:27.497",
+     "q3": "",
+     "best_s": 87.497
+    },
+    {
+     "code": "PER",
+     "team": "sauber",
+     "position": "17",
+     "q1": "1:26.596",
+     "q2": "",
+     "q3": "",
+     "best_s": 86.596
+    },
+    {
+     "code": "RAI",
+     "team": "lotus-f1",
+     "position": "18",
+     "q1": "1:27.758",
+     "q2": "",
+     "q3": "",
+     "best_s": 87.758
+    },
+    {
+     "code": "KOV",
+     "team": "caterham",
+     "position": "19",
+     "q1": "1:28.679",
+     "q2": "",
+     "q3": "",
+     "best_s": 88.679
+    },
+    {
+     "code": "PET",
+     "team": "caterham",
+     "position": "20",
+     "q1": "1:29.018",
+     "q2": "",
+     "q3": "",
+     "best_s": 89.018
+    },
+    {
+     "code": "GLO",
+     "team": "marussia",
+     "position": "21",
+     "q1": "1:30.923",
+     "q2": "",
+     "q3": "",
+     "best_s": 90.923
+    },
+    {
+     "code": "PIC",
+     "team": "marussia",
+     "position": "22",
+     "q1": "1:31.670",
+     "q2": "",
+     "q3": "",
+     "best_s": 91.67
+    },
+    {
+     "code": "DLR",
+     "team": "hrt",
+     "position": "NC",
+     "q1": "1:33.495",
+     "q2": "",
+     "q3": "",
+     "best_s": 93.495
+    },
+    {
+     "code": "KAR",
+     "team": "hrt",
+     "position": "NC",
+     "q1": "1:33.643",
+     "q2": "",
+     "q3": "",
+     "best_s": 93.643
+    }
+   ],
+   "race": [
+    {
+     "code": "BUT",
+     "position": "1",
+     "laps": 58,
+     "time": "1:34:09.565",
+     "retired": "",
+     "grid": "2",
+     "pit_stops": "2"
+    },
+    {
+     "code": "VET",
+     "position": "2",
+     "laps": 58,
+     "time": "1:34:11.704",
+     "retired": "",
+     "grid": "6",
+     "pit_stops": "2"
+    },
+    {
+     "code": "HAM",
+     "position": "3",
+     "laps": 58,
+     "time": "1:34:13.640",
+     "retired": "",
+     "grid": "1",
+     "pit_stops": "2"
+    },
+    {
+     "code": "WEB",
+     "position": "4",
+     "laps": 58,
+     "time": "1:34:14.112",
+     "retired": "",
+     "grid": "5",
+     "pit_stops": "2"
+    },
+    {
+     "code": "ALO",
+     "position": "5",
+     "laps": 58,
+     "time": "1:34:31.130",
+     "retired": "",
+     "grid": "12",
+     "pit_stops": "2"
+    },
+    {
+     "code": "KOB",
+     "position": "6",
+     "laps": 58,
+     "time": "1:34:46.331",
+     "retired": "",
+     "grid": "13",
+     "pit_stops": "2"
+    },
+    {
+     "code": "RAI",
+     "position": "7",
+     "laps": 58,
+     "time": "1:34:47.579",
+     "retired": "",
+     "grid": "17",
+     "pit_stops": "2"
+    },
+    {
+     "code": "PER",
+     "position": "8",
+     "laps": 58,
+     "time": "1:34:49.023",
+     "retired": "",
+     "grid": "22",
+     "pit_stops": "1"
+    },
+    {
+     "code": "RIC",
+     "position": "9",
+     "laps": 58,
+     "time": "1:34:49.121",
+     "retired": "",
+     "grid": "10",
+     "pit_stops": "3"
+    },
+    {
+     "code": "DIR",
+     "position": "10",
+     "laps": 58,
+     "time": "1:34:49.302",
+     "retired": "",
+     "grid": "15",
+     "pit_stops": "2"
+    },
+    {
+     "code": "VER",
+     "position": "11",
+     "laps": 58,
+     "time": "1:34:49.413",
+     "retired": "",
+     "grid": "11",
+     "pit_stops": "2"
+    },
+    {
+     "code": "ROS",
+     "position": "12",
+     "laps": 58,
+     "time": "1:35:07.207",
+     "retired": "",
+     "grid": "7",
+     "pit_stops": "2"
+    },
+    {
+     "code": "MAL",
+     "position": "13",
+     "laps": 57,
+     "time": "",
+     "retired": "Accident",
+     "grid": "8",
+     "pit_stops": "2"
+    },
+    {
+     "code": "GLO",
+     "position": "14",
+     "laps": 57,
+     "time": "",
+     "retired": "",
+     "grid": "20",
+     "pit_stops": "2"
+    },
+    {
+     "code": "PIC",
+     "position": "15",
+     "laps": 53,
+     "time": "",
+     "retired": "Oil pressure",
+     "grid": "21",
+     "pit_stops": "3"
+    },
+    {
+     "code": "SEN",
+     "position": "16",
+     "laps": 52,
+     "time": "",
+     "retired": "Collision damage",
+     "grid": "14",
+     "pit_stops": "3"
+    },
+    {
+     "code": "MAS",
+     "position": "DNF",
+     "laps": 46,
+     "time": "",
+     "retired": "Collision damage",
+     "grid": "16",
+     "pit_stops": "3"
+    },
+    {
+     "code": "KOV",
+     "position": "DNF",
+     "laps": 38,
+     "time": "",
+     "retired": "Suspension",
+     "grid": "18",
+     "pit_stops": "3"
+    },
+    {
+     "code": "PET",
+     "position": "DNF",
+     "laps": 34,
+     "time": "",
+     "retired": "Steering",
+     "grid": "19",
+     "pit_stops": "1"
+    },
+    {
+     "code": "MSC",
+     "position": "DNF",
+     "laps": 10,
+     "time": "",
+     "retired": "Gearbox",
+     "grid": "4",
+     "pit_stops": "0"
+    },
+    {
+     "code": "GRO",
+     "position": "DNF",
+     "laps": 1,
+     "time": "",
+     "retired": "Collision",
+     "grid": "3",
+     "pit_stops": "0"
+    },
+    {
+     "code": "HUL",
+     "position": "DNF",
+     "laps": 0,
+     "time": "",
+     "retired": "Collision damage",
+     "grid": "9",
+     "pit_stops": "0"
+    },
+    {
+     "code": "DLR",
+     "position": "DNQ",
+     "laps": 0,
+     "time": "",
+     "retired": "",
+     "grid": "",
+     "pit_stops": "0"
+    },
+    {
+     "code": "KAR",
+     "position": "DNQ",
+     "laps": 0,
+     "time": "",
+     "retired": "",
+     "grid": "",
+     "pit_stops": "0"
+    }
+   ]
+  }
+ },
+ "sources": [
+  "f1db (CC BY 4.0)",
+  "liveries and chassis shapes: hand-researched from public photos"
+ ]
+}
