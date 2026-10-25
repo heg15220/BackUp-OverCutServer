@@ -1,0 +1,43 @@
+class_name CarSpec
+extends Resource
+## Physical parameters of one car. baseline_2012() is a generic 2012 F1 car
+## (V8 2.4 L, KERS, DRS); the season data plan derives each team's car from it.
+
+@export var mass_kg := 642.0  ## car + driver, no fuel
+@export var wheelbase := 3.40
+@export var cg_to_front := 1.84
+@export var track_front := 1.80
+@export var track_rear := 1.70
+@export var cg_height := 0.30
+@export var yaw_inertia := 1100.0
+@export var tyre_radius := 0.33
+@export var max_steer := 0.30  ## rad at the wheel
+@export var base_mu := 1.70
+
+@export var max_power_kw := 560.0
+@export var power_rpm := 17500.0
+@export var rev_limit := 18000.0
+@export var idle_rpm := 4000.0
+@export var gear_ratios := PackedFloat32Array([22.4, 17.4, 14.0, 11.6, 9.8, 8.3, 7.0])  ## overall
+@export var shift_time := 0.04
+@export var drivetrain_eff := 0.92
+@export var kers_power_kw := 60.0
+@export var kers_energy_kj := 400.0
+
+@export var cd_a := 1.25
+@export var cl_a := 4.2
+@export var aero_balance_front := 0.44
+@export var drs_cd_a_delta := -0.16
+@export var drs_cl_a_delta := -0.50
+
+@export var brake_bias_front := 0.56
+@export var max_brake_force_n := 40000.0
+@export var fuel_capacity_kg := 160.0
+
+
+static func baseline_2012() -> CarSpec:
+	return CarSpec.new()
+
+
+func cg_to_rear() -> float:
+	return wheelbase - cg_to_front
