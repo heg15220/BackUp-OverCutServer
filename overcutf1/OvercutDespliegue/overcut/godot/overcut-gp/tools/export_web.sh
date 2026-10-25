@@ -7,10 +7,13 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 GODOT="${GODOT:-/c/Users/hugoe/AppData/Local/Programs/Godot/Godot_v4.7.2-stable_win64_console.exe}"
 mkdir -p "$HERE/export/web"
+# Keep Godot from importing its own build output as project assets.
+touch "$HERE/export/.gdignore"
+rm -f "$HERE"/export/web/*.import
 "$GODOT" --headless --path "$HERE" --export-release "Web" export/web/index.html
 if [ $# -ge 1 ]; then
   mkdir -p "$1"
   rm -f "$1"/index.*
-  cp "$HERE"/export/web/index.* "$1"/
+  find "$HERE/export/web" -maxdepth 1 -name "index.*" ! -name "*.import" -exec cp {} "$1"/ \;
   echo "Copied web build to $1"
 fi
