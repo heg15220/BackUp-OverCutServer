@@ -55,6 +55,14 @@ func update_rpm(wheel_speed_ms: float) -> void:
 	rpm = maxf(spec.idle_rpm, absf(wheel_speed_ms) / spec.tyre_radius * spec.gear_ratios[gear - 1] * 60.0 / TAU)
 
 
+## Engine force at the ground at full throttle in the current gear, without side effects.
+func full_drive_force() -> float:
+	if gear <= 0:
+		return 0.0
+	var eval_rpm := maxf(rpm, LAUNCH_RPM) if gear == 1 else rpm
+	return engine_torque(eval_rpm, 1.0) * spec.gear_ratios[gear - 1] * spec.drivetrain_eff / spec.tyre_radius
+
+
 ## Total longitudinal force at the ground from the engine (and KERS when requested).
 func drive_force(throttle: float, kers_request: bool, dt: float) -> float:
 	if gear <= 0:

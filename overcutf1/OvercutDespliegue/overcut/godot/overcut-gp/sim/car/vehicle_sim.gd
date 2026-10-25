@@ -163,6 +163,7 @@ static func _substep(state: CarState, spec: CarSpec, input: DriverInput, env: Tr
 			var usage := 0.0 if avail <= 0.0 else fx / avail
 			fy = -TyreModel.lateral_force(slip_angle, load, avail / maxf(load, 1.0)) * sqrt(maxf(0.0, 1.0 - usage * usage))
 		w.sliding = sliding
+		w.avail_n = avail
 		w.slip_angle = slip_angle
 		w.slip_ratio = signf(fx) if sliding else (0.0 if avail <= 0.0 else fx / avail * TyreModel.PEAK_SLIP_RATIO)
 		w.fx = fx
