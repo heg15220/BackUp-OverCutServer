@@ -252,3 +252,16 @@ Melbourne, Sepang, Shanghái, Sakhir, Barcelona, Mónaco, Montreal, Valencia (ci
 - Las radios y el ambiente.
 - Los tonos exactos de color de cada equipo (investigación).
 - Si la exportación compilada se versiona en git.
+
+---
+
+## 18. Cambio de dirección (2026-10-25, tras probar el plan 1) [Usuario]
+
+El usuario probó el plan 1 y lo rechazó como experiencia: esperaba un **juego en 3D con cámara cenital** (referencia: Reckless Racing; render 3D con perspectiva vista desde arriba, mundo con volumen, sombras y ambiente), **circuitos reales escaneados de OpenStreetMap con sus desniveles y ambiente**, **coches modelados a partir de fichas técnicas de 2012**, **sonido del V8**, y **un menú para elegir equipo y piloto y empezar la temporada en la primera carrera**.
+
+Decisiones:
+- **3D** [Usuario]: el mundo, los coches y el ambiente se renderizan en 3D con Godot (renderer Compatibility para web/móvil). La cámara es cenital en perspectiva, como en la referencia. Mi propuesta: fija por defecto (como la referencia), con opción de que gire con el coche.
+- **La física del plan 1 se mantiene** (dinámica plana del vehículo en el plano XZ), más **la pendiente del terreno** (componente de la gravedad a lo largo del coche) y la altura del coche siguiendo el asfalto.
+- **Orden de trabajo** [Usuario]: primero una **versión jugable completa en Melbourne 2012** (menú → equipo y piloto → clasificación Q1/Q2/Q3 → salida → carrera con IA, boxes, neumáticos y V8 → resultados y clasificación del mundial), y después el resto de circuitos y temporadas.
+- **Fuentes de Melbourne** [Mía]: línea central y anchos del trazado 1996–2020 de TUMFTM racetrack-database (LGPL-3.0), alineada sobre la geometría georreferenciada de OpenStreetMap (ODbL; relación 280443 y tramos `disused:highway=raceway` del trazado anterior a 2021). Lago, árboles, edificios y parques de OpenStreetMap. Elevación Copernicus DEM GLO-90 vía la API de elevación de Open-Meteo. Calendario y resultados 2012 de f1db (CC BY 4.0). Atribuciones en `CREDITS.md` del juego.
+- **Coches** [Mía]: modelos 3D propios generados por código a partir de las medidas del reglamento técnico FIA 2012 y de las fichas públicas de cada chasis; no se copian modelos ni planos de terceros.
