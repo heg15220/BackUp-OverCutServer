@@ -113,6 +113,22 @@ func project_hinted(pos: Vector2, hint: int) -> TrackProjection:
 	return p
 
 
+## Local projection around a known nearest index, with no fallback to the full search.
+## For callers that already know the closest centreline point (e.g. a rasterised grid).
+func project_local(pos: Vector2, near: int) -> TrackProjection:
+	var best := near
+	var best_d2 := INF
+	var best_t := 0.0
+	for k in 7:
+		var i := (near - 3 + k + _n) % _n
+		var r := _closest_on_segment(i, pos)
+		if r.x < best_d2:
+			best_d2 = r.x
+			best_t = r.y
+			best = i
+	return _make_projection(best, best_t, pos)
+
+
 ## Lateral offset of a nearby point (within a car length of p), walking to the
 ## neighbouring segment when the point lies past either end of p's segment, so it
 ## follows the curve instead of extrapolating p's tangent.
