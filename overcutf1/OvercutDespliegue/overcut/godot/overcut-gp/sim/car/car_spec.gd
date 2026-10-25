@@ -18,16 +18,16 @@ extends Resource
 @export var power_rpm := 17500.0
 @export var rev_limit := 18000.0
 @export var idle_rpm := 4000.0
-@export var gear_ratios := PackedFloat32Array([22.4, 17.4, 14.0, 11.6, 9.8, 8.3, 7.0])  ## overall
+@export var gear_ratios := PackedFloat32Array([22.4, 17.4, 14.0, 11.6, 9.7, 8.1, 6.65])  ## overall; 7th tops out above the DRS top speed
 @export var shift_time := 0.04
 @export var drivetrain_eff := 0.92
 @export var kers_power_kw := 60.0
 @export var kers_energy_kj := 400.0
 
-@export var cd_a := 1.25
+@export var cd_a := 1.05
 @export var cl_a := 4.2
 @export var aero_balance_front := 0.44
-@export var drs_cd_a_delta := -0.16
+@export var drs_cd_a_delta := -0.11
 @export var drs_cl_a_delta := -0.50
 
 @export var brake_bias_front := 0.56

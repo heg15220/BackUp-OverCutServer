@@ -47,4 +47,5 @@ func test_auto_shift_down_when_slow() -> void:
 
 
 func test_top_gear_speed_at_limiter() -> void:
-	assert_between(Units.kmh(Powertrain.new(spec).speed_at(18000.0, 7)), 310.0, 330.0)
+	# 7th is geared so the limiter sits above the DRS-open top speed.
+	assert_between(Units.kmh(Powertrain.new(spec).speed_at(18000.0, 7)), 325.0, 345.0)

@@ -39,7 +39,8 @@ func engine_torque(at_rpm: float, throttle: float) -> float:
 	else:
 		full = spec.max_power_kw * 1000.0 / (at_rpm * TAU / 60.0)  # constant power to the limiter
 	if throttle < 0.05:
-		return -ENGINE_BRAKE_NM * at_rpm / spec.rev_limit
+		# Engine braking only while the wheels drive the engine above idle (clutch open at rest).
+		return -ENGINE_BRAKE_NM * maxf(0.0, at_rpm - spec.idle_rpm - 500.0) / (spec.rev_limit - spec.idle_rpm)
 	return full * throttle
 
 
