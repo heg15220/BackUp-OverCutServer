@@ -26,3 +26,10 @@ func test_compounds_2012_order() -> void:
 	var g := TyreCompounds.DRY_2012.map(func(id): return TyreCompounds.get_compound(id).grip)
 	assert_true(g[0] > g[1] and g[1] > g[2] and g[2] > g[3])
 	assert_true(TyreCompounds.get_compound(&"wet").is_wet_tyre)
+
+
+## The sim already folds load sensitivity into the grip it hands the curve; the curve
+## must not apply it a second time.
+func test_lateral_with_given_peak_peaks_at_that_force() -> void:
+	assert_near(TyreModel.lateral_with_peak(TyreModel.PEAK_SLIP_ANGLE, 9000.0), 9000.0, 9000.0 * 0.01)
+	assert_near(TyreModel.lateral_with_peak(-TyreModel.PEAK_SLIP_ANGLE, 9000.0), -9000.0, 9000.0 * 0.01)

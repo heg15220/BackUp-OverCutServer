@@ -64,3 +64,31 @@ func test_query_performance() -> void:
 	var ms := Time.get_ticks_msec() - t0
 	print("  surface_at x10k: %d ms" % ms)
 	assert_true(ms < 400, "10k consultas < 400 ms (%d ms)" % ms)
+
+
+func test_hinted_projection_matches_full_search() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	for k in 200:
+		var i := rng.randi_range(0, data.points.size() - 1)
+		var pos := data.points[i] + Vector2(rng.randf_range(-15, 15), rng.randf_range(-15, 15))
+		var full := geo.project(pos)
+		var hinted := geo.project_hinted(pos, (full.index + rng.randi_range(-3, 3) + data.points.size()) % data.points.size())
+		assert_near(hinted.lateral, full.lateral, 1e-3, "point %d" % i)
+		assert_near(hinted.s, full.s, 1e-2)
+
+
+func test_hinted_projection_recovers_from_a_wrong_hint() -> void:
+	var pos := data.points[300] + _left(300) * 2.0
+	var hinted := geo.project_hinted(pos, 20)
+	assert_near(hinted.lateral, 2.0, 0.05)
+	assert_eq(hinted.index, 300)
+
+
+func test_offsets_from_one_projection() -> void:
+	var p := geo.project(data.points[60])
+	var right := -_left(60)
+	assert_near(geo.lateral_at(p, data.points[60] + right * 7.0), -7.0, 0.05)
+	assert_eq(geo.surface_for(p, -7.0), Surface.Type.KERB_LOW)
+	assert_true(geo.wall_penetration(p, -19.8, 0.55) > 0.3)
+	assert_near(geo.wall_penetration(p, 0.0, 0.55), 0.0, 1e-6)

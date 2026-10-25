@@ -25,6 +25,8 @@ var accel_local := Vector2.ZERO
 var last_impact_speed := 0.0
 var wall_contact := false
 var distance_m := 0.0
+## Last track segment index (hint for the next projection); -1 = unknown.
+var track_index := -1
 
 
 static func create(spec: CarSpec, compound_id: StringName, tyre_temp_c: float) -> CarState:

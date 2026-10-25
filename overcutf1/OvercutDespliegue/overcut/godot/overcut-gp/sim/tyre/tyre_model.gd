@@ -29,3 +29,9 @@ static func effective_mu(mu: float, load_n: float) -> float:
 
 static func lateral_force(slip_angle: float, load_n: float, mu: float) -> float:
 	return pacejka(slip_angle, LAT_B, LAT_C, effective_mu(mu, load_n) * load_n, LAT_E)
+
+
+## Lateral force when the caller already knows the peak force (grip with load
+## sensitivity applied); the curve only supplies the shape.
+static func lateral_with_peak(slip_angle: float, peak_force: float) -> float:
+	return pacejka(slip_angle, LAT_B, LAT_C, peak_force, LAT_E)

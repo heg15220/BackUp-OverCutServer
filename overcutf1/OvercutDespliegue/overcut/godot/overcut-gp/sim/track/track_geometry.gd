@@ -8,6 +8,9 @@ const WHITE_LINE_WIDTH := 0.12
 ## Half-width of the rubbered racing-line band.
 const RACING_LINE_HALF_WIDTH := 1.0
 const MAX_RING := 20
+## Segments searched behind/ahead of a hint (a car moves < 1 segment per tick).
+const HINT_BACK := 3
+const HINT_AHEAD := 5
 
 var data: TrackData
 var _n := 0
@@ -70,28 +73,59 @@ func project(pos: Vector2) -> TrackProjection:
 				best_d2 = r.x
 				best_t = r.y
 				best = i
-	if best_t >= 1.0:
-		# A vertex belongs to the segment that starts there.
-		best = (best + 1) % _n
-		best_t = 0.0
-	var a := data.points[best]
-	var b := data.points[(best + 1) % _n]
-	var p := TrackProjection.new()
-	p.index = best
-	p.t = best_t
-	p.tangent = (b - a).normalized()
-	p.s = lerpf(_cumulative[best], _cumulative[best + 1], best_t)
-	p.lateral = (pos - a.lerp(b, best_t)).dot(p.tangent.orthogonal())
-	return p
+	return _make_projection(best, best_t, pos)
+
+
+## Projection when the caller knows roughly where it was last tick (a car's previous
+## index): searches a few segments around the hint and falls back to the full search
+## if the nearest one sits at the edge of that window.
+func project_hinted(pos: Vector2, hint: int) -> TrackProjection:
+	var best := -1
+	var best_k := 0
+	var best_d2 := INF
+	var best_t := 0.0
+	var pts := data.points
+	# Inlined closest-point loop: this runs for every car every tick.
+	for k in HINT_BACK + HINT_AHEAD + 1:
+		var i := (hint - HINT_BACK + k + _n) % _n
+		var a := pts[i]
+		var ab := pts[(i + 1) % _n] - a
+		var len2 := ab.length_squared()
+		var t := 0.0 if len2 == 0.0 else clampf((pos - a).dot(ab) / len2, 0.0, 1.0)
+		var d2 := (a + ab * t).distance_squared_to(pos)
+		if d2 < best_d2:
+			best_d2 = d2
+			best_t = t
+			best = i
+			best_k = k
+	var at_edge := (best_k == 0 and best_t <= 0.0) or (best_k == HINT_BACK + HINT_AHEAD and best_t >= 1.0)
+	# Beyond the walls the local minimum may belong to another part of the circuit.
+	var reach := maxf(data.wall_left[best], data.wall_right[best]) + 5.0
+	if at_edge or best_d2 > reach * reach:
+		return project(pos)
+	return _make_projection(best, best_t, pos)
+
+
+## Lateral offset of another point measured against an existing projection's segment.
+## Good to a few centimetres for points within a car length of the projected one.
+func lateral_at(p: TrackProjection, pos: Vector2) -> float:
+	var a := data.points[p.index]
+	var b := data.points[(p.index + 1) % _n]
+	return (pos - a.lerp(b, p.t)).dot(p.tangent.orthogonal())
 
 
 func surface_at(pos: Vector2, racing_line_lateral := INF) -> int:
 	var p := project(pos)
-	var left := p.lateral >= 0.0
-	var d := absf(p.lateral)
+	return surface_for(p, p.lateral, racing_line_lateral)
+
+
+## Surface at `lateral` across the track at projection p's position along it.
+func surface_for(p: TrackProjection, lateral: float, racing_line_lateral := INF) -> int:
+	var left := lateral >= 0.0
+	var d := absf(lateral)
 	var width := _side(data.width_left if left else data.width_right, p)
 	if d <= width - WHITE_LINE_WIDTH:
-		if absf(p.lateral - racing_line_lateral) <= RACING_LINE_HALF_WIDTH:
+		if absf(lateral - racing_line_lateral) <= RACING_LINE_HALF_WIDTH:
 			return Surface.Type.RACING_LINE
 		return Surface.Type.ASPHALT
 	if d <= width:
@@ -108,13 +142,37 @@ func surface_at(pos: Vector2, racing_line_lateral := INF) -> int:
 ## Penetration vector (depth * inward normal) of a circle against the wall, or ZERO.
 func wall_contact(pos: Vector2, radius: float) -> Vector2:
 	var p := project(pos)
-	var left := p.lateral >= 0.0
-	var wall := _side(data.wall_left if left else data.wall_right, p)
-	var pen := absf(p.lateral) + radius - wall
+	var pen := wall_penetration(p, p.lateral, radius)
 	if pen <= 0.0:
 		return Vector2.ZERO
-	var outward := p.tangent.orthogonal() * (1.0 if left else -1.0)
-	return -outward * pen
+	return inward_normal(p, p.lateral) * pen
+
+
+## How deep a circle at `lateral` reaches past the wall on its side (0 if clear).
+func wall_penetration(p: TrackProjection, lateral: float, radius: float) -> float:
+	var wall := _side(data.wall_left if lateral >= 0.0 else data.wall_right, p)
+	return maxf(0.0, absf(lateral) + radius - wall)
+
+
+## Unit vector pointing from the wall on `lateral`'s side back towards the centreline.
+func inward_normal(p: TrackProjection, lateral: float) -> Vector2:
+	return p.tangent.orthogonal() * (-1.0 if lateral >= 0.0 else 1.0)
+
+
+func _make_projection(index: int, t: float, pos: Vector2) -> TrackProjection:
+	if t >= 1.0:
+		# A vertex belongs to the segment that starts there.
+		index = (index + 1) % _n
+		t = 0.0
+	var a := data.points[index]
+	var b := data.points[(index + 1) % _n]
+	var p := TrackProjection.new()
+	p.index = index
+	p.t = t
+	p.tangent = (b - a).normalized()
+	p.s = lerpf(_cumulative[index], _cumulative[index + 1], t)
+	p.lateral = (pos - a.lerp(b, t)).dot(p.tangent.orthogonal())
+	return p
 
 
 func _side(arr: PackedFloat32Array, p: TrackProjection) -> float:
