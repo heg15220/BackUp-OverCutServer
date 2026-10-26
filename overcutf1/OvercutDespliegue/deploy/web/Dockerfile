@@ -7,6 +7,8 @@ COPY ../../overcut/frontend ./
 ENV NODE_ENV=production
 RUN npm run build || npm run build:prod || echo "built"
 RUN ["node","-e","const fs=require('fs'); const path=require('path'); const src='build', dst='dist'; const copy=(s,d)=>{ fs.mkdirSync(d,{recursive:true}); for(const ent of fs.readdirSync(s,{withFileTypes:true})){ const sp=path.join(s,ent.name), dp=path.join(d,ent.name); if(ent.isDirectory()) copy(sp,dp); else if(ent.isSymbolicLink()) fs.symlinkSync(fs.readlinkSync(sp),dp); else fs.copyFileSync(sp,dp); } }; if(fs.existsSync(src)){ fs.rmSync(dst,{recursive:true,force:true}); copy(src,dst); fs.rmSync(src,{recursive:true,force:true}); }"]
+# OverCut GP: pre-gzip the Godot export once (nginx gzip_static serves the .gz)
+RUN if [ -d dist/games ]; then find dist/games -type f \( -name "*.wasm" -o -name "*.pck" -o -name "*.js" \) -exec gzip -9 -k {} \; ; fi
 
 # ---------- Build F1Hub frontend ----------
 FROM node:22 AS f1hub-fe
