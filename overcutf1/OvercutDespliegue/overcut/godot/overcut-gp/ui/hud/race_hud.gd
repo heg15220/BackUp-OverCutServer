@@ -340,7 +340,9 @@ func _layout() -> void:
 	touch_row.visible = touch_buttons
 	touch_row.position = Vector2(w - touch_row.size.x - 12, h * 0.6 - touch_row.size.y - 10)
 	var msg: Control = get_node("Message")
-	msg.position = Vector2((w - msg.size.x) * 0.5, 90 if not portrait else 140)
+	# Under the header, or under the skip button when it is showing, never on top of it.
+	var msg_top := skip.position.y + skip.size.y + 8 if skip.visible else hdr.position.y + hdr.size.y + 8
+	msg.position = Vector2((w - msg.size.x) * 0.5, maxf(msg_top, 90 if not portrait else 140))
 
 
 func _process(_delta: float) -> void:

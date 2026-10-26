@@ -427,10 +427,11 @@ func _toast(text: String) -> void:
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_outline_color", Color.BLACK)
 	l.add_theme_constant_override("outline_size", 6)
-	l.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	l.position.y = 140
-	l.custom_minimum_size = Vector2(get_viewport().get_visible_rect().size.x - 40, 0)
-	l.position.x = 20
+	# Full width minus a 20 px margin each side, so it follows the window when it resizes.
+	l.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	l.offset_left = 20
+	l.offset_right = -20
+	l.offset_top = 210  # below the HUD header, skip button and session message
 	overlay.add_child(l)
 	var tw := create_tween()
 	tw.tween_interval(4.0)

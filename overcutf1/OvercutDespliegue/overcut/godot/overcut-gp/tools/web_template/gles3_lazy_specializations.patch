@@ -1,0 +1,48 @@
+diff --git a/drivers/gles3/shader_gles3.cpp b/drivers/gles3/shader_gles3.cpp
+index 4fe333e..fd12d0b 100644
+--- a/drivers/gles3/shader_gles3.cpp
++++ b/drivers/gles3/shader_gles3.cpp
+@@ -700,7 +700,7 @@ void ShaderGLES3::_clear_version(Version *p_version) {
+ 	p_version->variants.clear();
+ }
+ 
+-void ShaderGLES3::_initialize_version(Version *p_version) {
++void ShaderGLES3::_initialize_version(Version *p_version, bool p_compile_defaults) {
+ 	ERR_FAIL_COND(p_version->variants.size() > 0);
+ 	bool use_cache = shader_cache_dir_valid && !(feedback_count > 0 && GLES3::Config::get_singleton()->disable_transform_feedback_shader_cache);
+ 	if (use_cache && _load_from_cache(p_version)) {
+@@ -709,6 +709,9 @@ void ShaderGLES3::_initialize_version(Version *p_version) {
+ 	p_version->variants.reserve(variant_count);
+ 	for (int i = 0; i < variant_count; i++) {
+ 		p_version->variants.push_back(AHashMap<uint64_t, Version::Specialization>());
++		if (!p_compile_defaults) {
++			continue; // Specializations get compiled on first bind.
++		}
+ 		Version::Specialization spec;
+ 		_compile_specialization(spec, i, p_version, specialization_default_mask);
+ 		p_version->variants[i].insert(specialization_default_mask, spec);
+diff --git a/drivers/gles3/shader_gles3.h b/drivers/gles3/shader_gles3.h
+index 4ff35c1..e77e347 100644
+--- a/drivers/gles3/shader_gles3.h
++++ b/drivers/gles3/shader_gles3.h
+@@ -109,7 +109,7 @@ private:
+ 	void _compile_specialization(Version::Specialization &spec, uint32_t p_variant, Version *p_version, uint64_t p_specialization);
+ 
+ 	void _clear_version(Version *p_version);
+-	void _initialize_version(Version *p_version);
++	void _initialize_version(Version *p_version, bool p_compile_defaults = true);
+ 
+ 	RID_Owner<Version, true> version_owner;
+ 
+@@ -187,7 +187,10 @@ protected:
+ 		ERR_FAIL_NULL_V(version, false);
+ 
+ 		if (version->variants.is_empty()) {
+-			_initialize_version(version); //may lack initialization
++			// OverCut: only build what is bound. Precompiling every variant with the default
++			// specialization (all light types on) costs seconds per material on some GPU drivers
++			// and those programs are never drawn with.
++			_initialize_version(version, false); //may lack initialization
+ 		}
+ 
+ 		Version::Specialization *spec = version->variants[p_variant].getptr(p_specialization);
