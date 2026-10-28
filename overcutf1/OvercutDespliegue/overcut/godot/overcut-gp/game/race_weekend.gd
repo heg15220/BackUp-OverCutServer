@@ -26,6 +26,7 @@ var visuals := {}  ## code -> {visual: CarVisual, tag: Label3D, prev_pos, prev_h
 var camera: OverheadCamera
 var touch: TouchControls
 var hud: RaceHud
+var engine_audio: EngineAudio
 var overlay: Control
 var mapper := InputMapper.new()
 var haptics: HapticsDirector
@@ -61,6 +62,8 @@ func _ready() -> void:
 	TrackLighting.add_to(self)
 	_spawn_visuals()
 	_build_ui()
+	engine_audio = EngineAudio.new()
+	add_child(engine_audio)
 	var backends: Array[HapticsBackend] = [WebHaptics.new(), JoypadHaptics.new()]
 	haptics = HapticsDirector.new(backends)
 	if "--stage=race" in OS.get_cmdline_user_args():
@@ -329,6 +332,7 @@ func _remember_poses() -> void:
 
 func _process(delta: float) -> void:
 	_now += delta
+	_feed_engine_audio()
 	var alpha := Engine.get_physics_interpolation_fraction()
 	for code in visuals:
 		var v: Dictionary = visuals[code]
@@ -377,6 +381,34 @@ func _unhandled_input(event: InputEvent) -> void:
 			_toggle_pit()
 		elif event.button_index == JOY_BUTTON_X:
 			_cycle_compound()
+
+
+# --- sound ----------------------------------------------------------------------------
+
+## Every car the player could hear this frame: its revs (from the engine when it runs the
+## physics, from its speed when it follows the line) and how hard it is pulling.
+func _feed_engine_audio() -> void:
+	var cars := []
+	var me: CarState
+	if stage == Stage.QUALI or stage == Stage.QUALI_BREAK:
+		me = quali.state
+		for c in quali.cars:
+			if c.is_player or c.out_of_garage():
+				cars.append(_heard_car(c))
+	elif session != null:
+		me = session.player_entry().state
+		for e in session.entries:
+			if e.status != RaceEntry.Status.RETIRED:
+				cars.append(_heard_car(e))
+	if me == null:
+		return
+	engine_audio.set_cars(me.position, me.velocity, cars)
+
+
+func _heard_car(e: RaceEntry) -> Dictionary:
+	var rpm := e.state.powertrain.rpm if e.physics or e.is_player else EngineAudio.rpm_for_speed(e.spec, e.state.speed())
+	var load := _last_raw.throttle if e.is_player else (e.ai.last_input.throttle if e.physics and e.ai != null else 0.8)
+	return {"code": e.code, "pos": e.state.position, "vel": e.state.velocity, "height": e.state.height, "rpm": rpm, "load": load, "player": e.is_player}
 
 
 # --- overlays -------------------------------------------------------------------------

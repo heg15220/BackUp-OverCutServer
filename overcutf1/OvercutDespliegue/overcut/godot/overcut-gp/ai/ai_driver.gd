@@ -150,6 +150,7 @@ func drive(state: CarState, dt: float) -> DriverInput:
 	var straight := profile.curvature[ahead] < 0.004
 	input.kers = straight and input.throttle >= 0.99 and v < 82.0
 	input.drs = drs_allowed and straight and input.brake == 0.0
+	last_input = input
 	return input
 
 
