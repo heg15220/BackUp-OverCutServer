@@ -91,7 +91,8 @@ static func measure_lateral(spec: CarSpec, compound: StringName) -> PackedFloat3
 	var base_spec := CarSpec.baseline_2012()
 	var key := String(compound)
 	if not _lateral_cache.has(key):
-		_lateral_cache[key] = _skidpad(base_spec, compound)
+		var baked: Variant = baked_lateral(compound)
+		_lateral_cache[key] = baked if baked != null else _skidpad(base_spec, compound)
 	var base: PackedFloat32Array = _lateral_cache[key]
 	var out := PackedFloat32Array()
 	out.resize(base.size())
@@ -158,10 +159,20 @@ static func SimRunner_rolling(spec: CarSpec, speed_ms: float, compound: StringNa
 	pt.update_rpm(speed_ms)
 	return s
 
+## The car's straight-line acceleration and braking: baked for the season's cars, otherwise
+## measured once per spec (qualifying and the race share every AI car's spec).
+static func measure_envelope(spec: CarSpec, compound: StringName) -> Array:
+	var key := "%s|%s" % [spec.fingerprint(), compound]
+	if not _envelope_cache.has(key):
+		var baked: Variant = baked_envelope(spec, compound)
+		_envelope_cache[key] = baked if baked != null else run_envelope(spec, compound)
+	return _envelope_cache[key]
+
+
 ## Measures the car's straight-line acceleration and braking (both with the aids on) at
 ## every speed by running the real physics, so the profile never asks for more than the
 ## car can do. Returns [accel_table, decel_table] indexed by speed / ENVELOPE_STEP.
-static func measure_envelope(spec: CarSpec, compound: StringName) -> Array:
+static func run_envelope(spec: CarSpec, compound: StringName) -> Array:
 	var bins := int(MAX_SPEED / ENVELOPE_STEP) + 2
 	var accel := PackedFloat32Array()
 	var decel := PackedFloat32Array()
@@ -216,6 +227,30 @@ static func measure_envelope(spec: CarSpec, compound: StringName) -> Array:
 		if decel[b] <= 0.0:
 			decel[b] = decel[b - 1] if b > 0 else 10.0
 	return [accel, decel]
+
+
+# --- baked tables (tools/bake_speed_envelopes.sh) ------------------------------------
+
+const BAKED_PATH := "res://data/speed_envelopes.json"
+static var _envelope_cache := {}
+static var _baked: Variant = null
+
+
+static func baked_lateral(compound: StringName) -> Variant:
+	var row: Variant = _baked_tables()["lateral"].get(String(compound))
+	return PackedFloat32Array(row) if row != null else null
+
+
+static func baked_envelope(spec: CarSpec, compound: StringName) -> Variant:
+	var row: Variant = _baked_tables()["envelope"].get("%s|%s" % [spec.fingerprint(), compound])
+	return [PackedFloat32Array(row[0]), PackedFloat32Array(row[1])] if row != null else null
+
+
+static func _baked_tables() -> Dictionary:
+	if _baked == null:
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(BAKED_PATH)) if FileAccess.file_exists(BAKED_PATH) else null
+		_baked = parsed if parsed is Dictionary else {"lateral": {}, "envelope": {}}
+	return _baked
 
 
 static func _lookup(table: PackedFloat32Array, v: float) -> float:

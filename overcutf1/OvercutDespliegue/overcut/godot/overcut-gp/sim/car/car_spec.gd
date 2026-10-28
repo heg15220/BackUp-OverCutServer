@@ -50,3 +50,13 @@ static func baseline_2012() -> CarSpec:
 
 func cg_to_rear() -> float:
 	return wheelbase - cg_to_front
+
+
+## Hash of every tuning value: two specs with the same fingerprint drive identically,
+## so measurements of one (SpeedProfile's envelopes) are valid for the other.
+func fingerprint() -> String:
+	var parts := PackedStringArray()
+	for p in get_property_list():
+		if p["usage"] & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			parts.append("%s=%s" % [p["name"], var_to_str(get(p["name"]))])
+	return "|".join(parts).md5_text()
