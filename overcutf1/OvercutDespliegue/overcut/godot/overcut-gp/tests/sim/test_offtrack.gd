@@ -24,6 +24,19 @@ func test_gravel_traps_car() -> void:
 	assert_true(d <= 90.0, "%.1f m" % d)
 
 
+
+func test_car_can_drive_out_of_gravel() -> void:
+	# Beached is the player's mistake, not a dead end: from a standstill, full throttle crawls out.
+	var env := TrackEnvironment.on(TrackFixtures.oval(Surface.Type.GRAVEL, 1.5, false, 120.0))
+	var s := TrackFixtures.car_on_straight(spec, 100.0, 40.0, 0.0)
+	var full := func(_s, _t):
+		var i := DriverInput.new()
+		i.throttle = 1.0
+		return i
+	SimRunner.run(s, spec, env, 6.0, full)
+	print("  gravel standstill + 6 s full throttle: %.1f km/h" % Units.kmh(s.speed()))
+	assert_true(Units.kmh(s.speed()) >= 20.0, "%.1f km/h" % Units.kmh(s.speed()))
+
 func test_grass_brakes_far_worse_than_asphalt() -> void:
 	var brake := func(_s, _t):
 		var i := DriverInput.new()

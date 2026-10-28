@@ -67,7 +67,7 @@ static func step(state: CarState, spec: CarSpec, input: DriverInput, env: TrackE
 			w.surface = Surface.Type.ASPHALT
 		mu[i] = spec.base_mu * w.tyre.grip_factor(water) * Surface.grip(w.surface, water) * (spec.rear_grip_factor if i >= 2 else 1.0)
 		bump[i] = Surface.bump(w.surface)
-		roll[i] = Surface.rolling_resistance(w.surface)
+		roll[i] = Surface.rolling_resistance(w.surface, state.speed())
 
 	# Gravity along the car on a slope (small angles: sin ~ tan). Positive grade = uphill.
 	var slope_force := 0.0

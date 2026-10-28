@@ -24,8 +24,17 @@ static func grip(type: int, water: float) -> float:
 	return lerpf(row[0], row[1], clampf(water, 0.0, 1.0))
 
 
-static func rolling_resistance(type: int) -> float:
-	return _TABLE[type][2]
+## Gravel resistance is the car ploughing through it, so it grows with speed: at a crawl
+## the driven wheels can still dig the car out instead of leaving it beached for good.
+const GRAVEL_CRAWL_ROLLING := 0.12
+const GRAVEL_PLOUGH_SPEED := 15.0  ## m/s where the full resistance applies
+
+
+static func rolling_resistance(type: int, speed := INF) -> float:
+	var full: float = _TABLE[type][2]
+	if type != Type.GRAVEL:
+		return full
+	return lerpf(GRAVEL_CRAWL_ROLLING, full, clampf(speed / GRAVEL_PLOUGH_SPEED, 0.0, 1.0))
 
 
 static func bump(type: int) -> float:
