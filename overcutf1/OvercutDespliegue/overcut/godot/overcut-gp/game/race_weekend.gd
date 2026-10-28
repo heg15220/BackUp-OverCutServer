@@ -10,6 +10,8 @@ enum Stage { QUALI, QUALI_BREAK, RACE, DONE }
 const PIT_COMPOUNDS := [&"soft", &"medium"]
 const FAST_FORWARD_TICKS := 900
 const RESULTS_DELAY := 3.0
+## "Esperar" in the garage: qualifying runs this many times faster while the player waits.
+const GARAGE_WAIT_SPEED := 10
 
 var app: App
 var gp: Dictionary
@@ -37,6 +39,7 @@ var _now := 0.0
 var _capture_path := ""
 var _capture_seconds := 4.0
 var _ai_player: AiDriver
+var _garage_wait := false
 
 
 func _ready() -> void:
@@ -162,12 +165,14 @@ func _start_quali() -> void:
 	quali.assists = assists
 	quali.player_input = _player_input
 	_show_quali_car()
-	_toast("%s · %s\nMarca tu mejor vuelta antes de que acabe el tiempo" % [app.gp_name(gp), QualiSession.SESSION_NAMES[0]])
+	_toast("%s · %s\nEstás en el box: pulsa «Salir a pista» (P) cuando quieras" % [app.gp_name(gp), QualiSession.SESSION_NAMES[0]])
 
 
 func _show_quali_car() -> void:
 	_hide_all()
-	_bind(player_code, quali.state)
+	_garage_wait = false
+	for c in quali.cars:
+		_bind(c.code, c.state)
 	_follow(player_code)
 
 
@@ -224,6 +229,12 @@ func _start_race(grid_codes: Array) -> void:
 
 
 func _toggle_pit() -> void:
+	if stage == Stage.QUALI:
+		if quali.player.run == QualiCar.Run.GARAGE:
+			quali.leave_garage()
+		else:
+			quali.request_pit()
+		return
 	if session == null:
 		return
 	var p := session.player_entry()
@@ -231,6 +242,9 @@ func _toggle_pit() -> void:
 
 
 func _cycle_compound() -> void:
+	if stage == Stage.QUALI:
+		_garage_wait = not _garage_wait and quali.player.run == QualiCar.Run.GARAGE
+		return
 	if session == null:
 		return
 	var p := session.player_entry()
@@ -275,6 +289,11 @@ func _race_over() -> void:
 
 func _physics_process(delta: float) -> void:
 	var ticks := clock.advance(delta)
+	if stage == Stage.QUALI and _garage_wait:
+		if quali.player.run == QualiCar.Run.GARAGE:
+			ticks *= GARAGE_WAIT_SPEED
+		else:
+			_garage_wait = false
 	for i in ticks:
 		_tick()
 	if _fast_forward and stage == Stage.RACE:
@@ -321,7 +340,9 @@ func _process(delta: float) -> void:
 		v["tag"].position = Vector3(pos.x, st.height + 2.6, pos.y)
 	match stage:
 		Stage.QUALI, Stage.QUALI_BREAK:
-			hud.show_quali(quali, Color(model.team(model.driver(player_code)["team"])["colors"]["primary"]), _now)
+			hud.show_quali(quali, _now, _garage_wait)
+			for c in quali.cars:
+				visuals[c.code]["tag"].visible = c.out_of_garage()
 			hud.set_skip(stage == Stage.QUALI, "Simular resto de %s" % QualiSession.SESSION_NAMES[quali.session])
 		Stage.RACE, Stage.DONE:
 			var p := session.player_entry()
@@ -460,6 +481,8 @@ func _toast(text: String) -> void:
 func _run_capture() -> void:
 	var spec := quali.spec if quali != null else session.player_entry().spec
 	_ai_player = AiDriver.new(track, SpeedProfile.build(track, spec, &"soft"), AiSkill.level(AiSkill.LEGEND), 3)
+	if quali != null and stage == Stage.QUALI:
+		quali.leave_garage()
 	assists.traction_control = true
 	assists.abs = true
 	assists.stability_control = true

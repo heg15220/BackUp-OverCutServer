@@ -84,10 +84,10 @@ func test_weekend_runs_qualifying_and_the_start() -> void:
 	assert_eq(w.quali.phase, QualiSession.Phase.DONE)
 	w._start_race(w.quali.final_result().grid_codes("HAM"))
 	await _frames(2)
-	for i in 120 * 8:
+	for i in 120 * 10:  # grid 2 s + five lights 5 s + up to 2.5 s before lights out
 		w._tick()
 	await _frames(2)
-	assert_eq(w.session.phase, RaceSession.Phase.RACING, "lights out within 8 s")
+	assert_eq(w.session.phase, RaceSession.Phase.RACING, "lights out within 10 s")
 	w._toggle_pit()
 	assert_true(w.session.player_entry().pit_requested)
 	var before := w.session.player_entry().pit_compound

@@ -15,6 +15,9 @@ const BOX_LIGHT := Color(0.12, 0.12, 0.15, 0.85)
 const PURPLE := Color("#b36bff")
 const YELLOW := Color("#ffd400")
 const ROW_H := 26.0
+## Qualifying: what the player is doing, and where a car without a time is.
+const QUALI_RUN := ["En el box", "Pit lane", "Vuelta de salida", "Vuelta lanzada", "Vuelta de entrada", "Entrando al box", "Fuera de la sesión"]
+const QUALI_WHERE := {"box": "BOX", "pit": "PIT", "pista": "EN PISTA"}
 const MAX_ROWS := 24
 
 var tower: VBoxContainer
@@ -430,6 +433,7 @@ func show_race(s: RaceSession, player: RaceEntry, now: float) -> void:
 	_show_events(s.events, now)
 	pit_button.text = "BOXES ✓" if player.pit_requested else "BOXES"
 	compound_button.text = "Neumático: %s" % TyreNames.short(player.pit_compound)
+	compound_button.visible = true
 	action_row.visible = player.status == RaceEntry.Status.RUNNING and s.phase == RaceSession.Phase.RACING
 
 
@@ -490,7 +494,7 @@ func _show_events(events: Array, now: float) -> void:
 	get_node("Message").visible = now < _message_until
 
 
-func show_quali(q: QualiSession, car_color: Color, now: float) -> void:
+func show_quali(q: QualiSession, now: float, garage_wait := false) -> void:
 	var table := q.live_table()
 	var rows := mini(visible_rows(), table.size())
 	var best := INF
@@ -508,16 +512,21 @@ func show_quali(q: QualiSession, car_color: Color, now: float) -> void:
 		var k: int = shown[i]
 		var r: Dictionary = table[k]
 		var t: float = r["time"]
-		var value := RaceFormat.lap_time(t) if k == 0 or t == INF else "+%.3f" % (t - best)
-		var vcolor := PURPLE if k == 0 and t < INF else (Color(1, 0.45, 0.4) if k >= cut else Color(0.85, 0.87, 0.9))
+		var value: String = QUALI_WHERE[r["where"]]
+		if t < INF:
+			value = RaceFormat.lap_time(t) if k == 0 else "+%.3f" % (t - best)
+		var vcolor := PURPLE if k == 0 and t < INF else (Color(1, 0.45, 0.4) if k >= cut and t < INF else Color(0.85, 0.87, 0.9))
 		_set_tower_row(i, k + 1, Color(q.model.team(r["team"])["colors"]["primary"]), r["code"], value, r["code"] == q.player_code, vcolor)
 	_hide_rows_from(shown.size())
 	header.text = "%s   %s" % [QualiSession.SESSION_NAMES[q.session], RaceFormat.clock(q.clock)]
-	var lap_text := "Vuelta de salida"
-	if q.on_timed_lap:
+	var me := q.player
+	var lap_text: String = QUALI_RUN[me.run]
+	if me.run == QualiCar.Run.FLYING:
 		lap_text = "Vuelta lanzada %s%s" % [RaceFormat.lap_time(q.elapsed - q.lap_start), "" if q.lap_valid else "  ANULADA"]
-	elif q.clock <= 0.0:
+	elif q.clock <= 0.0 and me.run != QualiCar.Run.IN_LAP:
 		lap_text = "Bandera a cuadros"
+	if me.pit_requested and me.on_track():
+		lap_text += " · entras a boxes"
 	subheader.text = lap_text
 	subheader.visible = true
 	get_node("Lights").visible = false
@@ -527,7 +536,16 @@ func show_quali(q: QualiSession, car_color: Color, now: float) -> void:
 	relative_rows[0].visible = true
 	relative_rows[0].text = "P%d · corte P%d" % [mine + 1, cut] if cut < 99 else "P%d · por la pole" % (mine + 1)
 	relative_rows[0].add_theme_color_override("font_color", YELLOW)
-	minimap.cars = [{"pos": q.state.position, "color": car_color, "player": true}]
+	var cars := []
+	for c in q.cars:
+		if c.out_of_garage():
+			cars.append({"pos": c.state.position, "color": Color(c.team["colors"]["primary"]).lightened(0.15), "player": c.is_player})
+	minimap.cars = cars
 	minimap.queue_redraw()
 	_show_events(q.events, now)
-	action_row.visible = false
+	# Garage: leave or wait; on track: the pits; in the pit lane there is nothing to press.
+	var in_garage := me.run == QualiCar.Run.GARAGE and q.clock > 0.0 and q.phase == QualiSession.Phase.RUNNING
+	action_row.visible = in_garage or me.on_track()
+	pit_button.text = "Salir a pista" if in_garage else ("BOXES ✓" if me.pit_requested else "BOXES")
+	compound_button.visible = in_garage
+	compound_button.text = "Tiempo normal" if garage_wait else "Esperar ×10"

@@ -13,8 +13,6 @@ enum Phase { GRID, LIGHTS, RACING, FINISHED }
 const LOD_RADIUS := 260.0
 ## Kinematic cars run at profile x pace x this (the driven AI's efficiency on its profile).
 const KIN_EFFICIENCY := 0.95
-const KIN_ACCEL := 14.0
-const KIN_DECEL := 38.0
 const GRID_TIME := 2.0
 const LIGHT_INTERVAL := 1.0
 const PIT_SPEED := 100.0 / 3.6
@@ -246,49 +244,17 @@ func _nearby_states(e: RaceEntry) -> Array:
 
 
 func _kinematic_step(e: RaceEntry, dt: float) -> void:
-	var n := e.profile.points.size()
 	var target := e.profile.speeds[e.kin_index] * e.skill.pace * KIN_EFFICIENCY
 	if sc_active:
 		target = minf(target, SC_SPEED)
 		var ahead := _car_ahead(e)
 		if ahead != null and _gap_m(ahead, e) < SC_GAP:
 			target = minf(target, ahead.kin_v if not ahead.physics else ahead.state.speed())
-	e.kin_v = move_toward(e.kin_v, target, (KIN_ACCEL if target > e.kin_v else KIN_DECEL) * dt)
-	var travel := e.kin_v * dt
-	while travel > 0.0:
-		var seg := e.profile.ds[e.kin_index]
-		var left := seg * (1.0 - e.kin_t)
-		if travel < left:
-			e.kin_t += travel / seg
-			travel = 0.0
-		else:
-			travel -= left
-			e.kin_t = 0.0
-			e.kin_index = (e.kin_index + 1) % n
-	var a := e.profile.points[e.kin_index]
-	var b := e.profile.points[(e.kin_index + 1) % n]
-	var jitter := (float(e.grid_position % 5) - 2.0) * 0.4  # cars side by side never sit on one line
-	var tangent := (b - a).normalized()
-	e.state.position = a.lerp(b, e.kin_t) + tangent.orthogonal() * jitter
-	e.state.heading = tangent.angle()
-	e.state.velocity = tangent * e.kin_v
-	e.state.height = lerpf(track.data.heights[e.kin_index], track.data.heights[(e.kin_index + 1) % n], e.kin_t)
-	e.state.track_index = e.kin_index
-	e.state.distance_m += e.kin_v * dt
+	e.advance_on_line(track, target, dt)
 
 
 func _switch_mode(e: RaceEntry, to_physics: bool) -> void:
-	e.physics = to_physics
-	if to_physics:
-		var tangent := (e.profile.points[(e.kin_index + 1) % e.profile.points.size()] - e.profile.points[e.kin_index]).normalized()
-		e.state.velocity = tangent * e.kin_v
-		e.state.yaw_rate = 0.0
-		e.state.track_index = e.kin_index
-	else:
-		var pr := geo.project_hinted(e.state.position, maxi(e.state.track_index, 0))
-		e.kin_index = pr.index
-		e.kin_t = pr.t
-		e.kin_v = e.state.speed()
+	e.switch_mode(to_physics, geo)
 
 
 func _track_progress(e: RaceEntry, prev_index: int) -> void:

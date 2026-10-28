@@ -59,3 +59,51 @@ func retire(reason: String, _time: float) -> void:
 
 func compound() -> StringName:
 	return state.wheels[0].tyre.compound.id
+
+
+# --- kinematic mode (shared by the race and qualifying) --------------------------------
+
+const KIN_ACCEL := 14.0
+const KIN_DECEL := 38.0
+
+
+## Follows the profile's line, easing kin_v toward target (m/s), and writes the pose to state.
+func advance_on_line(track: LoadedTrack, target: float, dt: float) -> void:
+	var n := profile.points.size()
+	kin_v = move_toward(kin_v, target, (KIN_ACCEL if target > kin_v else KIN_DECEL) * dt)
+	var travel := kin_v * dt
+	while travel > 0.0:
+		var seg := profile.ds[kin_index]
+		var left := seg * (1.0 - kin_t)
+		if travel < left:
+			kin_t += travel / seg
+			travel = 0.0
+		else:
+			travel -= left
+			kin_t = 0.0
+			kin_index = (kin_index + 1) % n
+	var a := profile.points[kin_index]
+	var b := profile.points[(kin_index + 1) % n]
+	var jitter := (float(grid_position % 5) - 2.0) * 0.4  # cars side by side never sit on one line
+	var tangent := (b - a).normalized()
+	state.position = a.lerp(b, kin_t) + tangent.orthogonal() * jitter
+	state.heading = tangent.angle()
+	state.velocity = tangent * kin_v
+	state.height = lerpf(track.data.heights[kin_index], track.data.heights[(kin_index + 1) % n], kin_t)
+	state.track_index = kin_index
+	state.distance_m += kin_v * dt
+
+
+## Hands the car between the full physics and the kinematic line-follower.
+func switch_mode(to_physics: bool, geo: TrackGeometry) -> void:
+	physics = to_physics
+	if to_physics:
+		var tangent := (profile.points[(kin_index + 1) % profile.points.size()] - profile.points[kin_index]).normalized()
+		state.velocity = tangent * kin_v
+		state.yaw_rate = 0.0
+		state.track_index = kin_index
+	else:
+		var pr := geo.project_hinted(state.position, maxi(state.track_index, 0))
+		kin_index = pr.index
+		kin_t = pr.t
+		kin_v = state.speed()
