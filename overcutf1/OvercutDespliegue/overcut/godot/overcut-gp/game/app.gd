@@ -106,6 +106,7 @@ func show_screen(builder: Callable) -> void:
 	for c in _ui_root.get_children():
 		c.queue_free()
 	_ui_root.add_child(screen)
+	ui.visible = true
 
 
 func has_save() -> bool:
@@ -179,6 +180,8 @@ func play_round() -> void:
 func _start_weekend(gp: Dictionary) -> void:
 	for c in _ui_root.get_children():
 		c.queue_free()
+	# The menus' layer sits above the race HUD and its full-screen root stops the mouse.
+	ui.visible = false
 	var w := RaceWeekend.new()
 	w.app = self
 	w.gp = gp

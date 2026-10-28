@@ -94,3 +94,17 @@ func test_weekend_runs_qualifying_and_the_start() -> void:
 	w._cycle_compound()
 	assert_true(w.session.player_entry().pit_compound != before, "compound changes")
 	await _cleanup(app)
+
+
+func test_menu_layer_does_not_cover_the_weekend() -> void:
+	var app := _app()
+	await _frames(1)
+	app.champ = Championship.create(app.model, "mclaren", "HAM", AiSkill.PROFESSIONAL, RaceRules.Length.LAPS_3)
+	app.play_round()
+	await _frames(3)
+	# The menus' layer sits above the race HUD: visible, its empty full-screen root eats every click.
+	assert_true(not app.ui.visible, "menu layer hidden during the weekend")
+	app.weekend_abandoned()
+	await _frames(2)
+	assert_true(app.ui.visible, "menu layer back with the hub")
+	await _cleanup(app)
