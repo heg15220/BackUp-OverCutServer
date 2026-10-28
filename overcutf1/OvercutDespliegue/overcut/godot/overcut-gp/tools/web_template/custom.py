@@ -1,9 +1,8 @@
 # SCons profile for OverCut GP's web export template (Godot 4.7.2, no threads).
 # The game builds its world in code: no physics, audio, networking, images,
 # glTF or XR at runtime, so those modules only add download and compile time.
-platform = "web"
-target = "template_release"
-threads = "no"
+# platform/target/threads go on the scons command line (build_web_template.sh):
+# SCons reads them before the profile and ignores them here.
 production = "yes"
 optimize = "size"
 deprecated = "no"
