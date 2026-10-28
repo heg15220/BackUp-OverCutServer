@@ -382,7 +382,22 @@ func _pause() -> void:
 	var v: VBoxContainer = p[1]
 	for b in buttons:
 		v.add_child(UiKit.button(b[0], b[1]))
+	v.add_child(UiKit.label("Ayudas a la conducción", 18, UiKit.MUTED))
+	for a in SettingsScreen.AIDS:
+		var t := CheckButton.new()
+		t.text = a[1]
+		t.button_pressed = bool(assists.get(a[0]))
+		t.custom_minimum_size = Vector2(0, 48)
+		t.toggled.connect(func(on): set_aid(a[0], on))
+		v.add_child(t)
 	_center(p[0], 460)
+
+
+## An aid switched from the pause menu: on the car at once, and saved for the next sessions.
+func set_aid(aid: String, on: bool) -> void:
+	assists.set(aid, on)
+	champ.assists[aid] = on
+	champ.save(app.save_path)
 
 
 func _resume() -> void:

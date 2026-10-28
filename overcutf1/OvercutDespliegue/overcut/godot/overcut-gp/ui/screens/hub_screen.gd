@@ -17,7 +17,7 @@ static func build(app: App) -> Control:
 		grid.add_child(_last_result(app))
 	var row := HBoxContainer.new()
 	col.add_child(row)
-	var settings := UiKit.button("Ajustes", app.edit_settings)
+	var settings := UiKit.button("Ajustes y ayudas", app.edit_settings)
 	settings.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(settings)
 	var leave := UiKit.button("Guardar y salir", func():

@@ -1,6 +1,6 @@
 class_name Minimap
 extends Control
-## Track outline with a dot per car (team colour; the player's car larger, ringed in white).
+## Track outline with a dot per car (team colour ringed in white; the player's car larger, ringed in yellow like its tag).
 
 var points := PackedVector2Array()
 ## [{pos: Vector2, color: Color, player: bool}]
@@ -49,11 +49,14 @@ func _draw() -> void:
 	draw_polyline(line, Color(0, 0, 0, 0.55), 7.0, true)
 	draw_polyline(line, Color(0.92, 0.93, 0.96), 3.0, true)
 	draw_circle(line[0], 4.0, UiKit.ACCENT)
+	# A light ring keeps dark team colours (Red Bull, Toro Rosso) visible on the dark panel.
 	for c in cars:
 		if not c["player"]:
-			draw_circle(to_map(c["pos"]), 4.5, c["color"])
+			var m := to_map(c["pos"])
+			draw_circle(m, 6.5, Color(0.92, 0.93, 0.96))
+			draw_circle(m, 5.0, c["color"])
 	for c in cars:
 		if c["player"]:
 			var m := to_map(c["pos"])
-			draw_circle(m, 7.5, Color.WHITE)
-			draw_circle(m, 5.5, c["color"])
+			draw_circle(m, 9.5, Color("#ffd400"))
+			draw_circle(m, 7.0, c["color"])

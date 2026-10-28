@@ -108,3 +108,21 @@ func test_menu_layer_does_not_cover_the_weekend() -> void:
 	await _frames(2)
 	assert_true(app.ui.visible, "menu layer back with the hub")
 	await _cleanup(app)
+
+
+func test_aids_change_from_the_pause_menu() -> void:
+	var app := _app()
+	await _frames(1)
+	app.champ = Championship.create(app.model, "mclaren", "HAM", AiSkill.PROFESSIONAL, RaceRules.Length.LAPS_3)
+	app.champ.assists["abs"] = true
+	app.play_round()
+	await _frames(3)
+	var w: RaceWeekend = app._weekend
+	w._pause()
+	await _frames(1)
+	var toggles := w.overlay.find_children("*", "CheckButton", true, false)
+	assert_eq(toggles.size(), SettingsScreen.AIDS.size(), "one switch per aid")
+	w.set_aid("abs", false)
+	assert_true(not w.assists.abs, "applies to the car at once")
+	assert_eq(Championship.load_from(SAVE, app.model).assists["abs"], false, "kept for the next sessions")
+	await _cleanup(app)
